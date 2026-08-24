@@ -19,7 +19,7 @@
 | Check | Result |
 |---|---|
 | TypeScript | Passed |
-| Vitest | Passed locally: 3 files, 7 tests; final clean clone required after current commit |
+| Vitest | Passed locally and in clean clone: 3 files, 7 tests |
 | Production build | Passed |
 | `git diff --check` | Passed |
 | Domain object lifecycle serialization | Passed |
@@ -55,11 +55,11 @@
 
 | Accessibility | Partial | labels and focusable controls present; screen-reader/canvas audit pending |
 | Performance benchmark | Verified locally | deterministic 91-object benchmark with recorded timings; browser-frame benchmark pending |
-| Clean GitHub reproduction | Previously passed | GitHub continuity verified at Gate 1B |
+| Clean GitHub reproduction | Verified | Branch `feature/gate-2-core-whiteboard` at `285f304` passed frozen install, check, test, and build from a clean clone |
 
 ## Known Limitations
 
-ما زالت Media/PDF/Table/Sticky/Connector UI الكاملة، automated UI smoke tests، touch device tests، stylus tests، performance benchmark متصفح حقيقي، وcomprehensive accessibility audit غير منفذة. fullscreen يعتمد على Browser API وقد يفشل بحسب سياق العرض. لا تزال AI وBilling وCollaboration وOCR وPDF Intelligence وMathLive غير مضافة.
+ما زالت Media/PDF/Table/Sticky/Connector UI الكاملة، automated UI smoke tests، touch device tests، stylus tests، performance benchmark متصفح حقيقي، وcomprehensive accessibility audit غير منفذة. هذه الجولة أغلقت child scaling في domain contract واختبرت الاستعادة regression-wise. fullscreen يعتمد على Browser API وقد يفشل بحسب سياق العرض. لا تزال AI وBilling وCollaboration وOCR وPDF Intelligence وMathLive غير مضافة.
 
 ## Canvas Decision
 

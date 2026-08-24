@@ -27,7 +27,7 @@
 | Accessibility smoke test | PARTIAL / NOT VERIFIED | Labels, focusable controls, visible handles and non-hover paths reviewed; no automated screen-reader or contrast audit |
 | Touch evidence | NOT VERIFIED — HARDWARE UNAVAILABLE | Pointer/touch-safe implementation exists; no physical touchscreen test |
 | Stylus evidence | NOT VERIFIED — HARDWARE UNAVAILABLE | No physical stylus test |
-| Clean clone | VERIFIED for pushed baseline; final repair clone pending push | Baseline `8d0148a` cloned and passed install/check/test/build; final repair must be pushed and re-cloned |
+| Clean clone | VERIFIED | Branch `feature/gate-2-core-whiteboard` at `285f304` cloned from GitHub and passed frozen install, check, 7 tests, and build with clean status |
 | Check | VERIFIED | Local `pnpm check` passed |
 | Tests | VERIFIED | Local run: 3 files, 7 tests passed |
 | Build | VERIFIED | Local `pnpm build` passed |
@@ -35,7 +35,7 @@
 
 ## Performance
 
-The deterministic dataset contains 91 objects. Current local Vitest run measured: creation `0.062 ms`, selection `0.014 ms`, movement `0.014 ms`, resize `0.015 ms`, zoom `0.009 ms`, save `0.070 ms`, restore `0.159 ms`. The previous pushed baseline measured creation `0.062 ms`, selection `0.014 ms`, movement `0.014 ms`, resize `0.014 ms`, zoom `0.009 ms`, save `0.073 ms`, restore `0.187 ms` in clean clone. These values are local operation timings, not claims about browser frame rate, network, touch, or production scale.
+The deterministic dataset contains 91 objects. Current local Vitest run measured: creation `0.062 ms`, selection `0.014 ms`, movement `0.014 ms`, resize `0.015 ms`, zoom `0.009 ms`, save `0.070 ms`, restore `0.159 ms`. Final clean clone at `285f304` measured creation `0.066 ms`, selection `0.014 ms`, movement `0.015 ms`, resize `0.014 ms`, zoom `0.009 ms`, save `0.075 ms`, restore `0.174 ms`. These values are local operation timings, not claims about browser frame rate, network, touch, or production scale.
 
 ## Accessibility and Hardware
 
@@ -43,7 +43,7 @@ Keyboard focusable controls and explicit labels are present. The UI does not rel
 
 ## Remaining Limitations
 
-UI automation for the complete teacher journey is not verified because a browser integration runner is unavailable. A final clean clone must be run after the repair commit is pushed. Media/PDF/Table/Sticky/Connector full UI, production Arabic and Math toolkits, AI, Billing, Collaboration, OCR, PDF Intelligence, and Gate 3 remain out of scope.
+UI automation for the complete teacher journey is not verified because a browser integration runner is unavailable. The final clean clone was run after repair commit `285f304` was pushed and passed. Media/PDF/Table/Sticky/Connector full UI, production Arabic and Math toolkits, AI, Billing, Collaboration, OCR, PDF Intelligence, and Gate 3 remain out of scope.
 
 ## Stop
 
