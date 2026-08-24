@@ -62,3 +62,11 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Add `GATE_1B_CANVAS_DECISION.md` with an evidence-based DEFER/SELECT outcome.
 - [x] Verify GitHub repository, remote, branch, commit, push capability, and clean working tree; stop if continuity is blocked. GitHub push is blocked because the current origin is managed/internal and the correct GitHub repository was not specified.
 - [x] Update Gate 1B report and changelog with the general whiteboard benchmark and exact test results.
+
+## GitHub Continuity Setup — pending verification
+
+- [ ] فحص remote والفرع والحالة وسجل commits دون تعديل.
+- [ ] التحقق من وجود مستودع GitHub هدف مصرح به؛ لا تخمين لاسم الحساب أو المستودع.
+- [ ] التحقق من ملفات README وCHANGELOG و.env.example و.gitignore ومجلدات docs ومتطلبات الأمن.
+- [ ] تنفيذ clean-clone verification فقط بعد توفر مستودع GitHub هدف مصرح به.
+- [ ] إنشاء تقرير `docs/gates/GATE_1B_GITHUB_CONTINUITY.md` وإصدار الحالة VERIFIED أو BLOCKED.
