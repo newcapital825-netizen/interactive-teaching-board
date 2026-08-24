@@ -247,3 +247,99 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
 .handle-bl { bottom:-8px; left:-8px; cursor:nesw-resize; }
 .handle-br { bottom:-8px; right:-8px; cursor:nwse-resize; }
 @media (max-width:600px) { .resize-handle { width:22px; height:22px; } .handle-tl { top:-11px; left:-11px; } .handle-tr { top:-11px; right:-11px; } .handle-bl { bottom:-11px; left:-11px; } .handle-br { bottom:-11px; right:-11px; } }
+
+/* Gate 3B UX: calm teacher workspace — primary tools first, contextual actions second, canvas always dominant. */
+.ux-board { border-color: rgba(53,72,59,.24); overflow:hidden; }
+.ux-header { align-items:center; background:rgba(251,250,246,.92); }
+.header-status { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+.save-pill { display:inline-flex; align-items:center; gap:6px; padding:7px 10px; border:1px solid var(--line); background:var(--paper); color:var(--muted-foreground); font-size:10px; white-space:nowrap; }
+.save-pill.saved { color:var(--olive); border-color:rgba(126,172,135,.55); }
+.save-pill.unsaved { color:var(--coral); border-color:rgba(213,107,88,.42); }
+.save-pill.failed { color:#a1382b; background:#fff0eb; }
+.save-dot { width:7px; height:7px; border-radius:50%; background:#aeb8ad; }
+.save-pill.saved .save-dot { background:#7eac87; }
+.save-pill.unsaved .save-dot { background:var(--coral); }
+.save-pill.failed .save-dot { background:#a1382b; }
+.ux-toolbar { min-height:58px; gap:12px; padding:10px 30px; background:#f0ede5; }
+.toolbar-section { display:flex; align-items:center; gap:5px; }
+.toolbar-section + .toolbar-section { border-right:1px solid var(--line); padding-right:12px; }
+.toolbar-section button { min-height:36px; }
+.primary-tools .tool { width:38px; min-width:38px; font-size:14px; }
+.primary-tools .tool.active { box-shadow:0 3px 0 rgba(53,72,59,.16); }
+.text-tool { font-family:Georgia,serif; font-weight:700; font-size:17px; line-height:1; }
+.secondary-tools button { white-space:nowrap; }
+.utility-tools { margin-right:auto; }
+.more-tools { color:var(--muted-foreground) !important; min-width:36px; }
+.context-strip { display:flex; align-items:center; gap:6px; flex-wrap:wrap; padding:8px 30px; border-bottom:1px solid var(--line); background:#e4ecdf; color:var(--olive); }
+.context-strip button { display:inline-flex; align-items:center; gap:5px; min-height:32px; padding:5px 9px; border:1px solid rgba(53,72,59,.18); background:rgba(251,250,246,.86); color:var(--olive); font-size:10px; cursor:pointer; }
+.context-strip button:hover { border-color:var(--coral); background:#fffaf5; }
+.context-title { margin-left:7px; padding-left:10px; border-left:1px solid rgba(53,72,59,.22); font-size:11px; font-weight:700; }
+.ux-layout { grid-template-columns:176px minmax(0,1fr) 250px; }
+.ux-pages, .ux-inspector { background:#f5f1e8; }
+.ux-stage-wrap { background:#e9e5dc; padding:20px; }
+.ux-stage { border-color:rgba(53,72,59,.3); box-shadow:inset 0 0 0 1px rgba(255,255,255,.6), 0 10px 20px rgba(47,62,52,.06); }
+.ux-stage.hand-mode { cursor:grab; }
+.ux-stage.hand-mode:active { cursor:grabbing; }
+.ux-object { border-radius:3px; }
+.ux-object:focus-visible { outline:3px solid var(--coral); outline-offset:3px; }
+.stage-controls { display:flex; gap:5px; align-items:center; margin-top:10px; }
+.stage-controls button { display:inline-flex; align-items:center; justify-content:center; gap:4px; min-height:30px; min-width:32px; padding:5px 8px; border:1px solid var(--line); background:var(--paper); color:var(--olive); font-size:9px; cursor:pointer; }
+.stage-controls button:hover { border-color:var(--coral); }
+.stage-controls button:disabled { opacity:.45; cursor:not-allowed; }
+.inspector-subheading { margin-top:18px; padding-bottom:6px; border-bottom:1px dashed var(--line); color:var(--olive); font-size:9px; font-weight:700; }
+.inspector-grid.four { grid-template-columns:repeat(4,1fr); }
+.inspector-grid.four button { min-height:34px; padding:4px; }
+.ux-footer { background:#e4e0d7; }
+.ux-presentation { position:sticky; top:0; z-index:12; }
+.ux-presentation strong { display:block; color:var(--olive); font-size:13px; }
+.ux-presentation span { display:block; margin-top:3px; color:var(--muted-foreground); font-size:10px; }
+.is-presenting .ux-layout { grid-template-columns:minmax(0,1fr); }
+.is-presenting .ux-pages, .is-presenting .ux-inspector { display:none; }
+.is-presenting .ux-stage-wrap { padding:34px; }
+.is-presenting .ux-stage { height:calc(100vh - 230px); min-height:560px; }
+.is-presenting .ux-object { box-shadow:8px 10px 0 rgba(53,72,59,.08); }
+@media (max-width:1100px) {
+  .ux-layout { grid-template-columns:140px minmax(0,1fr); }
+  .ux-inspector { grid-column:1 / -1; }
+  .header-status { justify-content:flex-start; margin-top:12px; }
+}
+@media (max-width:760px) {
+  .ux-header { padding:18px; }
+  .ux-header h2 { font-size:23px; }
+  .core-notice { white-space:normal; }
+  .ux-toolbar { padding:8px 12px; gap:8px; overflow-x:auto; }
+  .toolbar-section + .toolbar-section { padding-right:8px; }
+  .toolbar-section button { min-height:42px; }
+  .primary-tools .tool { width:42px; min-width:42px; }
+  .secondary-tools button { font-size:9px; }
+  .utility-tools { margin-right:0; }
+  .context-strip { padding:8px 12px; overflow-x:auto; flex-wrap:nowrap; }
+  .context-strip button { min-height:40px; white-space:nowrap; }
+  .ux-layout { display:block; }
+  .ux-pages { border-left:0; border-bottom:1px solid var(--line); padding:12px; overflow-x:auto; white-space:nowrap; }
+  .ux-pages .panel-title { margin-bottom:8px; }
+  .ux-pages .page-item { min-height:55px; }
+  .ux-stage-wrap { padding:12px; }
+  .ux-stage { height:410px; }
+  .stage-controls { flex-wrap:wrap; }
+  .stage-controls button { min-height:38px; }
+  .ux-inspector { padding:15px 12px; border-right:0; border-top:1px solid var(--line); }
+  .ux-footer { padding:10px 12px; }
+  .is-presenting .ux-stage-wrap { padding:14px; }
+  .is-presenting .ux-stage { min-height:430px; height:calc(100vh - 180px); }
+}
+@media (prefers-reduced-motion: reduce) { .ux-object, .save-pill, .context-strip button { transition:none; } }
+/* End Gate 3B UX reminder: teacher-facing labels stay simple; architecture remains invisible. */
+
+/* Gate 3B entry chrome: calm, ownable classroom identity around the canvas. */
+.gate3b-shell { background:linear-gradient(135deg,#f3efe8 0%,#eee9df 58%,#e5e1d7 100%); }
+.gate3b-topbar { position:sticky; top:0; z-index:30; }
+.gate3b-topbar .topbar-status strong { display:inline-flex; align-items:center; gap:5px; }
+.gate3b-mark { position:relative; display:grid; place-items:center; width:38px; height:38px; border:1px solid rgba(53,72,59,.3); background:#e4ecdf; transform:rotate(45deg); }
+.gate3b-mark::before, .gate3b-mark::after, .gate3b-mark span { content:""; position:absolute; display:block; background:var(--coral); }
+.gate3b-mark::before { width:2px; height:26px; }
+.gate3b-mark::after { width:26px; height:2px; }
+.gate3b-mark span { width:10px; height:10px; background:var(--olive); border:2px solid #f3efe8; }
+.gate3b-mark + div { margin-right:4px; }
+.gate3b-bottom { border-top-color:rgba(53,72,59,.18); }
+@media (max-width:700px) { .gate3b-topbar .topbar-status span:not(.status-dot), .gate3b-topbar .topbar-status strong { display:none; } .gate3b-mark { width:32px; height:32px; } }

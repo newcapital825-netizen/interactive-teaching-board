@@ -15,7 +15,9 @@ export type CoreObjectType =
   | "GroupObject"
   | "SentenceObject"
   | "EquationObject"
-  | "GraphObject";
+  | "GraphObject"
+  | "QuestionObject"
+  | "ActivityObject";
 
 export type Stroke = { points: Array<{ x: number; y: number }>; color: string; width: number; tool: "pen" | "highlighter" | "eraser" };
 
@@ -27,6 +29,7 @@ export type CoreObject = {
   rotation: number;
   zIndex: number;
   content: string;
+  data?: unknown;
   style: { color: string; background: string; fontSize: number; align: "left" | "center" | "right" };
   metadata: { label: string; source: "teacher" | "placeholder"; locked: boolean; visible: boolean; version: number };
   stroke?: Stroke;
@@ -40,8 +43,9 @@ export type BoardDocument = { id: string; title: string; version: number; pages:
 export const STORAGE_KEY = "gate2-core-board-document";
 export const uid = (prefix: string) => `${prefix}_${Math.random().toString(36).slice(2, 8)}`;
 
-export const createObject = (type: CoreObjectType, content: string, x: number, y: number): CoreObject => ({
-  id: uid(type.toLowerCase().replace("object", "")), type, position: { x, y }, size: { width: type === "SentenceObject" ? 280 : 180, height: 82 }, rotation: 0, zIndex: 1, content,
+const displayContent = (content: unknown) => typeof content === "string" ? content : JSON.stringify(content) ?? "";
+export const createObject = (type: CoreObjectType, content: unknown, x: number, y: number): CoreObject => ({
+  id: uid(type.toLowerCase().replace("object", "")), type, position: { x, y }, size: { width: type === "SentenceObject" ? 280 : 180, height: 82 }, rotation: 0, zIndex: 1, content: displayContent(content), data: typeof content === "string" ? undefined : content,
   style: { color: "#2d3d34", background: "#fbfaf6", fontSize: type === "EquationObject" ? 24 : 16, align: "left" },
   metadata: { label: type, source: "teacher", locked: false, visible: true, version: 1 },
 });
@@ -50,8 +54,11 @@ export const createPage = (name: string, objects: CoreObject[] = []): BoardPage 
 export const createDocument = (): BoardDocument => { const page = createPage("Page 1", [createObject("TextObject", "اكتب فكرة الدرس هنا", 44, 54)]); return { id: uid("board"), title: "درس تفاعلي جديد", version: 1, pages: [page], activePageId: page.id, updatedAt: new Date().toISOString() }; };
 export const getActivePage = (document: BoardDocument) => document.pages.find((page) => page.id === document.activePageId) ?? document.pages[0];
 export const cloneDocument = (document: BoardDocument): BoardDocument => JSON.parse(JSON.stringify(document)) as BoardDocument;
-export const persistDocument = (document: BoardDocument) => localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...document, updatedAt: new Date().toISOString() }));
-export const restoreDocument = (): BoardDocument | null => { const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return null; try { return JSON.parse(raw) as BoardDocument; } catch { return null; } };
+export const persistDocument = (document: BoardDocument) => {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...document, updatedAt: new Date().toISOString() })); return { ok: true as const }; }
+  catch (error) { return { ok: false as const, error: error instanceof Error ? error.message : "Unknown persistence error" }; }
+};
+export const restoreDocument = (): BoardDocument | null => { try { const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return null; return JSON.parse(raw) as BoardDocument; } catch { return null; } };
 
 export type ResizeCorner = "tl" | "tr" | "bl" | "br";
 
