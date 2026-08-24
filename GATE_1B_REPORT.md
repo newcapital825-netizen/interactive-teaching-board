@@ -183,3 +183,37 @@ Wait for explicit owner approval.
 [1]: https://github.com/tldraw/tldraw "tldraw repository, features, maintenance and license"
 [2]: https://github.com/excalidraw/excalidraw "Excalidraw repository, features and MIT license"
 [3]: https://reactflow.dev/ "React Flow official site, capabilities and MIT license"
+
+## General Whiteboard Benchmark Extension
+
+أضيف benchmark موحد يعرض سبعة كائنات على سطح واحد: `Text` و`Drawing` و`Shape` و`Image placeholder` و`SentenceObject` و`EquationObject` و`ConceptGraphObject`. جميعها تستخدم contract مملوكًا للتطبيق يحتوي `id` و`type` و`content` و`position` و`size` و`metadata`. أضيفت عمليات move وresize وduplicate وdelete وundo وredo وsave وreload وpresentation mode. هذا يثبت صلاحية اتجاه النموذج العام، ولا يساوي تنفيذ Core Whiteboard إنتاجي.
+
+## General Whiteboard Evidence
+
+| Requirement | Result | Boundary |
+|---|---|---|
+| Text | Demonstrated | DOM object |
+| Drawing | Demonstrated as pointer-stroke placeholder | no handwriting subsystem |
+| Shape | Demonstrated | generic shape placeholder |
+| Image placeholder | Demonstrated | no file import |
+| SentenceObject | Demonstrated | existing Arabic fixture |
+| EquationObject | Demonstrated as educational object | no solver |
+| Concept/Graph Object | Demonstrated | object metadata; React Flow remains separate |
+| Move | Demonstrated | pointer and toolbar path |
+| Resize | Demonstrated | toolbar proof path |
+| Duplicate/Delete | Demonstrated | application-owned state |
+| Undo/Redo | Demonstrated | snapshot history |
+| Save/Reload | Demonstrated | localStorage |
+| Presentation | Demonstrated | hides editing toolbar |
+
+## Mathematics Input Evaluation
+
+MathLive أو بديل رياضي لم يُدمج في هذه الجولة. تم تثبيت `EquationObject` كحد domain-only لإثبات أن الرياضيات يمكن أن تكون subject engine لاحقًا، مع إبقاء editable math وLaTeX وsemantics وtouch/accessibility وmobile behavior ضمن Technology Spike مستقبلي منفصل. لا يُسمى هذا اختيارًا لمكتبة Math Engine.
+
+## GitHub Continuity Finding
+
+المشروع لديه remote داخلي managed origin على فرع `main`، لكنه ليس رابط GitHub. جلسة GitHub للمستخدم مصادق عليها، وتظهر عدة مستودعات محتملة، لكن لا توجد قرينة كافية لاختيار المستودع الصحيح أو ربط المشروع به تلقائيًا دون مخاطرة بربط الكود بوجهة غير مقصودة. لذلك لم يتم push إلى GitHub، ولم تُختلق حالة نجاح. يلزم من المالك تحديد repository المقصود صراحة أو ربطه من Management UI قبل اعتبار GitHub Continuity مكتملة.
+
+## Updated Gate 1B Conclusion
+
+النتيجة العامة تظل **C — CONDITIONAL**. تم توسيع benchmark بما يكفي لتمثيل رؤية General Educational Whiteboard، لكن Gate 2 ما زال غير مصرح به. القرار المطلوب هو اختيار مستودع GitHub المقصود، ثم تفويض جولة Canvas integration فعلية منفصلة إن أراد المالك إغلاق قرار المحرك.

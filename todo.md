@@ -47,3 +47,18 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] اعتماد المخطط المقدم كصيغة العرض الرسمية: SentenceObject → Canvas Adapter (tldraw / Excalidraw) وGraph Adapter (React Flow).
 - [x] تحديث GATE_1B_REPORT.md وADR وواجهة Candidate Bench بالمخطط نفسه.
 - [x] التحقق من البناء واللقطة البصرية ثم حفظ checkpoint والتوقف.
+
+## Master Execution Prompt — pending scope review
+
+- [x] قراءة بقية `pasted_content_5.txt` وتحليل المتطلبات، خصوصًا حدود Gate 2 وGitHub والإنتاج.
+- [x] مقارنة متطلبات المنتج العام والمحركات العربية والرياضية بقرارات Gate 1B المعتمدة.
+- [x] عدم بدء Production/MVP/Gate 2 قبل توثيق التعارض والحصول على تفويض صريح إذا لزم.
+
+## Gate 1B general whiteboard extension — authorized scope
+
+- [x] Extend the frozen test workspace with minimal Text, Drawing, Shape, Image placeholder, SentenceObject, EquationObject, and Concept/Graph objects.
+- [x] Demonstrate move, resize, duplicate, delete, undo, redo, save, reload, and presentation mode on the shared object model.
+- [x] Add a future-facing MathLive evaluation note without selecting or integrating a Math engine prematurely.
+- [x] Add `GATE_1B_CANVAS_DECISION.md` with an evidence-based DEFER/SELECT outcome.
+- [x] Verify GitHub repository, remote, branch, commit, push capability, and clean working tree; stop if continuity is blocked. GitHub push is blocked because the current origin is managed/internal and the correct GitHub repository was not specified.
+- [x] Update Gate 1B report and changelog with the general whiteboard benchmark and exact test results.
