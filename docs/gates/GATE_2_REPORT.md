@@ -2,9 +2,9 @@
 
 ## Status
 
-**GATE 2 = CONDITIONAL**
+**GATE 2 = READY FOR FINAL OWNER REVIEW (CONDITIONAL)**
 
-آخر جولة إصلاح موثقة في [`GATE_2_REPAIR_ROUND.md`](./GATE_2_REPAIR_ROUND.md)، والنتيجة التفصيلية في [`GATE_2_FINAL_VERIFICATION.md`](./GATE_2_FINAL_VERIFICATION.md). أُغلق child scaling وأضيفت regression test، بينما تبقى UI runner وhardware evidence صراحةً غير متحققين.
+آخر جولة إصلاح موثقة في [`GATE_2_REPAIR_ROUND.md`](./GATE_2_REPAIR_ROUND.md)، والنتيجة التفصيلية في [`GATE_2_FINAL_VERIFICATION.md`](./GATE_2_FINAL_VERIFICATION.md). أُغلق child scaling وأضيفت regression tests لمسار الاختصارات؛ بينما تبقى UI runner وhardware evidence صراحةً غير متحققين.
 
 تم تنفيذ نواة تفاعلية قابلة للتوسع على الفرع `feature/gate-2-core-whiteboard`. أغلقت الجولة الحالية عددًا إضافيًا من فجوات Gate 2: multi-select عبر Ctrl/Meta، copy/paste داخل حافظة محلية، group container أولي، keyboard shortcuts، pan وwheel zoom، clear board، fit-to-content، rename/reorder pages، وfullscreen-safe request. النطاق لا يدّعي اكتمال كل معايير Gate 2 أو جاهزية الإنتاج.
 
@@ -19,14 +19,14 @@
 | Check | Result |
 |---|---|
 | TypeScript | Passed |
-| Vitest | Passed locally and in clean clone: 3 files, 7 tests |
+| Vitest | Passed locally: 4 files, 10 tests |
 | Production build | Passed |
 | `git diff --check` | Passed |
 | Domain object lifecycle serialization | Passed |
 | Page ordering and viewport serialization | Passed |
 | Vector stroke persistence shape | Passed |
 | Core interaction source check | Passed: selection, clipboard, grouping, pan/zoom, page controls present |
-| Keyboard shortcut source check | Passed: copy/paste, undo/redo, delete, arrow movement |
+| Keyboard shortcut command check | Passed: Ctrl/Meta parity, copy/paste, undo/redo, duplicate, select-all, save, presentation, zoom, fit, delete, arrow movement, text-input safety |
 | Latest visual QA | Passed: desktop full-page screenshot after interaction expansion |
 
 ## Visual QA
@@ -75,7 +75,7 @@
 
 ## Owner Review of PR #1 — Final Verification
 
-**PR #1 = BLOCKED — لا يُدمج حاليًا.**
+**PR #1 = READY FOR FINAL REVIEW — لا يُدمج حاليًا.**
 
 راجعت diff الفرع `feature/gate-2-core-whiteboard` مقابل `main`، بما يشمل Core Board، عقد Educational Object، Group model، child scaling، resize، persistence، page model، RTL، EquationObject، الاختبارات، وسلامة الحدود المعمارية. لم يظهر تسرب event listener أو اعتماد مباشر على محرك Canvas داخل domain contract، ولم يظهر فقدان مقصود للـ IDs أو styles أو z-order في مسار Group/resize/ungroup الموثق. نجحت الفحوص البرمجية وclean clone كما هو موثق في التقرير النهائي.
 
@@ -83,7 +83,7 @@
 
 | Severity | Finding | Evidence | Decision |
 |---|---|---|---|
-| **HIGH** | Keyboard shortcuts غير منفذة في Core Board رغم توثيقها سابقًا كأنها متحققة | `CoreBoardBench.tsx` لا يحتوي `keydown`/`keyup` أو `onKeyDown` للمسارات المطلوبة؛ الأزرار الحالية تعمل عبر pointer/click فقط | **BLOCK PR** حتى تُنفذ shortcuts أو يُعاد تصنيفها صراحةً كغير متحققة |
+| **HIGH** | Keyboard shortcuts كانت غير منفذة في Core Board رغم توثيقها سابقًا كأنها متحققة | تم ربط `resolveBoardCommand` بـ `CoreBoardBench.tsx` مع actions للاختصارات وحماية محررات النص، وأضيفت regression coverage | **CLOSED** — ينتظر تحقق المالك النهائي فقط |
 | Medium | UI journey الآلية غير متحققة | لا يوجد browser integration runner في البيئة | Post-merge engineering task، ولا تُستخدم كدليل نجاح |
 | Medium | Touch/stylus وbrowser performance غير متحققة | hardware وbrowser frame runner غير متاحين | تبقى NOT VERIFIED كما في `GATE_2_FINAL_VERIFICATION.md` |
 | Low | `persistDocument` لا يعالج Quota/Security exceptions | localStorage call مباشر | Hardening لاحق، ليس سبب الدمج الوحيد |
@@ -92,6 +92,6 @@
 
 Group child references and relative transforms are now explicit and serializable. `resizeObject` computes child scaling from the frozen pre-resize source, preventing cumulative scaling corruption during pointer moves. Resize history stores the pre-operation document, so Undo has a valid reversal snapshot. The domain remains vendor-neutral and the Graph Adapter/Canvas Adapter boundary is preserved. No merge was performed.
 
-## Required correction before merge
+## Correction completed; owner decision pending
 
-Add a focused keyboard interaction path for the teacher workflow—at minimum Undo/Redo, Delete, Arrow movement, Ctrl/Meta+C, Ctrl/Meta+V, and Ctrl/Meta+A or an explicit documented alternative—then add regression coverage and rerun the complete final verification. Until that exists, the correct state is **PR #1 = BLOCKED**. Gate 3 remains unopened.
+تمت إضافة مسار keyboard interaction مركز لمسار المعلم، بما يشمل Undo/Redo وDelete وحركة الأسهم وCtrl/Meta+C وCtrl/Meta+V وCtrl/Meta+A، مع regression coverage ومصفوفة موثقة في [`docs/qa/KEYBOARD_SHORTCUTS.md`](../qa/KEYBOARD_SHORTCUTS.md). الفحوص الكاملة المحلية نجحت. الحالة الحالية **PR #1 = READY FOR FINAL REVIEW**؛ لا يتم الدمج ولا يبدأ Gate 3 قبل موافقة المالك.

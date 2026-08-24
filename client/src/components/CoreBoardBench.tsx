@@ -5,6 +5,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Clipboard, Copy, Eraser, Eye, EyeOff, FilePlus2, Group, Hand, Lock, Maximize2, MousePointer2, Pencil, Play, Redo2, Save, Square, Trash2, Undo2, Ungroup, ZoomIn, ZoomOut } from "lucide-react";
 import { BoardDocument, BoardPage, CoreObject, CoreObjectType, Stroke, cloneDocument, createDocument, createObject, createPage, getActivePage, persistDocument, restoreDocument, resizeObject } from "@/lib/coreBoard";
+import { resolveBoardCommand } from "@/lib/keyboardCommands";
 
 type Tool = "select" | "pen" | "highlighter" | "eraser" | "shape";
 type HistoryItem = { document: BoardDocument; selectedId: string; tool: Tool };
@@ -35,17 +36,19 @@ export default function CoreBoardBench() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if ((event.target as HTMLElement)?.tagName === "INPUT") return;
-      const mod = event.metaKey || event.ctrlKey;
-      if (mod && event.key.toLowerCase() === "c") { event.preventDefault(); copySelected(); }
-      if (mod && event.key.toLowerCase() === "v") { event.preventDefault(); pasteSelected(); }
-      if (mod && event.key.toLowerCase() === "z") { event.preventDefault(); event.shiftKey ? redo() : undo(); }
-      if (mod && event.key.toLowerCase() === "y") { event.preventDefault(); redo(); }
-      if (event.key === "Delete" || event.key === "Backspace") { event.preventDefault(); remove(); }
-      if (event.key === "ArrowLeft") move(-12, 0);
-      if (event.key === "ArrowRight") move(12, 0);
-      if (event.key === "ArrowUp") move(0, -12);
-      if (event.key === "ArrowDown") move(0, 12);
+      const command = resolveBoardCommand(event);
+      if (!command) return;
+      const actions: Record<string, () => void> = {
+        undo, redo, copy: copySelected, paste: pasteSelected, duplicate, delete: remove,
+        selectAll: () => { setSelectedIds(page.objects.map((item) => item.id)); setSelectedId(page.objects.at(-1)?.id ?? ""); setNotice("تم تحديد كل كائنات الصفحة"); },
+        save, presentation: () => { setPresentation(true); setNotice("وضع العرض مفعّل"); },
+        zoomIn: () => setZoom((value) => Math.min(1.5, value + .1)),
+        zoomOut: () => setZoom((value) => Math.max(.7, value - .1)), fitContent,
+        moveLeft: () => move(-12, 0), moveRight: () => move(12, 0), moveUp: () => move(0, -12), moveDown: () => move(0, 12),
+      };
+      if (!actions[command]) return;
+      event.preventDefault();
+      actions[command]();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);

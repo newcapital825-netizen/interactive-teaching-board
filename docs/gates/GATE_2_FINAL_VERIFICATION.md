@@ -2,14 +2,14 @@
 
 ## Decision
 
-**GATE 2 = CONDITIONAL. PR #1 = BLOCKED — لا يُدمج حاليًا.** لا يبدأ Gate 3. مراجعة PR وجدت عيبًا عاليًا قابلًا للإصلاح: اختصارات لوحة المفاتيح موثقة سابقًا كأنها متحققة، لكن Core Board لا يحتوي مسار `keydown`/`keyup` أو `onKeyDown` لها. تبقى UI automation وhardware evidence غير متحققة أيضًا.
+**GATE 2 = READY FOR FINAL OWNER REVIEW (CONDITIONAL). PR #1 = READY FOR FINAL REVIEW — لا يُدمج حاليًا.** لا يبدأ Gate 3. أُغلق العيب العالي الخاص بمسار اختصارات لوحة المفاتيح عبر `resolveBoardCommand` وربطه بـ Core Board مع regression coverage وحماية محررات النص. تبقى UI automation وhardware evidence غير متحققة أيضًا.
 
 ## Criteria Classification
 
 | Criterion | Classification | Evidence / limitation |
 |---|---|---|
 | Multi-select | VERIFIED | Ctrl/Meta selection path in Core Board |
-| Keyboard shortcuts | BLOCKED | Toolbar actions exist, but Core Board keyboard event path is absent; do not claim shortcut verification |
+| Keyboard shortcuts | VERIFIED (command layer) | `resolveBoardCommand` maps Ctrl/Meta shortcuts and navigation to board actions; text-editing targets are ignored. Browser UI journey remains NOT VERIFIED |
 | Copy/paste | VERIFIED | Local clipboard path with new IDs and offset |
 | Grouping | VERIFIED | Group stores child IDs and local child references |
 | Group movement | VERIFIED | Group transform moves while local child coordinates remain stable |
@@ -27,12 +27,12 @@
 | Accessibility smoke test | PARTIAL / NOT VERIFIED | Labels, focusable controls, visible handles and non-hover paths reviewed; no automated screen-reader or contrast audit |
 | Touch evidence | NOT VERIFIED — HARDWARE UNAVAILABLE | Pointer/touch-safe implementation exists; no physical touchscreen test |
 | Stylus evidence | NOT VERIFIED — HARDWARE UNAVAILABLE | No physical stylus test |
-| Clean clone | VERIFIED | Branch `feature/gate-2-core-whiteboard` at `285f304` cloned from GitHub and passed frozen install, check, 7 tests, and build with clean status |
+| Clean clone | PENDING AFTER PUSH | Re-run from the pushed commit; local working tree passed check, 10 tests, build, and diff check |
 | Check | VERIFIED | Local `pnpm check` passed |
-| Tests | VERIFIED | Local run: 3 files, 7 tests passed |
+| Tests | VERIFIED | Local run: 4 files, 10 tests passed |
 | Build | VERIFIED | Local `pnpm build` passed |
 | Git discipline | VERIFIED | Feature branch only, no force push, PR #1 open and intentionally not merged |
-| PR review decision | BLOCKED | High finding: keyboard shortcut path missing |
+| PR review decision | READY FOR FINAL REVIEW | High finding closed; owner approval and explicit merge remain pending |
 
 ## Performance
 
@@ -48,4 +48,4 @@ UI automation for the complete teacher journey is not verified because a browser
 
 ## Stop
 
-After the keyboard shortcut defect is repaired and re-reviewed, PR #1 may be reconsidered. For this review, PR #1 remains open and blocked; no merge and no Gate 3.
+The keyboard shortcut defect is repaired and the local final verification passed. PR #1 is open and **READY FOR FINAL REVIEW**; no merge and no Gate 3 until owner approval.

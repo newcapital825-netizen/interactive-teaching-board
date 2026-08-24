@@ -155,3 +155,9 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] تحديث GATE_2_REPORT وGATE_2_FINAL_VERIFICATION بحالة VERIFIED/NOT VERIFIED/BLOCKED/DEFERRED وقرار PR دون merge.
 - [x] حفظ checkpoint نهائي والتوقف بانتظار تفويض الدمج الصريح.
 - [ ] إصلاح مسار keyboard shortcuts وإعادة المراجعة قبل أن يصبح PR #1 READY TO MERGE.
+
+## Pasted content 12 — pending review
+
+- [ ] قراءة وتحليل `pasted_content_12.txt` وتحديد علاقته بـ blocker اختصارات لوحة المفاتيح.
+- [ ] تنفيذ الإصلاح أو التوثيق المطلوب على فرع Gate 2 فقط.
+- [ ] تشغيل الفحوص وتحديث PR #1 وcheckpoint ثم التوقف.
