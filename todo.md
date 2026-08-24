@@ -134,3 +134,14 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] إنشاء benchmark رقمي قابل لإعادة التشغيل وتسجيل البيئة والنتائج الفعلية.
 - [x] إجراء accessibility smoke test موثق، وتسجيل touch/stylus كـ NOT VERIFIED إن لم تتوفر hardware.
 - [x] تنفيذ clean clone من فرع الإصلاح، تحديث GATE_2_REPORT وGATE_2_REPAIR_ROUND، وترك PR #1 مفتوحًا دون دمج.
+
+## Gate 2 Final Verification Round — pending
+
+- [ ] إكمال group resize بحيث تُحوّل المجموعة مواضع وأحجام children نسبيًا وتحافظ على z-order/styles/IDs بعد save/reload/ungroup.
+- [ ] إضافة regression tests لدورة group resize وungroup وundo/redo.
+- [ ] تشغيل UI automation قابل لإعادة الإنتاج أو تثبيت NOT VERIFIED إذا لم يتوفر runner.
+- [ ] إعادة تشغيل benchmark 91-object ومقارنة القياسات السابقة بالحالية.
+- [ ] تشغيل accessibility smoke review وتسجيل النتائج دون ادعاء WCAG.
+- [ ] تثبيت touch/stylus كـ NOT VERIFIED إن لم تتوفر hardware.
+- [ ] تنفيذ install/check/test/build/diff/status وكتابة `GATE_2_FINAL_VERIFICATION.md`.
+- [ ] رفع focused commit إلى PR #1 دون merge أو بدء Gate 3.

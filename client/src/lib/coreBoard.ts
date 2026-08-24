@@ -52,3 +52,22 @@ export const getActivePage = (document: BoardDocument) => document.pages.find((p
 export const cloneDocument = (document: BoardDocument): BoardDocument => JSON.parse(JSON.stringify(document)) as BoardDocument;
 export const persistDocument = (document: BoardDocument) => localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...document, updatedAt: new Date().toISOString() }));
 export const restoreDocument = (): BoardDocument | null => { const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return null; try { return JSON.parse(raw) as BoardDocument; } catch { return null; } };
+
+export type ResizeCorner = "tl" | "tr" | "bl" | "br";
+
+export const resizeObject = (object: CoreObject, width: number, height: number): CoreObject => {
+  const nextWidth = Math.max(80, width);
+  const nextHeight = Math.max(50, height);
+  if (object.type !== "GroupObject" || !object.children?.length) return { ...object, size: { width: nextWidth, height: nextHeight } };
+  const scaleX = object.size.width ? nextWidth / object.size.width : 1;
+  const scaleY = object.size.height ? nextHeight / object.size.height : 1;
+  return {
+    ...object,
+    size: { width: nextWidth, height: nextHeight },
+    children: object.children.map((child) => ({
+      ...child,
+      position: { x: child.position.x * scaleX, y: child.position.y * scaleY },
+      size: { width: Math.max(40, child.size.width * scaleX), height: Math.max(32, child.size.height * scaleY) },
+    })),
+  };
+};

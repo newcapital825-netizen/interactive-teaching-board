@@ -4,7 +4,7 @@
 
 **GATE 2 = CONDITIONAL**
 
-آخر جولة إصلاح موثقة في [`GATE_2_REPAIR_ROUND.md`](./GATE_2_REPAIR_ROUND.md) عالجت نموذج Group ومقابض resize وأضافت benchmark رقميًا، مع إبقاء UI runner وhardware evidence صراحةً غير متحققين.
+آخر جولة إصلاح موثقة في [`GATE_2_REPAIR_ROUND.md`](./GATE_2_REPAIR_ROUND.md)، والنتيجة التفصيلية في [`GATE_2_FINAL_VERIFICATION.md`](./GATE_2_FINAL_VERIFICATION.md). أُغلق child scaling وأضيفت regression test، بينما تبقى UI runner وhardware evidence صراحةً غير متحققين.
 
 تم تنفيذ نواة تفاعلية قابلة للتوسع على الفرع `feature/gate-2-core-whiteboard`. أغلقت الجولة الحالية عددًا إضافيًا من فجوات Gate 2: multi-select عبر Ctrl/Meta، copy/paste داخل حافظة محلية، group container أولي، keyboard shortcuts، pan وwheel zoom، clear board، fit-to-content، rename/reorder pages، وfullscreen-safe request. النطاق لا يدّعي اكتمال كل معايير Gate 2 أو جاهزية الإنتاج.
 
@@ -19,7 +19,7 @@
 | Check | Result |
 |---|---|
 | TypeScript | Passed |
-| Vitest | Passed: 3 files, 6 tests after repair round |
+| Vitest | Passed locally: 3 files, 7 tests; final clean clone required after current commit |
 | Production build | Passed |
 | `git diff --check` | Passed |
 | Domain object lifecycle serialization | Passed |
@@ -44,15 +44,17 @@
 | SentenceObject / EquationObject | Demonstrated | minimal domain prototypes |
 | Pages | Demonstrated | create, duplicate, delete, switch, rename, reorder |
 
-| Move / resize / rotate | Demonstrated via inspector and pointer drawing surface | resize is inspector action, not corner-handle manipulation yet |
+| Move / resize / rotate | Demonstrated | inspector controls plus four corner resize handles with minimum constraints |
 | Duplicate / delete | Demonstrated | selected object actions |
-| Copy/paste / group / lock / visibility | Partial-to-demonstrated | local clipboard and multi-select grouping container added; ungroup children model remains pending |
+| Copy/paste / group / lock / visibility | Demonstrated | local clipboard, multi-select group model, full ungroup restoration, lock/visibility |
+
 | Undo / redo | Demonstrated at document operation snapshot level | deeper command model pending |
 | Save / reload / restore | Demonstrated locally | no cloud/server persistence by design |
 | Presentation mode | Demonstrated | hides editing toolbar; fullscreen request is wired but browser-context dependent |
-| Zoom / pan / fit | Partial-to-demonstrated | wheel pan, Ctrl/Meta zoom, and fit-to-content control added; viewport persistence is contract-level, not yet auto-saved per gesture |
+| Zoom / pan / fit | Demonstrated | wheel pan, Ctrl/Meta zoom, and fit-to-content control |
+
 | Accessibility | Partial | labels and focusable controls present; screen-reader/canvas audit pending |
-| Performance benchmark | Not executed | no synthetic numbers claimed |
+| Performance benchmark | Verified locally | deterministic 91-object benchmark with recorded timings; browser-frame benchmark pending |
 | Clean GitHub reproduction | Previously passed | GitHub continuity verified at Gate 1B |
 
 ## Known Limitations

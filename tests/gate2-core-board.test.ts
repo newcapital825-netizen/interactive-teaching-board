@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { BoardDocument, cloneDocument, createDocument, createObject, createPage, getActivePage } from "../client/src/lib/coreBoard";
+import { BoardDocument, cloneDocument, createDocument, createObject, createPage, getActivePage, resizeObject } from "../client/src/lib/coreBoard";
 
 describe("Gate 2 Core Board domain", () => {
   let document: BoardDocument;
@@ -34,6 +34,29 @@ describe("Gate 2 Core Board domain", () => {
     expect(restored.pages.map((page) => page.name)).toEqual(["Page 1", "Page 2"]);
     expect(restored.activePageId).toBe(page2.id);
     expect(restored.pages[1].viewport.zoom).toBe(1.25);
+  });
+
+  it("resizes a group by scaling local children and restores them after serialization", () => {
+    const first = createObject("TextObject", "العربية + English", 20, 30);
+    first.size = { width: 120, height: 60 };
+    const second = createObject("ShapeObject", "shape", 190, 80);
+    second.size = { width: 90, height: 70 };
+    const group = createObject("GroupObject", "2 children", 20, 30);
+    group.size = { width: 260, height: 150 };
+    group.childIds = [first.id, second.id];
+    group.children = [
+      { ...first, position: { x: 0, y: 0 } },
+      { ...second, position: { x: 170, y: 50 } },
+    ];
+    const resized = resizeObject(group, 520, 300);
+    const restored = JSON.parse(JSON.stringify(resized)) as typeof group;
+    const ungrouped = restored.children!.map((child) => ({ ...child, position: { x: child.position.x + restored.position.x, y: child.position.y + restored.position.y } }));
+    expect(restored.childIds).toEqual([first.id, second.id]);
+    expect(restored.children![1].position).toEqual({ x: 340, y: 100 });
+    expect(restored.children![0].size).toEqual({ width: 240, height: 120 });
+    expect(ungrouped.map((child) => child.id)).toEqual([first.id, second.id]);
+    expect(ungrouped[1].zIndex).toBe(second.zIndex);
+    expect(ungrouped[0].style.background).toBe(first.style.background);
   });
 
   it("keeps vector stroke data editable instead of flattening it", () => {
