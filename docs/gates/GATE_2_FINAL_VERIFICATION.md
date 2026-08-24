@@ -2,14 +2,14 @@
 
 ## Decision
 
-**GATE 2 = CONDITIONAL.** لا يُدمج PR #1 ولا يبدأ Gate 3. السبب المتبقي ليس Group child scaling؛ بل عدم توفر UI automation runner واختبار hardware فعلي، مع بقاء بعض التحصينات غير المكتملة.
+**GATE 2 = CONDITIONAL. PR #1 = BLOCKED — لا يُدمج حاليًا.** لا يبدأ Gate 3. مراجعة PR وجدت عيبًا عاليًا قابلًا للإصلاح: اختصارات لوحة المفاتيح موثقة سابقًا كأنها متحققة، لكن Core Board لا يحتوي مسار `keydown`/`keyup` أو `onKeyDown` لها. تبقى UI automation وhardware evidence غير متحققة أيضًا.
 
 ## Criteria Classification
 
 | Criterion | Classification | Evidence / limitation |
 |---|---|---|
 | Multi-select | VERIFIED | Ctrl/Meta selection path in Core Board |
-| Keyboard shortcuts | VERIFIED | Copy/paste, undo/redo, delete, arrow movement paths present |
+| Keyboard shortcuts | BLOCKED | Toolbar actions exist, but Core Board keyboard event path is absent; do not claim shortcut verification |
 | Copy/paste | VERIFIED | Local clipboard path with new IDs and offset |
 | Grouping | VERIFIED | Group stores child IDs and local child references |
 | Group movement | VERIFIED | Group transform moves while local child coordinates remain stable |
@@ -31,7 +31,8 @@
 | Check | VERIFIED | Local `pnpm check` passed |
 | Tests | VERIFIED | Local run: 3 files, 7 tests passed |
 | Build | VERIFIED | Local `pnpm build` passed |
-| Git discipline | VERIFIED | Feature branch only, no force push, PR #1 open |
+| Git discipline | VERIFIED | Feature branch only, no force push, PR #1 open and intentionally not merged |
+| PR review decision | BLOCKED | High finding: keyboard shortcut path missing |
 
 ## Performance
 
@@ -47,4 +48,4 @@ UI automation for the complete teacher journey is not verified because a browser
 
 ## Stop
 
-After the final repair commit is pushed and clean-clone checks pass, PR #1 remains open for owner review. No merge and no Gate 3.
+After the keyboard shortcut defect is repaired and re-reviewed, PR #1 may be reconsidered. For this review, PR #1 remains open and blocked; no merge and no Gate 3.

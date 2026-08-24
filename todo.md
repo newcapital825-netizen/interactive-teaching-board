@@ -145,3 +145,13 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] تثبيت touch/stylus كـ NOT VERIFIED — HARDWARE UNAVAILABLE.
 - [x] تنفيذ install/check/test/build/diff/status وكتابة `GATE_2_FINAL_VERIFICATION.md`.
 - [x] رفع focused commit إلى PR #1 دون merge أو بدء Gate 3.
+
+## Gate 2 Owner Review / Merge Preparation — pending
+
+- [x] مراجعة diff الكامل لـ PR #1 والكود ونموذج المجال والحدود المعمارية والأمن.
+- [x] فحص state corruption وID collisions وstale references وgroup transforms وstyles/z-order وpersistence وRTL وevent leaks وkeyboard behavior.
+- [x] إنشاء `docs/qa/INPUT_DEVICE_VERIFICATION.md` بحالة TOUCH/STYLUS غير متحققين.
+- [x] تصنيف browser performance كـ NOT VERIFIED والإبقاء على benchmark الهندسي 91-object.
+- [x] تحديث GATE_2_REPORT وGATE_2_FINAL_VERIFICATION بحالة VERIFIED/NOT VERIFIED/BLOCKED/DEFERRED وقرار PR دون merge.
+- [x] حفظ checkpoint نهائي والتوقف بانتظار تفويض الدمج الصريح.
+- [ ] إصلاح مسار keyboard shortcuts وإعادة المراجعة قبل أن يصبح PR #1 READY TO MERGE.
