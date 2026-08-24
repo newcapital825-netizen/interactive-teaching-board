@@ -2,7 +2,7 @@
 
 ## Status
 
-**GATE 3A = IN IMPLEMENTATION — NOT YET READY FOR OWNER REVIEW.** هذا التقرير هو مسودة تحقق تُحدّث بعد clean clone والرفع إلى GitHub. لم يتم فتح أو دمج Pull Request، ولم يبدأ Gate 3B أو Arabic Toolkit أو Math Toolkit أو AI.
+**GATE 3A = READY FOR OWNER REVIEW.** تم الرفع إلى GitHub والتحقق من الفرع عبر clean clone مستقل. لم يتم فتح أو دمج Pull Request، ولم يبدأ Gate 3B أو Arabic Toolkit أو Math Toolkit أو AI.
 
 ## Git baseline
 
@@ -12,7 +12,8 @@
 | Base branch | `main` |
 | Base SHA | `d24e3fcf925bc61b51e34b7aa42552fd062d1bf6` |
 | Feature branch | `feature/gate-3a-educational-object-engine` |
-| Working tree | implementation in progress; not yet clean |
+| Working tree | clean in final clean clone |
+| Final branch SHA | `ab096958b56a27d77c2b07f85fde67f48142c0a3` |
 | PR | intentionally not opened |
 
 ## Architecture changes
@@ -67,11 +68,11 @@
 | `git diff --check` | PASSED locally |
 | Gate 2 regression suite | PASSED: existing 4 Gate 2/domain/keyboard/performance files |
 | Gate 3A contract suite | PASSED: lifecycle, capabilities, registry, migration, persistence, adapters, transformations, security, cross-subject proof |
-| 100-object baseline | Measured locally: creation 0.185 ms, serialization 0.077 ms, restore parse 0.193 ms, duplication 0.004 ms |
+| 100-object baseline | Clean clone measurement: creation 0.160 ms, serialization 0.076 ms, restore parse 0.205 ms, duplication 0.004 ms |
 | UI automation | NOT VERIFIED — RUNNER UNAVAILABLE |
 | Touch / Stylus | NOT VERIFIED — HARDWARE UNAVAILABLE |
 | Real browser performance | NOT VERIFIED |
-| Clean clone from feature branch | Pending push and final clean clone |
+| Clean clone from feature branch | PASSED at `ab096958b56a27d77c2b07f85fde67f48142c0a3`; working tree clean |
 
 ## Accessibility
 
@@ -93,9 +94,9 @@
 | Security review | VERIFIED for no-execution and unknown retention boundaries |
 | Accessibility smoke | PARTIAL; no full audit |
 | Performance baseline | VERIFIED locally for 100 objects; no browser frame claim |
-| Clean clone / GitHub branch | PENDING |
-| Documentation | PARTIAL until final clean-clone results are recorded |
+| Clean clone / GitHub branch | VERIFIED: feature branch only, no PR opened, clean working tree |
+| Documentation | VERIFIED for Gate 3A scope; limitations and backlog recorded |
 
 ## Decision rule
 
-لن يعلن Gate 3A `READY FOR OWNER REVIEW` قبل رفع الفرع وتشغيل clean clone والفحوص مرة أخرى وتحديث هذا التقرير بالأرقام النهائية. إذا فشل أي اختبار أو حدث Gate 2 regression، تبقى الحالة `CONDITIONAL`. عند نجاح كل الفحوص البرمجية فقط، تبقى فجوات UI automation وhardware وreal browser performance مصنفة بوضوح ولا تُخفى.
+تم إعلان Gate 3A `READY FOR OWNER REVIEW` بعد رفع الفرع وتشغيل clean clone والفحوص مرة أخرى وتحديث هذا التقرير بالأرقام النهائية. نجحت الفحوص البرمجية ولم يحدث Gate 2 regression. تبقى فجوات UI automation وhardware وreal browser performance مصنفة بوضوح ولا تُخفى. لا يُفتح PR ولا يبدأ Gate 3B قبل تفويض المالك.
