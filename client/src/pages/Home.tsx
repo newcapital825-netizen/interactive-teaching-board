@@ -6,6 +6,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import CandidateBench from "@/components/CandidateBench";
 import GeneralWhiteboardBench from "@/components/GeneralWhiteboardBench";
+import CoreBoardBench from "@/components/CoreBoardBench";
 import {
   ArrowDownToLine,
   Check,
@@ -245,6 +246,7 @@ export default function Home() {
       </div>
       <CandidateBench />
       <GeneralWhiteboardBench />
+      <CoreBoardBench />
       <footer className="bottom-bar"><span><Hand size={14} /> pointer / touch surface evaluated</span><span>Canvas Adapter <b>↔</b> Educational Object <b>↔</b> Graph Adapter</span><span>Gate 1 · disposable evidence</span></footer>
     </main>
   );

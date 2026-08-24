@@ -87,3 +87,27 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] دفع التاريخ المحلي دون force push.
 - [x] تنفيذ clean clone ثم install وcheck وtests وbuild.
 - [x] تحديث تقرير GitHub Continuity بالحالة النهائية والرابط وSHA والتوقف.
+
+## Pasted content 7 — pending review
+
+- [ ] قراءة وتحليل `pasted_content_7.txt` وتحديد التعليمات الجديدة مقابل حالة GitHub وGate 1B.
+- [ ] تنفيذ النطاق المصرح به فقط، مع عدم بدء Gate 2 أو أي توسعة غير معتمدة.
+- [ ] اختبار التغييرات وتحديث التقرير والـ checkpoint عند الإتمام.
+
+## Gate 2 — Core Interactive Teaching Board — authorized
+
+- [ ] إنشاء فرع `feature/gate-2-core-whiteboard` وعدم العمل على `main`.
+- [ ] تصميم Core Board عام مستقل عن Arabic وMath مع Educational Object contract موسع.
+- [ ] تنفيذ Text وDrawing وShape وImage placeholder وMedia/PDF/Table/Sticky/Connector/Group placeholders ضمن حدود Gate 2.
+- [ ] تنفيذ select وmulti-select وmove وresize وrotate وduplicate وdelete وcopy/paste وgroup وlock وvisibility وundo/redo وzoom/pan وfit-to-content.
+- [ ] تنفيذ رسم vector حقيقي قابل للحفظ والاستعادة: pen وhighlighter وeraser وstroke width وfreehand وline وarrow وbasic shapes.
+- [ ] تنفيذ mixed RTL/LTR text editing واختباره مع Arabic + English + numbers + x² + symbols.
+- [ ] تنفيذ Board Pages/Frames مع create وduplicate وreorder وrename وdelete.
+- [ ] تنفيذ Presentation Mode وfullscreen-safe experience دون بيانات تقنية.
+- [ ] تنفيذ local-first persistence abstraction مع save/close/reload/restore لكل الكائنات والصفحات.
+- [ ] إضافة Arabic وMath toolkit contracts مع SentenceObject وWordObject وGrammarObject وI3rabObject وEquationObject prototypes دون محركات كاملة.
+- [ ] إضافة benchmark قابل لإعادة التشغيل وقياس فعلي للتحميل والتفاعل والتحريك وzoom/pan وsave/restore.
+- [ ] إضافة اختبارات domain وintegration وUI smoke وpersistence وRTL/mixed-direction وdrawing وequation وpages.
+- [ ] تنفيذ visual QA لسطح فارغ وممتلئ والعربية والمختلط والرسم والتحديد وتغيير الحجم والصفحات ووضع العرض والشاشة الكبيرة.
+- [ ] تحديث docs/gates/GATE_2_REPORT.md وتسجيل Canvas decision دون اختيار مبكر.
+- [ ] تشغيل check وtest وbuild، ثم حفظ checkpoint وفتح PR/طلب مراجعة دون بدء Gate 3.
