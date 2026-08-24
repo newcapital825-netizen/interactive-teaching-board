@@ -149,3 +149,11 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
 .probe-check:before { content:'✓'; color:var(--coral); margin-right:6px; }
 .probe-caption { color:var(--muted-foreground); font-size:10px; line-height:1.8; }
 .probe-caption strong { color:var(--olive); font-size:13px; }
+
+.architecture-strip { display:flex; align-items:center; justify-content:center; gap:12px; padding:14px 28px; border-bottom:1px solid var(--line); background:rgba(231,226,216,.32); color:var(--olive); }
+.architecture-strip > span { padding:8px 12px; background:var(--olive); color:#fbfaf6; font-size:11px; font-weight:700; }
+.architecture-strip i, .architecture-strip em { color:var(--coral); font-style:normal; font-size:16px; }
+.architecture-strip div { display:flex; flex-direction:column; gap:2px; padding:7px 11px; border:1px solid var(--line); background:rgba(251,250,246,.7); }
+.architecture-strip b { font-size:10px; }
+.architecture-strip small { color:var(--muted-foreground); font-size:9px; }
+@media (max-width:700px) { .architecture-strip { gap:6px; padding:11px 12px; justify-content:flex-start; overflow:auto; } .architecture-strip > span,.architecture-strip div { white-space:nowrap; } }

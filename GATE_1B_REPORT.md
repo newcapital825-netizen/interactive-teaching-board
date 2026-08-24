@@ -46,18 +46,18 @@
 ## 8. Integration Architecture
 
 ```text
-                         Frozen SentenceObject
-                                  │
-                    ┌─────────────┴─────────────┐
-                    │                           │
-              Canvas Adapter                Graph Adapter
-                    │                           │
-          tldraw probe / TBD          React Flow 12.11.3
-          Excalidraw probe             Grammar / I3rab graph
-                    │                           │
-                    └──── application-owned ────┘
-                         serialization + evidence
+                    SentenceObject
+                         │
+             ┌───────────┴───────────┐
+             │                       │
+       Canvas Adapter          Graph Adapter
+             │                       │
+       ┌─────┴─────┐             React Flow
+       │           │
+    tldraw     Excalidraw
 ```
+
+هذا هو المخطط المعتمد للعرض المعماري في Gate 1B. يبقى `SentenceObject` مالك البيانات التعليمية، ويظل `Canvas Adapter` حدًا مستقلًا لمرشحي tldraw وExcalidraw، بينما يُستخدم React Flow داخل `Graph Adapter` لتمثيل Grammar/I3rab والعلاقات. لا يثبت المخطط وحده اختيارًا نهائيًا أو تكاملًا إنتاجيًا.
 
 المخطط يثبت الفصل المقترح، ولا يعني أن tldraw أو Excalidraw قد اجتازا التكامل الفعلي.
 

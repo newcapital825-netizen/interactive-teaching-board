@@ -41,3 +41,9 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Record coupling, persistence, export, RTL, touch/pointer/stylus, accessibility, and performance evidence.
 - [x] Produce `GATE_1B_REPORT.md` with comparison matrix, architecture diagram, risks, recommendation, and Gate 2 preconditions.
 - [x] Stop after Gate 1B and wait for explicit owner approval.
+
+## Owner architecture diagram — pending implementation
+
+- [x] اعتماد المخطط المقدم كصيغة العرض الرسمية: SentenceObject → Canvas Adapter (tldraw / Excalidraw) وGraph Adapter (React Flow).
+- [x] تحديث GATE_1B_REPORT.md وADR وواجهة Candidate Bench بالمخطط نفسه.
+- [x] التحقق من البناء واللقطة البصرية ثم حفظ checkpoint والتوقف.

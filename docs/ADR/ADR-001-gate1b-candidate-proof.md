@@ -10,7 +10,21 @@
 
 ## القرار
 
-نحافظ على `Educational Object Model` مستقلًا، ونستخدم adapters صغيرة، ويمتلك التطبيق serialization الخاص به. React Flow مناسب مبدئيًا للرسم البياني المتخصص، لكنه ليس بديلًا للـ primary canvas. لا يُعلن tldraw أو Excalidraw فائزًا قبل تكامل فعلي منفصل.
+نحافظ على `Educational Object Model` مستقلًا، ونستخدم adapters صغيرة، ويمتلك التطبيق serialization الخاص به. يعتمد العرض المعماري الرسمي الصيغة التالية:
+
+```text
+                    SentenceObject
+                         │
+             ┌───────────┴───────────┐
+             │                       │
+       Canvas Adapter          Graph Adapter
+             │                       │
+       ┌─────┴─────┐             React Flow
+       │           │
+    tldraw     Excalidraw
+```
+
+React Flow مناسب مبدئيًا للرسم البياني المتخصص، لكنه ليس بديلًا للـ primary canvas. لا يُعلن tldraw أو Excalidraw فائزًا قبل تكامل فعلي منفصل.
 
 ## الدليل
 
