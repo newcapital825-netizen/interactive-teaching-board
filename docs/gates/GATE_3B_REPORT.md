@@ -11,7 +11,8 @@
 | Repository | `newcapital825-netizen/interactive-teaching-board` |
 | Base SHA | `d24e3fcf925bc61b51e34b7aa42552fd062d1bf6` |
 | Branch | `feature/gate-3b-universal-whiteboard-ux` |
-| Commits | `aa68131` UX surface; `b573751` UX tests/benchmark; `0cee0b4` documentation |
+| Commits | `aa68131` UX surface; `b573751` UX tests/benchmark; `0cee0b4` architecture/QA docs; `c3ac6e9` final editorial review/report |
+| Final clean-clone SHA | `c3ac6e9a3b9326f940397fef950fd14b3d013321` |
 | PR / merge | Not opened / not merged |
 
 ## UX changes
@@ -62,9 +63,9 @@
 
 | Objects | Creation ms | Serialization ms | Restoration ms | Zoom ms | Clone ms |
 |---:|---:|---:|---:|---:|---:|
-| 100 | 0.218 | 0.210 | 0.116 | 0.075 | 0.249 |
-| 250 | 0.190 | 0.205 | 0.335 | 0.032 | 0.555 |
-| 500 | 0.361 | 0.519 | 1.747 | 0.042 | 1.252 |
+| 100 | 0.219 | 1.317 | 0.126 | 0.100 | 0.251 |
+| 250 | 0.196 | 0.204 | 0.293 | 0.028 | 0.633 |
+| 500 | 0.358 | 0.385 | 4.177 | 0.032 | 0.936 |
 
 ## Honest limitations
 
