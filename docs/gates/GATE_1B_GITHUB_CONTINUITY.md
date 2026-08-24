@@ -21,7 +21,7 @@
 
 تم الحفاظ على تاريخ المشروع المحلي بالكامل، ولم تُستخدم أي عملية force push أو history rewrite أو حذف فرع. أُعيدت تسمية remote الداخلي إلى `manus-internal` بدل حذفه، وأصبح GitHub هو `origin` الرسمي. الفرع الحالي `main` ويتبع `origin/main`.
 
-تم دفع commit continuity إلى GitHub: `d80020a chore(repo): establish GitHub continuity for Gate 1B`. سيُثبت SHA النهائي لهذا التحديث التوثيقي بعد دفعه.
+تم دفع commit continuity إلى GitHub، وآخر commit موثق هو `eafbe7195b5535cd26ed32dfe8c7963b94a1f20d docs(repo): finalize verified continuity report`.
 
 ## Clean Clone Verification
 
