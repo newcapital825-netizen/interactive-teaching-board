@@ -14,7 +14,7 @@
 | Merge method | GitHub natural merge commit |
 | Merge timestamp | `2026-08-24T09:42:19Z` |
 
-تم التحقق من أن commit رأس `main` يساوي `302fd67841da827d61680c79423810e04faa8077`.
+تم التحقق مباشرة بعد الدمج من أن رأس `main` كان يساوي merge commit `302fd67841da827d61680c79423810e04faa8077`. بعد ذلك أُضيف commit توثيقي عادي إلى `main` هو `e5fda1b152de76658d893c083e943c1696c91f22`؛ وهو رأس `main` الحالي، ويحافظ على merge commit كسلف مباشر دون إعادة كتابة التاريخ.
 
 ## Post-merge verification
 

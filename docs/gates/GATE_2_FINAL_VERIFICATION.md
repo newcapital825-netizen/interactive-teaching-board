@@ -27,7 +27,7 @@
 | Accessibility smoke test | PARTIAL / NOT VERIFIED | Labels, focusable controls, visible handles and non-hover paths reviewed; no automated screen-reader or contrast audit |
 | Touch evidence | NOT VERIFIED — HARDWARE UNAVAILABLE | Pointer/touch-safe implementation exists; no physical touchscreen test |
 | Stylus evidence | NOT VERIFIED — HARDWARE UNAVAILABLE | No physical stylus test |
-| Clean clone | VERIFIED | Clean clone of `main` at merge commit `302fd67841da827d61680c79423810e04faa8077` passed frozen install, check, 10 tests, build, diff check, and clean status |
+| Clean clone | VERIFIED | Clean clone of `main` at merge commit `302fd67841da827d61680c79423810e04faa8077` passed frozen install, check, 10 tests, build, diff check, and clean status; documentation commit `e5fda1b` was then added normally |
 | Check | VERIFIED | Local `pnpm check` passed |
 | Tests | VERIFIED | Clean main clone: 4 files, 10 tests passed |
 | Build | VERIFIED | Local `pnpm build` passed |
@@ -44,7 +44,7 @@ Keyboard focusable controls and explicit labels are present. The UI does not rel
 
 ## Remaining Limitations
 
-UI automation for the complete teacher journey is not verified because a browser integration runner is unavailable. The final clean clone was run from main merge commit `302fd67841da827d61680c79423810e04faa8077` and passed. Media/PDF/Table/Sticky/Connector full UI, production Arabic and Math toolkits, AI, Billing, Collaboration, OCR, PDF Intelligence, and Gate 3 remain out of scope.
+UI automation for the complete teacher journey is not verified because a browser integration runner is unavailable. The first post-merge clean clone was run from merge commit `302fd67841da827d61680c79423810e04faa8077` and passed; the subsequent documentation-only commit `e5fda1b152de76658d893c083e943c1696c91f22` was added without rewriting history. Media/PDF/Table/Sticky/Connector full UI, production Arabic and Math toolkits, AI, Billing, Collaboration, OCR, PDF Intelligence, and Gate 3 remain out of scope.
 
 ## Stop
 
