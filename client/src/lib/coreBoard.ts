@@ -30,6 +30,8 @@ export type CoreObject = {
   style: { color: string; background: string; fontSize: number; align: "left" | "center" | "right" };
   metadata: { label: string; source: "teacher" | "placeholder"; locked: boolean; visible: boolean; version: number };
   stroke?: Stroke;
+  childIds?: string[];
+  children?: CoreObject[];
 };
 
 export type BoardPage = { id: string; name: string; objects: CoreObject[]; viewport: { x: number; y: number; zoom: number } };

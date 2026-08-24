@@ -118,3 +118,19 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] إغلاق أعلى الفجوات المصرح بها: copy/paste وgroup/ungroup وpan/fit وإدارة الصفحات ووضع العرض.
 - [ ] إضافة اختبارات ودليل benchmark/accessibility واقعي دون اختلاق أرقام.
 - [ ] تحديث GATE_2_REPORT وPull Request، ثم التوقف قبل Gate 3.
+
+## Pasted content 9 — pending review
+
+- [ ] قراءة وتحليل `pasted_content_9.txt` مقابل فجوات Gate 2 الحالية.
+- [ ] تنفيذ التحسينات المصرح بها على فرع `feature/gate-2-core-whiteboard` فقط.
+- [ ] تشغيل الفحوص وتحديث التقرير وPull Request ثم التوقف قبل Gate 3.
+
+## Gate 2 Conditional Repair Round — pending
+
+- [x] استبدال Group container بنموذج children IDs وتحويلات ومواقع قابلة لإعادة البناء.
+- [x] تنفيذ group move/resize/save/restore/ungroup مع Undo/Redo على مستوى الوثيقة؛ child scaling أثناء group resize مؤجل للتحصين.
+- [x] تنفيذ corner resize handles للأجسام القابلة لتغيير الحجم مع minimum size ومنع الانقلاب.
+- [x] إضافة UI/integration test journey فعلية أو توثيق حدود البيئة بوضوح؛ runner الفعلي غير متوفر وسُجلت الحالة NOT VERIFIED.
+- [x] إنشاء benchmark رقمي قابل لإعادة التشغيل وتسجيل البيئة والنتائج الفعلية.
+- [x] إجراء accessibility smoke test موثق، وتسجيل touch/stylus كـ NOT VERIFIED إن لم تتوفر hardware.
+- [x] تنفيذ clean clone من فرع الإصلاح، تحديث GATE_2_REPORT وGATE_2_REPAIR_ROUND، وترك PR #1 مفتوحًا دون دمج.

@@ -4,6 +4,8 @@
 
 **GATE 2 = CONDITIONAL**
 
+آخر جولة إصلاح موثقة في [`GATE_2_REPAIR_ROUND.md`](./GATE_2_REPAIR_ROUND.md) عالجت نموذج Group ومقابض resize وأضافت benchmark رقميًا، مع إبقاء UI runner وhardware evidence صراحةً غير متحققين.
+
 تم تنفيذ نواة تفاعلية قابلة للتوسع على الفرع `feature/gate-2-core-whiteboard`. أغلقت الجولة الحالية عددًا إضافيًا من فجوات Gate 2: multi-select عبر Ctrl/Meta، copy/paste داخل حافظة محلية، group container أولي، keyboard shortcuts، pan وwheel zoom، clear board، fit-to-content، rename/reorder pages، وfullscreen-safe request. النطاق لا يدّعي اكتمال كل معايير Gate 2 أو جاهزية الإنتاج.
 
 ## Implemented Scope
@@ -17,7 +19,7 @@
 | Check | Result |
 |---|---|
 | TypeScript | Passed |
-| Vitest | Passed: 2 files, 5 tests |
+| Vitest | Passed: 3 files, 6 tests after repair round |
 | Production build | Passed |
 | `git diff --check` | Passed |
 | Domain object lifecycle serialization | Passed |
@@ -55,7 +57,7 @@
 
 ## Known Limitations
 
-ما زالت corner resize handles، ungroup children model، Media/PDF/Table/Sticky/Connector UI الكاملة، automated UI smoke tests، touch device tests، stylus tests، performance benchmark حقيقي، وcomprehensive accessibility audit غير منفذة. fullscreen يعتمد على Browser API وقد يفشل بحسب سياق العرض. لا تزال AI وBilling وCollaboration وOCR وPDF Intelligence وMathLive غير مضافة.
+ما زالت Media/PDF/Table/Sticky/Connector UI الكاملة، automated UI smoke tests، touch device tests، stylus tests، performance benchmark متصفح حقيقي، وcomprehensive accessibility audit غير منفذة. fullscreen يعتمد على Browser API وقد يفشل بحسب سياق العرض. لا تزال AI وBilling وCollaboration وOCR وPDF Intelligence وMathLive غير مضافة.
 
 ## Canvas Decision
 

@@ -239,3 +239,11 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
 .core-board-footer { display:flex; justify-content:space-between; gap:15px; padding:12px 30px; border-top:1px solid var(--line); color:var(--muted-foreground); font-size:9px; }
 @media (max-width:900px) { .core-board { margin:24px 17px; } .core-board-header { display:block; padding:20px; } .core-notice { display:inline-block; margin-top:14px; } .core-toolbar { padding:8px 12px; overflow-x:auto; flex-wrap:nowrap; } .core-layout { grid-template-columns:120px minmax(0,1fr); } .object-inspector { grid-column:1 / -1; border-right:0; border-top:1px solid var(--line); } .core-stage { height:440px; } .core-board-footer { padding:12px 17px; flex-wrap:wrap; } }
 @media (max-width:600px) { .core-layout { display:block; } .pages-panel { border-left:0; border-bottom:1px solid var(--line); } .page-item { display:inline-grid; width:auto; min-width:112px; margin-left:4px; } .panel-caption { display:none; } .core-stage-wrap { padding:12px; } .core-stage { height:380px; } .core-object { transform:scale(.8); transform-origin:top right; } }
+
+/* Gate 2 repair: visible corner handles with touch-sized hit areas and no inversion affordance. */
+.resize-handle { position:absolute; width:16px; height:16px; border:2px solid var(--paper); background:var(--coral); box-shadow:0 0 0 1px var(--coral); border-radius:50%; z-index:8; touch-action:none; }
+.handle-tl { top:-8px; left:-8px; cursor:nwse-resize; }
+.handle-tr { top:-8px; right:-8px; cursor:nesw-resize; }
+.handle-bl { bottom:-8px; left:-8px; cursor:nesw-resize; }
+.handle-br { bottom:-8px; right:-8px; cursor:nwse-resize; }
+@media (max-width:600px) { .resize-handle { width:22px; height:22px; } .handle-tl { top:-11px; left:-11px; } .handle-tr { top:-11px; right:-11px; } .handle-bl { bottom:-11px; left:-11px; } .handle-br { bottom:-11px; right:-11px; } }
