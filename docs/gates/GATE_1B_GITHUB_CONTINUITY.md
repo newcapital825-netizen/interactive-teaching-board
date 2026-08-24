@@ -11,8 +11,8 @@
 | Repository root | `/home/ubuntu/arabic-smart-board-spike` |
 | Branch | `main` |
 | Current remote | managed/internal Cloudflare artifact remote; not GitHub |
-| HEAD | `093efea` — Gate 1B general whiteboard benchmark checkpoint |
-| Working tree | `todo.md` has an uncommitted continuity-task entry |
+| HEAD | `e76767c` — `chore(repo): document GitHub continuity blocker` |
+| Working tree | Clean after the local continuity commit |
 | Existing history | Gate 1B checkpoints and initial bootstrap are preserved |
 | Destructive operations | none performed |
 
@@ -51,7 +51,7 @@
 
 ## Local Continuity Commit
 
-يمكن إنشاء commit محلي focused لهذه الوثيقة وبنية docs مع إبقاء التاريخ آمنًا، لكن لا يجوز دفعه إلى أي remote قبل اعتماد المالك لمستودع GitHub الهدف. سيُذكر SHA المحلي النهائي بعد التحقق النهائي.
+تم إنشاء commit محلي focused بأمان: `e76767c chore(repo): document GitHub continuity blocker`. لم يتم دفعه إلى أي remote؛ يبقى push محظورًا حتى اعتماد المالك لمستودع GitHub الهدف.
 
 ## Exact Next Step
 
