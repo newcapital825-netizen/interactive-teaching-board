@@ -70,3 +70,20 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] التحقق من ملفات README وCHANGELOG و.env.example و.gitignore ومجلدات docs ومتطلبات الأمن.
 - [ ] تنفيذ clean-clone verification فقط بعد توفر مستودع GitHub هدف مصرح به.
 - [ ] إنشاء تقرير `docs/gates/GATE_1B_GITHUB_CONTINUITY.md` وإصدار الحالة VERIFIED أو BLOCKED.
+
+## Owner-authorized GitHub connection — pending matching
+
+- [ ] فحص المستودعات المرشحة في حساب GitHub المصادق عليه ومطابقة الاسم والوصف والتاريخ.
+- [ ] اختيار المستودع فقط إذا كانت المطابقة موثوقة؛ وإلا طلب الرابط المحدد من المالك.
+- [ ] التحقق من visibility وdefault branch والصلاحيات ووجود تاريخ متعارض.
+- [ ] تنفيذ clean clone ثم install/typecheck/tests/build قبل push غير قسري.
+- [ ] تحديث تقرير GitHub Continuity وإغلاق الحالة VERIFIED أو إبقاء BLOCKED بدقة.
+
+## New GitHub repository setup — authorized
+
+- [ ] إنشاء مستودع GitHub خاص جديد باسم `interactive-teaching-board` تحت الحساب الموثّق.
+- [ ] التحقق من الملكية والخصوصية والفرع الافتراضي والصلاحيات.
+- [ ] حفظ remote الداخلي الحالي دون دفع إليه، ثم استبداله بـ GitHub بعد التحقق.
+- [ ] دفع التاريخ المحلي دون force push.
+- [ ] تنفيذ clean clone ثم install وcheck وtests وbuild.
+- [ ] تحديث تقرير GitHub Continuity بالحالة النهائية والرابط وSHA والتوقف.
