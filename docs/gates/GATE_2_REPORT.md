@@ -57,9 +57,9 @@
 
 لم يتم اختيار tldraw أو Excalidraw نهائيًا. Core Board يحتفظ بحدود adapter محايدة، وReact Flow يبقى Graph Adapter. اختيار Canvas Engine مؤجل حتى جولة integration evidence مستقلة.
 
-## Branch and Commit
+## Branch, Commit, and Pull Request
 
-هذا العمل مخصص للفرع `feature/gate-2-core-whiteboard`. يجب تسجيل commit ورفع الفرع وفتح Pull Request للمراجعة، دون الدمج إلى `main` تلقائيًا. سيتم تحديث SHA بعد commit النهائي.
+هذا العمل مخصص للفرع `feature/gate-2-core-whiteboard`، وتم رفعه إلى GitHub دون force push في commit `a1c7bc4 feat(core-board): add Gate 2 interactive teaching board foundation`. فُتح Pull Request للمراجعة: [#1](https://github.com/newcapital825-netizen/interactive-teaching-board/pull/1). لم يتم الدمج إلى `main` تلقائيًا؛ Gate 2 ما زال CONDITIONAL وينتظر المراجعة.
 
 ## Gate 3 Preconditions
 
