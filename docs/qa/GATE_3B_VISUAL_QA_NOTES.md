@@ -23,3 +23,9 @@
 ## Editorial pass
 
 بعد مراجعة مستقلة، أضيف evidence trail دائم يربط المصدر والتحليل والعنصر والرسم، وfolio rail مرقّم، وعلامة layer داخل canvas، مع جعل العربية هي الصوت الأساسي. أُصلح grid إلى أربعة أعمدة صريحة على desktop وإلى صفوف متجاوبة على الشاشات الأصغر؛ اللقطة النهائية أظهرت canvas مركزيًا على desktop وfolio/pages/canvas بترتيب قابل للاستخدام على mobile.
+
+## Architectural integration repair visual QA
+
+- Desktop preview after the repair branch merge rendered the Arabic folio shell, registry-driven insertion toolbar, central canvas, pages panel, and inspector without a visible runtime failure.
+- Mobile viewport (390×844) rendered the title, evidence trail, scrollable tool row, folio steps, pages panel, and canvas in a usable vertical sequence.
+- The dev server was restarted before capture; the old HMR parser warning did not reproduce after restart. Browser performance and hardware touch/stylus behavior remain unverified.
