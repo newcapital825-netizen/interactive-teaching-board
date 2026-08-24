@@ -2,7 +2,7 @@
 
 ## Scope and baseline
 
-هذا التقرير يسبق إصلاح التكامل ولا يغيّر `main`. repair branch هو `feature/gate-3b-integration-repair`، وقد أُنشئ من آخر رأس مرفوع لـGate 3B: `0299656e6f07456296659a891df18f008b51d1f5`. Gate 3A موجود على `feature/gate-3a-educational-object-engine` عند `fb7aa15af572733075a765a824bc2c04ac3023c6`.
+هذا التقرير يسبق إصلاح التكامل ولا يغيّر `main`. repair branch هو `feature/gate-3b-integration-repair`، وقد اكتمل الإصلاح على رأس الفرع `901e95ac7453bab225d8ce3e30885985fde05cd1`. أُنشئ الفرع من آخر رأس مرفوع لـGate 3B: `0299656e6f07456296659a891df18f008b51d1f5`. Gate 3A موجود على `feature/gate-3a-educational-object-engine` عند `fb7aa15af572733075a765a824bc2c04ac3023c6`.
 
 ## 1. ما يستخدمه Gate 3B حاليًا
 
@@ -64,7 +64,7 @@
 
 ## 10. Known limitations
 
-Touch and stylus hardware remain **NOT VERIFIED — HARDWARE UNAVAILABLE**. UI automation remains **NOT VERIFIED — RUNNER UNAVAILABLE**. Real-browser performance remains **NOT VERIFIED**. The current repair branch has not been pushed yet, and no Pull Request or merge to `main` is authorized in this repair round.
+Touch and stylus hardware remain **NOT VERIFIED — HARDWARE UNAVAILABLE**. UI automation remains **NOT VERIFIED — RUNNER UNAVAILABLE**. Real-browser performance remains **NOT VERIFIED**. The repair branch is pushed at commit `901e95ac7453bab225d8ce3e30885985fde05cd1`; no Pull Request or merge to `main` is authorized in this repair round.
 
 ## 11. Post-repair owner review
 
