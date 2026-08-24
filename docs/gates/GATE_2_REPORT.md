@@ -2,9 +2,9 @@
 
 ## Status
 
-**GATE 2 = READY FOR FINAL OWNER REVIEW (CONDITIONAL)**
+**GATE 2 = PASSED**
 
-آخر جولة إصلاح موثقة في [`GATE_2_REPAIR_ROUND.md`](./GATE_2_REPAIR_ROUND.md)، والنتيجة التفصيلية في [`GATE_2_FINAL_VERIFICATION.md`](./GATE_2_FINAL_VERIFICATION.md). أُغلق child scaling وأضيفت regression tests لمسار الاختصارات؛ بينما تبقى UI runner وhardware evidence صراحةً غير متحققين.
+آخر جولة إصلاح موثقة في [`GATE_2_REPAIR_ROUND.md`](./GATE_2_REPAIR_ROUND.md)، والنتيجة التفصيلية في [`GATE_2_FINAL_VERIFICATION.md`](./GATE_2_FINAL_VERIFICATION.md). أُغلق child scaling ومسار اختصارات لوحة المفاتيح، وأُنجز الدمج الطبيعي إلى `main`. تبقى فجوات التحقق الموثقة أدناه غير مانعة للدمج.
 
 تم تنفيذ نواة تفاعلية قابلة للتوسع على الفرع `feature/gate-2-core-whiteboard`. أغلقت الجولة الحالية عددًا إضافيًا من فجوات Gate 2: multi-select عبر Ctrl/Meta، copy/paste داخل حافظة محلية، group container أولي، keyboard shortcuts، pan وwheel zoom، clear board، fit-to-content، rename/reorder pages، وfullscreen-safe request. النطاق لا يدّعي اكتمال كل معايير Gate 2 أو جاهزية الإنتاج.
 
@@ -55,11 +55,11 @@
 
 | Accessibility | Partial | labels and focusable controls present; screen-reader/canvas audit pending |
 | Performance benchmark | Verified locally | deterministic 91-object benchmark with recorded timings; browser-frame benchmark pending |
-| Clean GitHub reproduction | Verified | Branch `feature/gate-2-core-whiteboard` at `285f304` passed frozen install, check, test, and build from a clean clone |
+| Clean GitHub reproduction | Verified | Clean clone of `main` at merge commit `302fd67841da827d61680c79423810e04faa8077` passed frozen install, check, 10 tests, build, and diff check |
 
 ## Known Limitations
 
-ما زالت Media/PDF/Table/Sticky/Connector UI الكاملة، automated UI smoke tests، touch device tests، stylus tests، performance benchmark متصفح حقيقي، وcomprehensive accessibility audit غير منفذة. هذه الجولة أغلقت child scaling في domain contract واختبرت الاستعادة regression-wise. fullscreen يعتمد على Browser API وقد يفشل بحسب سياق العرض. لا تزال AI وBilling وCollaboration وOCR وPDF Intelligence وMathLive غير مضافة.
+ما زالت Media/PDF/Table/Sticky/Connector UI الكاملة وcomprehensive accessibility audit غير منفذة. **TOUCH = NOT VERIFIED — HARDWARE UNAVAILABLE**، **STYLUS = NOT VERIFIED — HARDWARE UNAVAILABLE**، **UI AUTOMATION = NOT VERIFIED — RUNNER UNAVAILABLE**، و**REAL BROWSER PERFORMANCE = NOT VERIFIED**. هذه فجوات تحقق غير مانعة للدمج وليست عيوبًا Critical/High مثبتة. هذه الجولة أغلقت child scaling في domain contract واختبرت الاستعادة regression-wise. fullscreen يعتمد على Browser API وقد يفشل بحسب سياق العرض. لا تزال AI وBilling وCollaboration وOCR وPDF Intelligence وMathLive غير مضافة.
 
 ## Canvas Decision
 
@@ -67,7 +67,7 @@
 
 ## Branch, Commit, and Pull Request
 
-هذا العمل مخصص للفرع `feature/gate-2-core-whiteboard`، وتم رفعه إلى GitHub دون force push في commit `a1c7bc4 feat(core-board): add Gate 2 interactive teaching board foundation`. فُتح Pull Request للمراجعة: [#1](https://github.com/newcapital825-netizen/interactive-teaching-board/pull/1). لم يتم الدمج إلى `main` تلقائيًا؛ Gate 2 ما زال CONDITIONAL وينتظر المراجعة.
+تم دمج [PR #1](https://github.com/newcapital825-netizen/interactive-teaching-board/pull/1) دمجًا طبيعيًا إلى `main` دون force push أو rebase. Merge commit: `302fd67841da827d61680c79423810e04faa8077`. تم التحقق من أن `main` يشير إلى SHA نفسه.
 
 ## Gate 3 Preconditions
 
@@ -75,7 +75,7 @@
 
 ## Owner Review of PR #1 — Final Verification
 
-**PR #1 = READY FOR FINAL REVIEW — لا يُدمج حاليًا.**
+**PR #1 = MERGED — Gate 2 PASSED.**
 
 راجعت diff الفرع `feature/gate-2-core-whiteboard` مقابل `main`، بما يشمل Core Board، عقد Educational Object، Group model، child scaling، resize، persistence، page model، RTL، EquationObject، الاختبارات، وسلامة الحدود المعمارية. لم يظهر تسرب event listener أو اعتماد مباشر على محرك Canvas داخل domain contract، ولم يظهر فقدان مقصود للـ IDs أو styles أو z-order في مسار Group/resize/ungroup الموثق. نجحت الفحوص البرمجية وclean clone كما هو موثق في التقرير النهائي.
 
@@ -83,15 +83,15 @@
 
 | Severity | Finding | Evidence | Decision |
 |---|---|---|---|
-| **HIGH** | Keyboard shortcuts كانت غير منفذة في Core Board رغم توثيقها سابقًا كأنها متحققة | تم ربط `resolveBoardCommand` بـ `CoreBoardBench.tsx` مع actions للاختصارات وحماية محررات النص، وأضيفت regression coverage | **CLOSED** — ينتظر تحقق المالك النهائي فقط |
+| **HIGH** | Keyboard shortcuts كانت غير منفذة في Core Board رغم توثيقها سابقًا كأنها متحققة | تم ربط `resolveBoardCommand` بـ `CoreBoardBench.tsx` مع actions للاختصارات وحماية محررات النص، وأضيفت regression coverage | **CLOSED** — أُغلق قبل الدمج |
 | Medium | UI journey الآلية غير متحققة | لا يوجد browser integration runner في البيئة | Post-merge engineering task، ولا تُستخدم كدليل نجاح |
 | Medium | Touch/stylus وbrowser performance غير متحققة | hardware وbrowser frame runner غير متاحين | تبقى NOT VERIFIED كما في `GATE_2_FINAL_VERIFICATION.md` |
 | Low | `persistDocument` لا يعالج Quota/Security exceptions | localStorage call مباشر | Hardening لاحق، ليس سبب الدمج الوحيد |
 
 ### Confirmed review areas
 
-Group child references and relative transforms are now explicit and serializable. `resizeObject` computes child scaling from the frozen pre-resize source, preventing cumulative scaling corruption during pointer moves. Resize history stores the pre-operation document, so Undo has a valid reversal snapshot. The domain remains vendor-neutral and the Graph Adapter/Canvas Adapter boundary is preserved. No merge was performed.
+Group child references and relative transforms are now explicit and serializable. `resizeObject` computes child scaling from the frozen pre-resize source, preventing cumulative scaling corruption during pointer moves. Resize history stores the pre-operation document, so Undo has a valid reversal snapshot. The domain remains vendor-neutral and the Graph Adapter/Canvas Adapter boundary is preserved. The natural GitHub merge was completed; no Gate 3 work was started.
 
-## Correction completed; owner decision pending
+## Merge completed; Gate 3 remains unopened
 
-تمت إضافة مسار keyboard interaction مركز لمسار المعلم، بما يشمل Undo/Redo وDelete وحركة الأسهم وCtrl/Meta+C وCtrl/Meta+V وCtrl/Meta+A، مع regression coverage ومصفوفة موثقة في [`docs/qa/KEYBOARD_SHORTCUTS.md`](../qa/KEYBOARD_SHORTCUTS.md). الفحوص الكاملة المحلية نجحت. الحالة الحالية **PR #1 = READY FOR FINAL REVIEW**؛ لا يتم الدمج ولا يبدأ Gate 3 قبل موافقة المالك.
+تمت إضافة مسار keyboard interaction مركز لمسار المعلم، بما يشمل Undo/Redo وDelete وحركة الأسهم وCtrl/Meta+C وCtrl/Meta+V وCtrl/Meta+A، مع regression coverage ومصفوفة موثقة في [`docs/qa/KEYBOARD_SHORTCUTS.md`](../qa/KEYBOARD_SHORTCUTS.md). تمت الموافقة والدمج الطبيعي، ثم نجحت post-merge verification من clean clone.

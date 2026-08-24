@@ -154,7 +154,16 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] تصنيف browser performance كـ NOT VERIFIED والإبقاء على benchmark الهندسي 91-object.
 - [x] تحديث GATE_2_REPORT وGATE_2_FINAL_VERIFICATION بحالة VERIFIED/NOT VERIFIED/BLOCKED/DEFERRED وقرار PR دون merge.
 - [x] حفظ checkpoint نهائي والتوقف بانتظار تفويض الدمج الصريح.
-- [ ] إصلاح مسار keyboard shortcuts وإعادة المراجعة قبل أن يصبح PR #1 READY TO MERGE.
+- [x] إصلاح مسار keyboard shortcuts وإعادة المراجعة قبل أن يصبح PR #1 READY TO MERGE.
+
+## Owner-authorized PR #1 merge verification — completed
+
+- [x] Verify PR #1 checks and merge readiness on GitHub.
+- [x] Merge PR #1 naturally into `main` without force push or history rewrite.
+- [x] Verify merged commit SHA on `main`.
+- [x] Run clean checkout verification from `main` with frozen install, check, test, build, and diff check.
+- [x] Update Gate 2 status to PASSED and write `docs/gates/GATE_2_MERGE_REPORT.md`.
+- [x] Stop; do not create a Gate 3 branch or write Gate 3 code.
 
 ## Pasted content 12 — pending review
 

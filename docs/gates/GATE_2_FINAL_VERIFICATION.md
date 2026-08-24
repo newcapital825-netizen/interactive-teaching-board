@@ -2,7 +2,7 @@
 
 ## Decision
 
-**GATE 2 = READY FOR FINAL OWNER REVIEW (CONDITIONAL). PR #1 = READY FOR FINAL REVIEW — لا يُدمج حاليًا.** لا يبدأ Gate 3. أُغلق العيب العالي الخاص بمسار اختصارات لوحة المفاتيح عبر `resolveBoardCommand` وربطه بـ Core Board مع regression coverage وحماية محررات النص. تبقى UI automation وhardware evidence غير متحققة أيضًا.
+**GATE 2 = PASSED. PR #1 = MERGED.** لا يبدأ Gate 3. أُغلق العيب العالي الخاص بمسار اختصارات لوحة المفاتيح عبر `resolveBoardCommand` وربطه بـ Core Board مع regression coverage وحماية محررات النص. تبقى فجوات التحقق الأربع الموثقة أدناه غير مانعة للدمج.
 
 ## Criteria Classification
 
@@ -27,12 +27,12 @@
 | Accessibility smoke test | PARTIAL / NOT VERIFIED | Labels, focusable controls, visible handles and non-hover paths reviewed; no automated screen-reader or contrast audit |
 | Touch evidence | NOT VERIFIED — HARDWARE UNAVAILABLE | Pointer/touch-safe implementation exists; no physical touchscreen test |
 | Stylus evidence | NOT VERIFIED — HARDWARE UNAVAILABLE | No physical stylus test |
-| Clean clone | PENDING AFTER PUSH | Re-run from the pushed commit; local working tree passed check, 10 tests, build, and diff check |
+| Clean clone | VERIFIED | Clean clone of `main` at merge commit `302fd67841da827d61680c79423810e04faa8077` passed frozen install, check, 10 tests, build, diff check, and clean status |
 | Check | VERIFIED | Local `pnpm check` passed |
-| Tests | VERIFIED | Local run: 4 files, 10 tests passed |
+| Tests | VERIFIED | Clean main clone: 4 files, 10 tests passed |
 | Build | VERIFIED | Local `pnpm build` passed |
-| Git discipline | VERIFIED | Feature branch only, no force push, PR #1 open and intentionally not merged |
-| PR review decision | READY FOR FINAL REVIEW | High finding closed; owner approval and explicit merge remain pending |
+| Git discipline | VERIFIED | Natural GitHub merge only; no force push or rebase; PR #1 merged to `main` |
+| PR review decision | MERGED | Owner authorization received; natural merge completed |
 
 ## Performance
 
@@ -44,8 +44,8 @@ Keyboard focusable controls and explicit labels are present. The UI does not rel
 
 ## Remaining Limitations
 
-UI automation for the complete teacher journey is not verified because a browser integration runner is unavailable. The final clean clone was run after repair commit `285f304` was pushed and passed. Media/PDF/Table/Sticky/Connector full UI, production Arabic and Math toolkits, AI, Billing, Collaboration, OCR, PDF Intelligence, and Gate 3 remain out of scope.
+UI automation for the complete teacher journey is not verified because a browser integration runner is unavailable. The final clean clone was run from main merge commit `302fd67841da827d61680c79423810e04faa8077` and passed. Media/PDF/Table/Sticky/Connector full UI, production Arabic and Math toolkits, AI, Billing, Collaboration, OCR, PDF Intelligence, and Gate 3 remain out of scope.
 
 ## Stop
 
-The keyboard shortcut defect is repaired and the local final verification passed. PR #1 is open and **READY FOR FINAL REVIEW**; no merge and no Gate 3 until owner approval.
+The keyboard shortcut defect is repaired, PR #1 was merged naturally, and post-merge verification passed from a clean clone. Gate 3 remains unopened.
