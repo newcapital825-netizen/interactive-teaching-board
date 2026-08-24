@@ -87,3 +87,77 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] دفع التاريخ المحلي دون force push.
 - [x] تنفيذ clean clone ثم install وcheck وtests وbuild.
 - [x] تحديث تقرير GitHub Continuity بالحالة النهائية والرابط وSHA والتوقف.
+
+## Pasted content 7 — pending review
+
+- [ ] قراءة وتحليل `pasted_content_7.txt` وتحديد التعليمات الجديدة مقابل حالة GitHub وGate 1B.
+- [ ] تنفيذ النطاق المصرح به فقط، مع عدم بدء Gate 2 أو أي توسعة غير معتمدة.
+- [ ] اختبار التغييرات وتحديث التقرير والـ checkpoint عند الإتمام.
+
+## Gate 2 — Core Interactive Teaching Board — authorized
+
+- [ ] إنشاء فرع `feature/gate-2-core-whiteboard` وعدم العمل على `main`.
+- [ ] تصميم Core Board عام مستقل عن Arabic وMath مع Educational Object contract موسع.
+- [ ] تنفيذ Text وDrawing وShape وImage placeholder وMedia/PDF/Table/Sticky/Connector/Group placeholders ضمن حدود Gate 2.
+- [ ] تنفيذ select وmulti-select وmove وresize وrotate وduplicate وdelete وcopy/paste وgroup وlock وvisibility وundo/redo وzoom/pan وfit-to-content.
+- [ ] تنفيذ رسم vector حقيقي قابل للحفظ والاستعادة: pen وhighlighter وeraser وstroke width وfreehand وline وarrow وbasic shapes.
+- [ ] تنفيذ mixed RTL/LTR text editing واختباره مع Arabic + English + numbers + x² + symbols.
+- [ ] تنفيذ Board Pages/Frames مع create وduplicate وreorder وrename وdelete.
+- [ ] تنفيذ Presentation Mode وfullscreen-safe experience دون بيانات تقنية.
+- [ ] تنفيذ local-first persistence abstraction مع save/close/reload/restore لكل الكائنات والصفحات.
+- [ ] إضافة Arabic وMath toolkit contracts مع SentenceObject وWordObject وGrammarObject وI3rabObject وEquationObject prototypes دون محركات كاملة.
+- [ ] إضافة benchmark قابل لإعادة التشغيل وقياس فعلي للتحميل والتفاعل والتحريك وzoom/pan وsave/restore.
+- [ ] إضافة اختبارات domain وintegration وUI smoke وpersistence وRTL/mixed-direction وdrawing وequation وpages.
+- [ ] تنفيذ visual QA لسطح فارغ وممتلئ والعربية والمختلط والرسم والتحديد وتغيير الحجم والصفحات ووضع العرض والشاشة الكبيرة.
+- [ ] تحديث docs/gates/GATE_2_REPORT.md وتسجيل Canvas decision دون اختيار مبكر.
+- [ ] تشغيل check وtest وbuild، ثم حفظ checkpoint وفتح PR/طلب مراجعة دون بدء Gate 3.
+
+## Gate 2 continuation from pasted_content_8 — pending review
+
+- [ ] مراجعة بقية تعليمات Gate 2 في الملف الثامن مقابل التنفيذ الحالي.
+- [ ] إغلاق أعلى الفجوات المصرح بها: copy/paste وgroup/ungroup وpan/fit وإدارة الصفحات ووضع العرض.
+- [ ] إضافة اختبارات ودليل benchmark/accessibility واقعي دون اختلاق أرقام.
+- [ ] تحديث GATE_2_REPORT وPull Request، ثم التوقف قبل Gate 3.
+
+## Pasted content 9 — pending review
+
+- [ ] قراءة وتحليل `pasted_content_9.txt` مقابل فجوات Gate 2 الحالية.
+- [ ] تنفيذ التحسينات المصرح بها على فرع `feature/gate-2-core-whiteboard` فقط.
+- [ ] تشغيل الفحوص وتحديث التقرير وPull Request ثم التوقف قبل Gate 3.
+
+## Gate 2 Conditional Repair Round — pending
+
+- [x] استبدال Group container بنموذج children IDs وتحويلات ومواقع قابلة لإعادة البناء.
+- [x] تنفيذ group move/resize/save/restore/ungroup مع Undo/Redo على مستوى الوثيقة؛ child scaling أثناء group resize مؤجل للتحصين.
+- [x] تنفيذ corner resize handles للأجسام القابلة لتغيير الحجم مع minimum size ومنع الانقلاب.
+- [x] إضافة UI/integration test journey فعلية أو توثيق حدود البيئة بوضوح؛ runner الفعلي غير متوفر وسُجلت الحالة NOT VERIFIED.
+- [x] إنشاء benchmark رقمي قابل لإعادة التشغيل وتسجيل البيئة والنتائج الفعلية.
+- [x] إجراء accessibility smoke test موثق، وتسجيل touch/stylus كـ NOT VERIFIED إن لم تتوفر hardware.
+- [x] تنفيذ clean clone من فرع الإصلاح، تحديث GATE_2_REPORT وGATE_2_REPAIR_ROUND، وترك PR #1 مفتوحًا دون دمج.
+
+## Gate 2 Final Verification Round — pending
+
+- [x] إكمال group resize بحيث تُحوّل المجموعة مواضع وأحجام children نسبيًا وتحافظ على z-order/styles/IDs بعد save/reload/ungroup.
+- [x] إضافة regression tests لدورة group resize وungroup وundo/redo.
+- [x] تشغيل UI automation قابل لإعادة الإنتاج أو تثبيت NOT VERIFIED إذا لم يتوفر runner؛ runner غير متوفر وسُجلت الحالة.
+- [x] إعادة تشغيل benchmark 91-object ومقارنة القياسات السابقة بالحالية.
+- [x] تشغيل accessibility smoke review وتسجيل النتائج دون ادعاء WCAG.
+- [x] تثبيت touch/stylus كـ NOT VERIFIED — HARDWARE UNAVAILABLE.
+- [x] تنفيذ install/check/test/build/diff/status وكتابة `GATE_2_FINAL_VERIFICATION.md`.
+- [x] رفع focused commit إلى PR #1 دون merge أو بدء Gate 3.
+
+## Gate 2 Owner Review / Merge Preparation — pending
+
+- [x] مراجعة diff الكامل لـ PR #1 والكود ونموذج المجال والحدود المعمارية والأمن.
+- [x] فحص state corruption وID collisions وstale references وgroup transforms وstyles/z-order وpersistence وRTL وevent leaks وkeyboard behavior.
+- [x] إنشاء `docs/qa/INPUT_DEVICE_VERIFICATION.md` بحالة TOUCH/STYLUS غير متحققين.
+- [x] تصنيف browser performance كـ NOT VERIFIED والإبقاء على benchmark الهندسي 91-object.
+- [x] تحديث GATE_2_REPORT وGATE_2_FINAL_VERIFICATION بحالة VERIFIED/NOT VERIFIED/BLOCKED/DEFERRED وقرار PR دون merge.
+- [x] حفظ checkpoint نهائي والتوقف بانتظار تفويض الدمج الصريح.
+- [ ] إصلاح مسار keyboard shortcuts وإعادة المراجعة قبل أن يصبح PR #1 READY TO MERGE.
+
+## Pasted content 12 — pending review
+
+- [ ] قراءة وتحليل `pasted_content_12.txt` وتحديد علاقته بـ blocker اختصارات لوحة المفاتيح.
+- [ ] تنفيذ الإصلاح أو التوثيق المطلوب على فرع Gate 2 فقط.
+- [ ] تشغيل الفحوص وتحديث PR #1 وcheckpoint ثم التوقف.

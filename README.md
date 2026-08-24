@@ -1,6 +1,6 @@
-# Interactive Teaching Board — Gate 1B Spike
+# Interactive Teaching Board — Gate 2 Core Board
 
-هذا المشروع هو **Technology Spike disposable** للسبورة التعليمية التفاعلية، وليس تنفيذ MVP أو إنتاجًا نهائيًا. يثبت سطحًا عامًا للكائنات التعليمية مع مسار عربي أولي ومسار Graph Adapter، مع الحفاظ على استقلال نموذج المجال عن مكتبات الرسم.
+هذا المشروع هو **Core Interactive Teaching Board** على فرع Gate 2، مبني فوق Technology Spike سابق. ما يزال نطاقًا مرحليًا قابلًا للمراجعة وليس MVP إنتاجيًا مكتملًا. يثبت سطحًا عامًا للكائنات التعليمية مع مسار عربي أولي ومسار Graph Adapter، مع الحفاظ على استقلال نموذج المجال عن مكتبات الرسم.
 
 ## Current architecture
 
@@ -16,7 +16,11 @@
     tldraw     Excalidraw
 ```
 
-المخطط يصف الحدود المعمارية لا اختيارًا نهائيًا لمحرك Canvas. يعمل React Flow فعليًا في Graph Candidate Bench، بينما tldraw وExcalidraw موصوفان كمرشحي Canvas يحتاجان تكاملًا فعليًا منفصلًا قبل Gate 2.
+المخطط يصف الحدود المعمارية لا اختيارًا نهائيًا لمحرك Canvas. يعمل React Flow فعليًا في Graph Candidate Bench، بينما tldraw وExcalidraw موصوفان كمرشحي Canvas يحتاجان تكاملًا فعليًا منفصلًا قبل اعتماد قرار الإنتاج.
+
+## Gate 2 branch
+
+العمل الحالي على `feature/gate-2-core-whiteboard` وليس على `main`. لا يبدأ Gate 3 تلقائيًا؛ يلزم مراجعة المالك ودمج Pull Request صريح بعد إغلاق القيود المذكورة في `docs/gates/GATE_2_REPORT.md`.
 
 ## What is demonstrated
 
@@ -39,8 +43,11 @@ pnpm dev
 
 ## GitHub continuity
 
-الفرع الحالي `main` مرتبط بـ managed origin داخلي وليس بمستودع GitHub. لم يتم push إلى GitHub لأن المستودع الصحيح لم يُحدد صراحة؛ لا ينبغي ربط المشروع بمستودع محتمل بالحدس. يجب تحديد المستودع المقصود ثم ضبط remote والتحقق من clone/install/check/dev قبل Gate 2.
+المستودع الرسمي هو [newcapital825-netizen/interactive-teaching-board](https://github.com/newcapital825-netizen/interactive-teaching-board)، وهو خاص وفرعه الرئيسي `main`. العمل الحالي في الفرع `feature/gate-2-core-whiteboard`، بينما remote الداخلي محفوظ باسم `manus-internal`. يجب استخدام مسار branch → commit → pull request → review → merge، دون force push.
 
 ## Explicitly deferred
+
+Gate 2 ما زال **CONDITIONAL**. clipboard copy/paste وgroup/ungroup وpan وfit-to-content وإعادة ترتيب/إعادة تسمية الصفحات وfullscreen API واختبارات الأجهزة والأداء والوصول الشامل ما تزال بحاجة إلى إغلاق قبل إعلان PASS.
+
 
 Gate 2 وMVP وAI وPDF/OCR وBilling وCollaboration وClassroom وFull Arabic Engine وFull Math Engine وMathLive integration وproduction authentication غير مفعلة.
