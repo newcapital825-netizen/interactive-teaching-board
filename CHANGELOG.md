@@ -1,13 +1,9 @@
 # Changelog
 
-## Gate 1 Spike — 2026-08-24
+## Gate 1B — Additional Architectural Proof — 2026-08-24
 
-تم إنشاء مشروع disposable مستقل لـ Technology Spike، وتوثيق اتجاه التصميم، وبناء ARABIC CORE OBJECT PROTOTYPE بمسار النص العربي واختيار الكلمة والتحليل الأساسي والشجرة المرئية وSentenceObject وسطح Canvas Adapter والحفظ والاستعادة والتصدير.
+تم تجميد `SentenceObject` والسيناريو نفسه «قرأَ الطالبُ الكتابَ»، وإضافة Candidate Bench يبدّل المرشحين دون fork في نموذج المجال. تم اختبار React Flow 12.11.3 فعليًا كـ Graph Adapter لتمثيل Grammar/I3rab، مع إبقاء tldraw وExcalidraw ضمن probes خفيفة وتسجيل أن direct Canvas integration يحتاج جولة منفصلة بسبب ضغط الحزم والذاكرة في بيئة الـ Spike.
 
-تمت إضافة `@xyflow/react` 12.11.3 كمرشح لمحرك الرسوم المتخصصة، دون اعتباره بديلًا لمحرك Canvas ودون إعلان فائز. لم تتم إضافة tldraw أو Excalidraw إلى الإنتاج أو اعتماد أي منهما.
+أُضيف `GATE_1B_REPORT.md` و`docs/ADR/ADR-001-gate1b-candidate-proof.md`، وسُجل تحليل coupling وRTL وtouch/stylus وaccessibility وperformance وexport وpersistence وlicense. نجح TypeScript وproduction build، مع بقاء تحذير حجم الحزمة.
 
-نجح فحص TypeScript والبناء. أُثبتت حدود الفصل المعماري بصريًا ووثائقيًا، مع تسجيل قيود touch/stylus وaccessibility وperformance وcandidate integration في `GATE_1_REPORT.md`.
-
-لم يبدأ AI أو billing أو PDF/OCR أو real-time collaboration أو authentication أو full Arabic NLP أو أي Production Implementation.
-
-**الحالة:** OPTION B — CONDITIONALLY RECOMMENDED. القرار المطلوب من المالك قبل Gate 2 موثق في التقرير.
+**الحالة:** C — CONDITIONAL. لا يبدأ Gate 2 أو MVP أو أي ميزة مؤجلة قبل قرار المالك الصريح.

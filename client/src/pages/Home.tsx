@@ -4,6 +4,7 @@
  * This is disposable evidence, not production UI or a complete Arabic parser.
  */
 import { useEffect, useMemo, useRef, useState } from "react";
+import CandidateBench from "@/components/CandidateBench";
 import {
   ArrowDownToLine,
   Check,
@@ -241,6 +242,7 @@ export default function Home() {
           <div className="flow-note"><span>نفس الكائن · ثلاث عدسات</span><strong>SentenceObject → Text · Grammar · I3rab</strong><ChevronDown size={15} /></div>
         </aside>
       </div>
+      <CandidateBench />
       <footer className="bottom-bar"><span><Hand size={14} /> pointer / touch surface evaluated</span><span>Canvas Adapter <b>↔</b> Educational Object <b>↔</b> Graph Adapter</span><span>Gate 1 · disposable evidence</span></footer>
     </main>
   );

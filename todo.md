@@ -28,3 +28,16 @@
 ## Explicitly not started
 
 Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time collaboration, classroom infrastructure, analytics, production content library, full Arabic NLP, and deployment optimization.
+
+## New owner instruction — pending review
+
+- [x] قراءة وتحليل تعليمات `pasted_content_4.txt` ثم تنفيذ نطاقها المصرح به فقط.
+
+## Gate 1B — additional architectural proof
+
+- [x] Freeze the existing SentenceObject and identical Arabic test scenario across candidates.
+- [x] Evaluate tldraw and Excalidraw as Canvas Adapter candidates without selecting a winner prematurely; direct integration remains deferred and is recorded honestly.
+- [x] Evaluate React Flow as a specialized Graph Adapter for Grammar/I3rab, not as a primary canvas replacement.
+- [x] Record coupling, persistence, export, RTL, touch/pointer/stylus, accessibility, and performance evidence.
+- [x] Produce `GATE_1B_REPORT.md` with comparison matrix, architecture diagram, risks, recommendation, and Gate 2 preconditions.
+- [x] Stop after Gate 1B and wait for explicit owner approval.
