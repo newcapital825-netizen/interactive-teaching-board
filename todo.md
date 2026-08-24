@@ -111,3 +111,10 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] تنفيذ visual QA لسطح فارغ وممتلئ والعربية والمختلط والرسم والتحديد وتغيير الحجم والصفحات ووضع العرض والشاشة الكبيرة.
 - [ ] تحديث docs/gates/GATE_2_REPORT.md وتسجيل Canvas decision دون اختيار مبكر.
 - [ ] تشغيل check وtest وbuild، ثم حفظ checkpoint وفتح PR/طلب مراجعة دون بدء Gate 3.
+
+## Gate 2 continuation from pasted_content_8 — pending review
+
+- [ ] مراجعة بقية تعليمات Gate 2 في الملف الثامن مقابل التنفيذ الحالي.
+- [ ] إغلاق أعلى الفجوات المصرح بها: copy/paste وgroup/ungroup وpan/fit وإدارة الصفحات ووضع العرض.
+- [ ] إضافة اختبارات ودليل benchmark/accessibility واقعي دون اختلاق أرقام.
+- [ ] تحديث GATE_2_REPORT وPull Request، ثم التوقف قبل Gate 3.
