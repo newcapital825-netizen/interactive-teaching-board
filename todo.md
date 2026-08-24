@@ -81,9 +81,9 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 
 ## New GitHub repository setup — authorized
 
-- [ ] إنشاء مستودع GitHub خاص جديد باسم `interactive-teaching-board` تحت الحساب الموثّق.
-- [ ] التحقق من الملكية والخصوصية والفرع الافتراضي والصلاحيات.
-- [ ] حفظ remote الداخلي الحالي دون دفع إليه، ثم استبداله بـ GitHub بعد التحقق.
-- [ ] دفع التاريخ المحلي دون force push.
-- [ ] تنفيذ clean clone ثم install وcheck وtests وbuild.
-- [ ] تحديث تقرير GitHub Continuity بالحالة النهائية والرابط وSHA والتوقف.
+- [x] إنشاء مستودع GitHub خاص جديد باسم `interactive-teaching-board` تحت الحساب الموثّق.
+- [x] التحقق من الملكية والخصوصية والفرع الافتراضي والصلاحيات.
+- [x] حفظ remote الداخلي الحالي باسم `manus-internal` دون دفع إليه، ثم ضبط GitHub كـ `origin`.
+- [x] دفع التاريخ المحلي دون force push.
+- [x] تنفيذ clean clone ثم install وcheck وtests وbuild.
+- [x] تحديث تقرير GitHub Continuity بالحالة النهائية والرابط وSHA والتوقف.
