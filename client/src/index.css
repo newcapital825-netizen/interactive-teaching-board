@@ -343,3 +343,35 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
 .gate3b-mark + div { margin-right:4px; }
 .gate3b-bottom { border-top-color:rgba(53,72,59,.18); }
 @media (max-width:700px) { .gate3b-topbar .topbar-status span:not(.status-dot), .gate3b-topbar .topbar-status strong { display:none; } .gate3b-mark { width:32px; height:32px; } }
+
+/* Gate 3B style decision: the board reads as an annotated folio, not a generic SaaS canvas. */
+.evidence-trail { display:flex; align-items:center; gap:12px; padding:16px 24px 14px; border-top:1px solid rgba(53,72,59,.12); border-bottom:1px solid rgba(53,72,59,.14); background:rgba(242,239,231,.78); }
+.evidence-trail > i { flex:1; height:1px; background:linear-gradient(90deg,rgba(53,72,59,.12),rgba(213,107,88,.45),rgba(53,72,59,.12)); }
+.evidence-step { display:grid; grid-template-columns:auto 1fr; column-gap:7px; min-width:128px; color:rgba(49,77,62,.62); }
+.evidence-step span { grid-row:span 2; align-self:center; font:600 11px/1 ui-monospace,monospace; color:var(--coral); }
+.evidence-step strong { font-size:12px; color:var(--ink); }
+.evidence-step small { color:rgba(49,77,62,.58); font-size:10px; }
+.evidence-step.active strong { color:var(--olive); }
+.evidence-step.active span { display:grid; place-items:center; width:23px; height:23px; border-radius:50%; color:#fff; background:var(--olive); }
+.folio-rail { display:flex; flex-direction:column; align-items:center; gap:9px; min-width:68px; padding:18px 8px; border-inline-end:1px solid rgba(53,72,59,.16); background:rgba(231,235,224,.62); }
+.folio-label { writing-mode:vertical-rl; transform:rotate(180deg); color:rgba(49,77,62,.56); font-size:9px; letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px; }
+.folio-step { display:grid; gap:4px; justify-items:center; color:rgba(49,77,62,.52); font-size:10px; }
+.folio-step b { display:grid; place-items:center; width:30px; height:30px; border:1px solid rgba(53,72,59,.25); border-radius:50%; color:var(--olive); font:600 10px ui-monospace,monospace; background:#f5f2e9; }
+.folio-step.active b { color:#fff; border-color:var(--olive); background:var(--olive); box-shadow:0 0 0 4px rgba(53,72,59,.08); }
+.folio-line { width:1px; height:30px; background:linear-gradient(var(--coral),rgba(53,72,59,.12)); }
+.panel-kicker { display:block; margin-bottom:3px; color:var(--coral); font:600 9px/1 ui-monospace,monospace; letter-spacing:.09em; }
+.stage-layer-note { display:flex; align-items:center; gap:8px; margin:0 0 8px; color:rgba(49,77,62,.65); font-size:11px; }
+.stage-layer-note b { color:var(--olive); }
+.layer-mark { display:grid; place-items:center; width:24px; height:24px; border:1px solid rgba(213,107,88,.48); color:var(--coral); font:600 10px ui-monospace,monospace; }
+.ux-stage { border-color:rgba(53,72,59,.25); background-color:#fcfaf5; box-shadow:inset 0 0 0 1px rgba(255,255,255,.7), 0 16px 36px rgba(49,77,62,.06); }
+.ux-pages, .ux-inspector { background:rgba(246,243,235,.72); }
+.ux-inspector .panel-title, .ux-pages .panel-title { color:var(--olive); }
+.ux-inspector .inspector-subheading { color:var(--coral); }
+.ux-footer { color:rgba(49,77,62,.72); background:rgba(229,232,222,.55); }
+@media (max-width:900px) { .evidence-trail { overflow-x:auto; justify-content:flex-start; } .evidence-step { min-width:112px; } .folio-rail { grid-column:1/-1; flex-direction:row; justify-content:center; min-width:0; border-inline-end:0; border-bottom:1px solid rgba(53,72,59,.16); padding:9px 12px; } .folio-label { writing-mode:horizontal-tb; transform:none; margin:0 6px 0 0; } .folio-line { width:24px; height:1px; } }
+@media (max-width:560px) { .evidence-trail { padding-inline:14px; gap:8px; } .evidence-step { min-width:102px; } .evidence-step small { display:none; } .stage-layer-note { margin-inline:12px; } }
+
+/* Gate 3B layout correction: four explicit columns keep the canvas central and prevent implicit grid rows. */
+.ux-layout { grid-template-columns:68px 180px minmax(0,1fr) 250px; }
+@media (max-width:1100px) { .ux-layout { grid-template-columns:68px minmax(0,1fr) 220px; } .folio-rail { grid-column:1/-1; flex-direction:row; justify-content:center; min-width:0; border-inline-end:0; border-bottom:1px solid rgba(53,72,59,.16); padding:9px 12px; } .folio-label { writing-mode:horizontal-tb; transform:none; margin:0 6px 0 0; } .folio-line { width:24px; height:1px; } }
+@media (max-width:760px) { .ux-layout { grid-template-columns:1fr; } .ux-pages { border-block:1px solid var(--line); border-inline:0; } .object-inspector { border-inline:0; border-bottom:1px solid var(--line); } }
