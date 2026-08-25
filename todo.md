@@ -460,3 +460,14 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] Gate 20: assemble Release Candidate evidence and classify readiness honestly.
 - [ ] Gate 21: prepare Controlled Pilot scope, participant safeguards, success criteria, rollback, and owner review stop.
 - [ ] Write gate reports, run clean clone and final regressions, save one checkpoint, and stop for Owner Review; do not publish or merge.
+
+
+## Gate 13 Browser QA — completed; CONDITIONAL; proceed to Gate 14 after checkpoint
+
+- [x] Verified Gate 12 baseline and created/pushed `feature/gate-13-browser-qa` without modifying main.
+- [x] Created browser test matrix and evidence notes distinguishing browser-proven, contract-only, and NOT VERIFIED paths.
+- [x] Ran dev-browser smoke for load, SentenceObject/EquationObject insertion, selection/move mutation, save, student preview, and presentation.
+- [x] Ran production build/server smoke in a real browser.
+- [x] Passed frozen install, check, 21 test files/110 tests, build, diff-check, and architecture scan.
+- [ ] Contextual conversion, active Activity browser lifecycle, file picker export/import, real pointer drag/resize, multi-select/group, UI automation, accessibility, touch, stylus, and browser performance remain unverified.
+- [x] Wrote `docs/gates/GATE_13_REPORT.md`; checkpoint and clean clone remain required before moving to Gate 14.
