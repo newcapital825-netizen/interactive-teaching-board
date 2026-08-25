@@ -14,12 +14,15 @@
 | Base branch | `feature/gate-4b-vertical-slice` |
 | Validation branch | `feature/gate-4b-validation-hardening` |
 | Base commit | `ad8969170230079f066131fa624cda6512108973` |
+| Validation HEAD | `bb3b4e59494ec51fd1c7ad80a0e44e14ad5b846f` |
 | Pull Request | غير مفتوح، حسب التفويض |
 | Scope | Validation + Hardening فقط |
 | Local verification | `pnpm install --frozen-lockfile`, `pnpm check`, `pnpm test -- --run`, `pnpm build`, `git diff --check` = PASS |
 | Test result | 10 test files، 44 tests = PASS |
 | Hardening suite | 8 tests = PASS |
-| Final local run | `2026-08-25 15:30` sandbox time |
+| Final clean-clone run | `2026-08-25 15:31` sandbox time |
+| Clean clone status | PASS; working tree clean |
+| Open PR status | none |
 | Architecture scan | لا توجد duplicate EducationalObject/registry/factory/assessment/feedback/fallback declarations = PASS |
 | Working tree before commit | تغييرات hardening والتوثيق فقط؛ لا تعديل main |
 
@@ -58,9 +61,9 @@
 
 | count | create | serialization | deserialization | duplicate | group | resize-group | ungroup | lens regeneration |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 100 | 0.331 | 0.096 | 0.246 | 0.016 | 0.029 | 0.053 | 0.016 | 0.014 |
-| 250 | 1.452 | 0.299 | 0.410 | 0.005 | 0.006 | 0.008 | 0.002 | 0.008 |
-| 500 | 0.738 | 0.563 | 0.839 | 0.004 | 0.017 | 0.006 | 0.002 | 0.006 |
+| 100 | 0.378 | 0.112 | 0.235 | 0.017 | 0.026 | 0.053 | 0.014 | 0.016 |
+| 250 | 1.537 | 0.263 | 0.411 | 0.004 | 0.005 | 0.008 | 0.002 | 0.009 |
+| 500 | 0.724 | 0.572 | 0.944 | 0.006 | 0.009 | 0.009 | 0.002 | 0.009 |
 
 جميع القياسات أعلاه تحمل `result = PASS`، والاختبار يفرض حدًا أقل من 1000 ms لكل عملية في بيئة الاختبار الحالية. أرقام التشغيلات تتغير قليلًا بين runs بسبب scheduling؛ لذلك تُحفظ كدليل هندسي لا كSLA.
 
@@ -91,7 +94,7 @@
 
 ## القرار والتوقف
 
-التصنيف النهائي **B — CONDITIONAL** لأن نجاح الاختبارات لا يثبت وحده browser lifecycle أو migration completeness أو full accessibility. migration canonical board مثبتة، لكن lesson workflow لا يملك بعد versioned migration fixture كاملاً. بعد إكمال clean clone ورفع الفرع فقط، يتوقف العمل. لا PR، لا merge، لا Gate 4C، ولا توسعة product scope.
+التصنيف النهائي **B — CONDITIONAL** لأن نجاح الاختبارات لا يثبت وحده browser lifecycle أو migration completeness أو full accessibility. migration canonical board مثبتة، لكن lesson workflow لا يملك بعد versioned migration fixture كاملاً. تم إكمال clean clone ورفع الفرع فقط، ويتوقف العمل هنا بانتظار Owner Review. لا PR، لا merge، لا Gate 4C، ولا توسعة product scope.
 
 ## References
 

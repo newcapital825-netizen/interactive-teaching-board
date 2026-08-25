@@ -185,13 +185,13 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 
 ## Gate 4B Validation & Hardening — authorized
 
-- [ ] Verify the approved Gate 4B branch, commit, remote, main baseline, and clean working tree.
-- [ ] Create `feature/gate-4b-validation-hardening` based only on the approved Gate 4B branch/commit.
-- [ ] Audit canonical EducationalObject, registry, factory, capabilities, assessment, feedback, migration, and serialization for duplication.
-- [ ] Validate Arabic and Mathematics coverage against future lifecycle requirements without implementing full engines.
-- [ ] Strengthen provenance, source modification, lens regeneration, activity, assessment, feedback, save/restore, duplicate, delete, undo, redo, and migration tests.
-- [ ] Strengthen deterministic assessment states and document unsupported states honestly where not implemented.
-- [ ] Add repeatable benchmarks for 100/250/500 objects, save, restore, duplicate, group, ungroup, serialization, deserialization, and lens regeneration.
-- [ ] Validate RTL, accessibility semantics, presentation mode, keyboard behavior, and record unavailable hardware/browser runner limits without downgrading them.
-- [ ] Create the required validation reports, coverage matrices, lifecycle validation, and ADR-005.
-- [ ] Run clean-clone install/check/test/build/diff-check, push branch only, do not open a PR, do not merge, and stop for Owner Review.
+- [x] Verify the approved Gate 4B branch, commit, remote, main baseline, and clean working tree.
+- [x] Create `feature/gate-4b-validation-hardening` based only on the approved Gate 4B branch/commit.
+- [x] Audit canonical EducationalObject, registry, factory, capabilities, assessment, feedback, migration, and serialization for duplication.
+- [x] Validate Arabic and Mathematics coverage against future lifecycle requirements without implementing full engines.
+- [x] Strengthen provenance, source modification, lens regeneration, activity, assessment, feedback, save/restore, duplicate, delete, undo, redo, and migration tests.
+- [x] Strengthen deterministic assessment states and document unsupported states honestly where not implemented.
+- [x] Add repeatable benchmarks for 100/250/500 objects, save, restore, duplicate, group, ungroup, serialization, deserialization, and lens regeneration.
+- [x] Validate RTL, accessibility semantics, presentation mode, keyboard behavior, and record unavailable hardware/browser runner limits without downgrading them.
+- [x] Create the required validation reports, coverage matrices, lifecycle validation, and ADR-005.
+- [x] Run clean-clone install/check/test/build/diff-check, push branch only, do not open a PR, do not merge, and stop for Owner Review.
