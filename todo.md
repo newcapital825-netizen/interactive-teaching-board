@@ -400,3 +400,22 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] Create exactly `feature/gate-10-save-export-import-recovery` from the Gate 9 checkpoint.
 - [ ] Implement safe local export/import/recovery over canonical document persistence without cloud or collaboration.
 - [ ] Add malformed, duplicate-ID, broken-provenance, migration, round-trip, and recovery tests plus evidence report.
+
+
+## Release Acceleration — Gate 10 through Release Candidate authorized
+
+- [ ] Read the complete release acceleration directive and record the critical path, exit criteria, and stop rules.
+- [ ] Verify Gate 9 checkpoint `44888d19`, actual branch/HEAD, main, remotes, status, and PR state.
+- [ ] Create exactly `feature/gate-10-save-export-import-recovery` without modifying main, force-pushing, rebasing, or opening/merging a PR.
+- [ ] Implement safe local export/import/recovery preserving metadata, IDs, relationships, pages, styles, z-order, provenance, assessment, feedback, override, versions, and supported migrations.
+- [ ] Add corruption, unsafe payload, duplicate-ID, malformed, missing metadata, provenance, and round-trip tests; stop on data-loss or destructive migration risks.
+- [ ] Continue through Gate 11 canvas interaction, Gate 12 classroom loop, Gate 13 accessibility/device resilience, Gate 14 production hardening, and Gate 15 RC polish only when each has no critical blocker.
+- [ ] Add bounded Arabic and Mathematics demo lessons with known source content, complete final report, save RC checkpoint, and stop at RELEASE CANDIDATE — OWNER REVIEW.
+
+
+## Gate 10 Explicit Authorization — final verification only
+
+- [ ] Confirm current Gate 10 branch/base/HEAD and working tree after the explicit authorization.
+- [ ] Run the exact required commands in the Gate 10 branch and clean clone: frozen install, check, full test run, build, and diff check.
+- [ ] Review export/import/recovery/autosave/security/data-integrity evidence and update the Gate 10 report with exact statuses.
+- [ ] Save one Gate 10 checkpoint only, do not start Gate 11, and stop at Owner Review.
