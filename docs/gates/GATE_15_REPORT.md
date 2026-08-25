@@ -55,8 +55,8 @@
 | Human classroom validation | **NOT VERIFIED** | لا معلم/طلاب حقيقيون في هذه الجولة | Teacher Acceptance Test |
 | Browser performance | **NOT VERIFIED** في معنى budget رسمي | Playwright functional timing فقط، دون budget قياسي أو device throttling | Gate 16 performance benchmark |
 | Bundle size | **PARTIALLY PROVEN** | build ينجح مع تحذير >500 kB | code-splitting أو قرار موثق في Gate 16 |
-| Clean Clone | **PENDING** | مطلوب قبل checkpoint النهائي | إعادة install/check/test/build/e2e/diff-check من clone نظيف |
+| Clean Clone | **PROVEN — PASS** | clone مستقل من GitHub شغّل install/check/test/build/e2e/diff-check وworking tree نظيف | لا إجراء إضافي ضمن Gate 15 |
 
-## Stop Rule
+## Final SHA وStop Rule
 
-بعد إغلاق بند Clean Clone وتثبيت SHA النهائي، يجب commit وpush التقرير والتوقف. لا Gate 16، ولا PR، ولا merge، ولا تعديل `main`، ولا feature expansion ضمن هذا التفويض.
+Final implementation SHA: `aa79ef5acaeed3acd116c9dcc0c9eb2c7e9e625e` على `feature/gate-15-playwright-classroom-qa`. أُثبت Clean Clone من GitHub بنجاح مع working tree نظيف. بعد checkpoint Gate 15، لا Gate 16، ولا PR، ولا merge، ولا تعديل `main`، ولا feature expansion ضمن هذا التفويض.
