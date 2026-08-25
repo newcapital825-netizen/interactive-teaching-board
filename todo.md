@@ -182,3 +182,16 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Add automated vertical-slice, round-trip, provenance, regression, and repeatable performance tests.
 - [x] Document accessibility and hardware limitations honestly; do not implement AI, OCR, PDF intelligence, billing, collaboration, or student accounts.
 - [x] Run clean verification, update Gate 4B reports, push branch only, and stop without PR or merge.
+
+## Gate 4B Validation & Hardening — authorized
+
+- [ ] Verify the approved Gate 4B branch, commit, remote, main baseline, and clean working tree.
+- [ ] Create `feature/gate-4b-validation-hardening` based only on the approved Gate 4B branch/commit.
+- [ ] Audit canonical EducationalObject, registry, factory, capabilities, assessment, feedback, migration, and serialization for duplication.
+- [ ] Validate Arabic and Mathematics coverage against future lifecycle requirements without implementing full engines.
+- [ ] Strengthen provenance, source modification, lens regeneration, activity, assessment, feedback, save/restore, duplicate, delete, undo, redo, and migration tests.
+- [ ] Strengthen deterministic assessment states and document unsupported states honestly where not implemented.
+- [ ] Add repeatable benchmarks for 100/250/500 objects, save, restore, duplicate, group, ungroup, serialization, deserialization, and lens regeneration.
+- [ ] Validate RTL, accessibility semantics, presentation mode, keyboard behavior, and record unavailable hardware/browser runner limits without downgrading them.
+- [ ] Create the required validation reports, coverage matrices, lifecycle validation, and ADR-005.
+- [ ] Run clean-clone install/check/test/build/diff-check, push branch only, do not open a PR, do not merge, and stop for Owner Review.

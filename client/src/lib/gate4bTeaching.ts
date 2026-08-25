@@ -12,7 +12,8 @@ import {
 import { createRegisteredEducationalObject } from "./objectRegistry";
 
 export type Subject = "arabic" | "mathematics";
-export type FeedbackState = "correct" | "partially-correct" | "incorrect";
+export type FeedbackState = "correct" | "valid-alternative" | "partially-correct" | "incorrect" | "incomplete";
+export type AssessmentDiagnostic = "answer-error" | "step-error" | "conceptual-error" | "procedural-error" | "alternative-solution" | "incomplete";
 export type InteractionKind = "select" | "classify" | "enter" | "verify" | "solve";
 
 export type SourceRange = { start: number; end: number };
@@ -95,6 +96,7 @@ export type Assessment = {
   feedbackId: string;
   createdAt: string;
   provenance: Provenance;
+  diagnostic: AssessmentDiagnostic;
 };
 
 export type Feedback = {
@@ -106,6 +108,9 @@ export type Feedback = {
   hint?: string;
   retryAllowed: boolean;
   teacherNote: string;
+  nextStep?: string;
+  misconception?: string;
+  teacherOverride?: { state: FeedbackState; note: string };
   createdAt: string;
 };
 
@@ -166,30 +171,34 @@ export const createMathVisualizationLens = (source: EducationalObject<"EquationO
 export const createActivity = (subject: Subject, source: EducationalObject, lens: GrammarLens | MathVisualizationLens, at = nowIso()): ActivityDefinition => subject === "arabic" ? {
   id: id("activity"), subject, prompt: "حدد الفاعل في الجملة.", interactionKind: "classify", sourceObjectId: source.id, lensId: lens.id, expectedAnswer: "word_2", acceptedAnswers: ["word_2", "الطالبُ", "الطالب"], answer: "", attemptCount: 0, completionState: "incomplete", assessmentId: null, feedbackId: null, createdAt: at, updatedAt: at,
 } : {
-  id: id("activity"), subject, prompt: "حل المعادلة: 2x + 3 = 11", interactionKind: "solve", sourceObjectId: source.id, lensId: lens.id, expectedAnswer: "4", acceptedAnswers: ["4", "x=4", "x = 4"], answer: "", attemptCount: 0, completionState: "incomplete", assessmentId: null, feedbackId: null, createdAt: at, updatedAt: at,
+  id: id("activity"), subject, prompt: "حل المعادلة: 2x + 3 = 11", interactionKind: "solve", sourceObjectId: source.id, lensId: lens.id, expectedAnswer: "4", acceptedAnswers: ["4"], answer: "", attemptCount: 0, completionState: "incomplete", assessmentId: null, feedbackId: null, createdAt: at, updatedAt: at,
 };
 
 export const evaluateAnswer = (activity: ActivityDefinition, answer: string): { state: FeedbackState; score: number } => {
   const submitted = normalize(answer);
-  if (!submitted) return { state: "incorrect", score: 0 };
+  if (!submitted) return { state: "incomplete", score: 0 };
   if (activity.acceptedAnswers.some((candidate) => normalize(candidate) === submitted)) return { state: "correct", score: 1 };
+  if (activity.subject === "mathematics" && (submitted === "x=4" || submitted === "x=4".replace("=", " = "))) return { state: "valid-alternative", score: 1 };
   if (activity.subject === "arabic" && (submitted === "word_1" || submitted === "word_3" || submitted.includes("فعل") || submitted.includes("مفعول"))) return { state: "partially-correct", score: 0.5 };
   if (activity.subject === "mathematics" && (submitted === "8" || submitted.includes("2"))) return { state: "partially-correct", score: 0.5 };
   return { state: "incorrect", score: 0 };
 };
 
 export const createFeedback = (assessment: Assessment, activity: ActivityDefinition): Feedback => {
-  const common = { id: id("feedback"), assessmentId: assessment.id, state: assessment.evaluation, retryAllowed: assessment.evaluation !== "correct", teacherNote: activity.subject === "arabic" ? "تذكير للمعلم: الفاعل هو من قام بالفعل." : "تذكير للمعلم: حافظ على تكافؤ الطرفين في كل خطوة.", createdAt: nowIso() };
+  const common = { id: id("feedback"), assessmentId: assessment.id, state: assessment.evaluation, retryAllowed: !["correct", "valid-alternative"].includes(assessment.evaluation), teacherNote: activity.subject === "arabic" ? "تذكير للمعلم: الفاعل هو من قام بالفعل." : "تذكير للمعلم: حافظ على تكافؤ الطرفين في كل خطوة.", createdAt: nowIso() };
   if (assessment.evaluation === "correct") return { ...common, title: "إجابة صحيحة", explanation: activity.subject === "arabic" ? "أحسنت؛ الطالبُ هو الفاعل لأنه قام بالقراءة." : "أحسنت؛ بعد طرح 3 ثم القسمة على 2، يكون x = 4." };
-  if (assessment.evaluation === "partially-correct") return { ...common, title: "إجابة جزئية", explanation: activity.subject === "arabic" ? "بدأت من اتجاه صحيح، لكن اختر الكلمة التي تؤدي الفعل لا وصف الفعل أو المفعول به." : "الخطوة الوسطى قريبة؛ بعد طرح 3 يصبح الطرف الأيسر 2x والطرف الأيمن 8.", hint: activity.subject === "arabic" ? "اسأل: من قام بالفعل؟" : "نفّذ العملية نفسها على الطرفين." };
-  return { ...common, title: "لنحاول مرة أخرى", explanation: activity.subject === "arabic" ? "الإجابة ليست الفاعل. اقرأ الجملة واسأل: من قام بالفعل؟" : "ابدأ بطرح 3 من الطرفين، ثم اقسم الناتج على 2.", hint: activity.subject === "arabic" ? "الكلمة الثانية هي المرشح الصحيح." : "بعد طرح 3: 2x = 8." };
+  if (assessment.evaluation === "valid-alternative") return { ...common, title: "حل صحيح بصيغة بديلة", explanation: "أثبتت الصيغة x = 4 القيمة نفسها؛ نحتفظ بها كطريقة تعبير صحيحة.", hint: "يمكنك الآن التحقق بالتعويض.", nextStep: "تحقق من الحل بالتعويض في المعادلة." };
+  if (assessment.evaluation === "incomplete") return { ...common, title: "لم تُرسل إجابة بعد", explanation: activity.subject === "arabic" ? "اختر كلمة من الجملة لتحديد الفاعل." : "اكتب قيمة x أو صيغة حل واضحة قبل الإرسال.", hint: activity.subject === "arabic" ? "ابدأ بالسؤال: من قام بالفعل؟" : "ابدأ بطرح 3 من الطرفين.", nextStep: "أكمل الحقل أو الاختيار ثم أرسل المحاولة." };
+  if (assessment.evaluation === "partially-correct") return { ...common, title: "إجابة جزئية", explanation: activity.subject === "arabic" ? "بدأت من اتجاه صحيح، لكن اختر الكلمة التي تؤدي الفعل لا وصف الفعل أو المفعول به." : "الخطوة الوسطى قريبة؛ بعد طرح 3 يصبح الطرف الأيسر 2x والطرف الأيمن 8.", hint: activity.subject === "arabic" ? "اسأل: من قام بالفعل؟" : "نفّذ العملية نفسها على الطرفين.", nextStep: activity.subject === "arabic" ? "اربط السؤال بمن قام بالفعل." : "راجع الخطوة الأولى قبل متابعة الحل." };
+  return { ...common, title: "لنحاول مرة أخرى", explanation: activity.subject === "arabic" ? "الإجابة ليست الفاعل. اقرأ الجملة واسأل: من قام بالفعل؟" : "ابدأ بطرح 3 من الطرفين، ثم اقسم الناتج على 2.", hint: activity.subject === "arabic" ? "الكلمة الثانية هي المرشح الصحيح." : "بعد طرح 3: 2x = 8.", nextStep: activity.subject === "arabic" ? "أعد قراءة الجملة وحدد صاحب الفعل." : "نفّذ طرح 3 على الطرفين أولًا." };
 };
 
 export const assessActivity = (activity: ActivityDefinition, answer: string, provenance: Provenance, at = nowIso()): { activity: ActivityDefinition; assessment: Assessment; feedback: Feedback } => {
   const result = evaluateAnswer(activity, answer);
   const assessmentId = id("assessment");
-  const nextActivity: ActivityDefinition = { ...activity, answer, attemptCount: activity.attemptCount + 1, completionState: result.state === "correct" ? "complete" : "incomplete", assessmentId, feedbackId: null, updatedAt: at };
-  const assessment: Assessment = { id: assessmentId, activityId: activity.id, attemptId: id("attempt"), answer, evaluation: result.state, score: result.score, maxScore: 1, feedbackId: "pending", createdAt: at, provenance: clone(provenance) };
+  const nextActivity: ActivityDefinition = { ...activity, answer, attemptCount: activity.attemptCount + 1, completionState: ["correct", "valid-alternative"].includes(result.state) ? "complete" : "incomplete", assessmentId, feedbackId: null, updatedAt: at };
+  const diagnostic: AssessmentDiagnostic = result.state === "valid-alternative" ? "alternative-solution" : result.state === "incomplete" ? "incomplete" : result.state === "partially-correct" ? (activity.subject === "mathematics" ? "step-error" : "conceptual-error") : result.state === "incorrect" ? "answer-error" : "procedural-error";
+  const assessment: Assessment = { id: assessmentId, activityId: activity.id, attemptId: id("attempt"), answer, evaluation: result.state, score: result.score, maxScore: 1, feedbackId: "pending", createdAt: at, provenance: clone(provenance), diagnostic };
   const feedback = createFeedback(assessment, nextActivity);
   return { activity: { ...nextActivity, feedbackId: feedback.id }, assessment: { ...assessment, feedbackId: feedback.id }, feedback };
 };
