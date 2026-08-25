@@ -340,3 +340,21 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] Inspect the existing bounded Mathematics slice and select the highest-value teacher workflow without creating a general Math Engine.
 - [ ] Implement deterministic, explainable, source-preserving Math teaching tools only within proven boundaries.
 - [ ] Add tests, evidence report, readiness matrix, checkpoint, and stop/continue decision based on critical blockers.
+
+
+## Gate 7 Mathematics Teaching Toolkit — completed; roadmap continuation authorized
+
+- [x] Read the complete Gate 7–14 directive and record scope, evidence labels, and stop rules.
+- [x] Verify Gate 6 checkpoint `f2b27b9632aa6faa6e73f7939b9c013609926b62`, main, remotes, status, and existing Math slice.
+- [x] Create exactly `feature/gate-7-mathematics-toolkit` without modifying main, force-pushing, rebasing, or opening/merging a PR.
+- [x] Implement bounded expression/equation creation, transformations, step solving, alternatives, substitution, graph/grid representation, annotations, practice, assessment, feedback, override, provenance, and local save/restore using canonical contracts.
+- [x] Classify unsupported mathematics honestly; no symbolic algebra engine claim.
+- [x] Add unit, integration, negative, malformed, migration, round-trip, provenance, assessment, feedback, regression, and performance tests.
+- [x] Run required checks, write Gate 7 report and evidence matrix, save checkpoint, then continue to Gate 8 only if no critical blocker exists.
+
+## Gate 8 Contextual Teaching Actions — authorized by roadmap; pending Gate 7 checkpoint
+
+- [ ] Create exactly `feature/gate-8-contextual-actions` from the Gate 7 checkpoint.
+- [ ] Implement capability-driven actions شرح/تحليل/تدريب/تقييم/مثال/مقارنة/تمييز/إخفاء/إظهار/تحويل إلى نشاط without subject logic in Core Board.
+- [ ] Add Arabic and Mathematics action maps over canonical object types, preserve provenance, and test unsupported actions honestly.
+- [ ] Add integration/regression/accessibility tests, evidence report, checkpoint, and continue only if no critical blocker exists.
