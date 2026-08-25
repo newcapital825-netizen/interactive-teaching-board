@@ -173,12 +173,12 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 
 ## Gate 4B — Controlled Vertical Slice — authorized
 
-- [ ] Verify main, Gate 4A approval, branch baseline, and clean working tree.
-- [ ] Create `feature/gate-4b-vertical-slice` without modifying main.
-- [ ] Implement one deterministic Arabic sentence → Grammar Lens → activity → assessment → feedback → save/restore journey.
-- [ ] Implement one deterministic equation → Math Visualization Lens → activity → assessment → feedback → save/restore journey.
-- [ ] Reuse canonical EducationalObject, registry, factory, capabilities, migration, adapters, transformations, interaction, assessment, feedback, and provenance infrastructure.
-- [ ] Add presentation-mode journeys and preserve IDs, source references, provenance, styles, z-order, activity state, and assessment state.
-- [ ] Add automated vertical-slice, round-trip, provenance, regression, and repeatable performance tests.
-- [ ] Document accessibility and hardware limitations honestly; do not implement AI, OCR, PDF intelligence, billing, collaboration, or student accounts.
-- [ ] Run clean verification, update Gate 4B reports, push branch only, and stop without PR or merge.
+- [x] Verify main, Gate 4A approval, branch baseline, and clean working tree.
+- [x] Create `feature/gate-4b-vertical-slice` without modifying main.
+- [x] Implement one deterministic Arabic sentence → Grammar Lens → activity → assessment → feedback → save/restore journey.
+- [x] Implement one deterministic equation → Math Visualization Lens → activity → assessment → feedback → save/restore journey.
+- [x] Reuse canonical EducationalObject, registry, factory, capabilities, migration, adapters, transformations, interaction, assessment, feedback, and provenance infrastructure.
+- [x] Add presentation-mode journeys and preserve IDs, source references, provenance, styles, z-order, activity state, and assessment state.
+- [x] Add automated vertical-slice, round-trip, provenance, regression, and repeatable performance tests.
+- [x] Document accessibility and hardware limitations honestly; do not implement AI, OCR, PDF intelligence, billing, collaboration, or student accounts.
+- [x] Run clean verification, update Gate 4B reports, push branch only, and stop without PR or merge.

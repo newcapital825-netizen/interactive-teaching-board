@@ -12,6 +12,9 @@
 | Branch | `feature/gate-4b-vertical-slice` |
 | Base | آخر commit منشور لـGate 4A: `ca8f6d6206d852e62bddc023c43e2ecbbf9749a1` |
 | PR | لم يُفتح، وفق التفويض |
+| Final commit | `a853a719177e6e70bd057eef4c73a9a024daecfe` |
+| Clean clone | PASS: `/tmp/interactive-teaching-board-gate4b-clean` |
+| Clean clone HEAD | `a853a719177e6e70bd057eef4c73a9a024daecfe` |
 | Gate 4B scope | Arabic + Mathematics controlled vertical slice |
 
 ## ما تم تنفيذه
@@ -32,7 +35,7 @@
 
 الاختبار المخصص يغطي creation، registry/factory reuse، Arabic transformation، Math transformation، provenance، activity، الحالات الثلاث للتقييم، feedback، round-trip، ID/capability preservation، malformed payload rejection، وrepeatable domain benchmark لعدد 100 رحلة. اختبارات Gate 2 وGate 3A وGate 3B تستمر ضمن suite المشروع.
 
-النتيجة المحلية الحالية: `pnpm check = PASS`، `pnpm test -- --run = PASS`، مع **9 test files و36 tests**، و`pnpm build = PASS`، و`git diff --check = PASS`. benchmark domain قابل للتكرار على 100 رحلة سجّل `createTransformAssessSerializeRestoreMs = 9.345` في تشغيل الاختبار الحالي. هذا قياس sandbox/Node وليس قياس real-browser performance.
+نتيجة clean clone: `pnpm install --frozen-lockfile = PASS`، `pnpm check = PASS`، `pnpm test -- --run = PASS` مع **9 test files و36 tests**، `pnpm build = PASS`، و`git diff --check = PASS`. benchmark domain القابل للتكرار على 100 رحلة سجّل `createTransformAssessSerializeRestoreMs = 12.184 ms` في clean clone. هذا قياس sandbox/Node وليس قياس real-browser performance.
 
 ## الملفات المتغيرة
 
@@ -42,6 +45,10 @@
 | Workspace/UI | `client/src/components/Gate4BWorkspace.tsx`, `client/src/pages/Home.tsx`, `client/src/index.css` |
 | Tests | `tests/gate4b-vertical-slice.test.ts`, rename harmless Gate 1B fixture type to avoid duplicate `EducationalObject` name |
 | Documentation | `docs/gates/GATE_4B_REPORT.md`, `docs/gates/GATE_4B_VERTICAL_SLICE.md`, and five Gate 4B architecture traces |
+
+## Known warnings
+
+يحذر pnpm من أن مفاتيح `pnpm.patchedDependencies` و`pnpm.overrides` في package.json لم تعد تُقرأ من ذلك الموضع في إصدار pnpm المستخدم. لم يمنع التحذير check أو test أو build. كما ظهر تحذير Vite بأن حزمة JavaScript الإنتاجية تتجاوز 500 kB بعد minification؛ لم تُنفذ code-splitting في هذه الشريحة لأن ذلك خارج نطاقها.
 
 ## Accessibility وhardware
 
