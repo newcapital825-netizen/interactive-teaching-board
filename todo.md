@@ -243,3 +243,19 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Add pedagogical, negative, malformed, alternative, provenance, round-trip, migration, and assessment-to-feedback tests.
 - [x] Run RTL/Arabic UX/accessibility/performance validation and record unavailable browser/hardware limits honestly.
 - [x] Create the Gate 4C-A hardening report, run clean verification, push one branch only, do not open PR, do not merge, and stop for Owner Review.
+
+## Gate 4C-B Mathematics Step-by-Step Vertical Slice — authorized
+
+- [ ] Read the complete Gate 4C-B directive and extract its scope, stop rules, evidence requirements, and limitations.
+- [ ] Verify the approved Arabic hardening baseline, repository, branch, HEAD, main, remote, and clean working tree.
+- [ ] Create exactly one `feature/gate-4c-b-math-step-slice` branch only after baseline verification; never modify main or rewrite shared history.
+- [ ] Complete Phase 0 Discovery and write `docs/gates/GATE_4C_B_MATH_DISCOVERY.md` before production code.
+- [ ] Reuse canonical EducationalObject, Registry, Factory, Capabilities, Migration, Adapters, Transformations, Assessment, Feedback, Provenance, Events, and Persistence; document architectural non-duplication.
+- [ ] Implement one bounded mathematics step-by-step slice for `2x + 3 = 11`, not a general Math Engine or symbolic mathematics engine.
+- [ ] Add MathProblemObject/SolutionStepObject contracts, multiple valid paths, step-level deterministic assessment, diagnostics, progressive feedback, answer/verification separation, and teacher override provenance.
+- [ ] Add a small deterministic Golden Dataset covering positive, alternative, negative, incomplete, malformed, invalid, unsupported, and verification cases.
+- [ ] Add one canonical Math Visualization Lens derived from the mathematical object and preserving sourceObjectId/sourceRange/sourceVersion.
+- [ ] Integrate the smallest teacher/student workflow into the existing board with save/restore and presentation mode.
+- [ ] Add regression, negative, malformed, migration, persistence, round-trip, provenance, UI/RTL/responsive, and deterministic tests.
+- [ ] Run check/test/build/diff-check and clean-clone verification; document unavailable hardware/browser/accessibility validation honestly.
+- [ ] Write the Gate 4C-B report, push one branch only, do not open PR, do not merge, do not start Gate 4D, and stop for Owner Review.
