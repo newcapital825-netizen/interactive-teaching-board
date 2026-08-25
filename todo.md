@@ -322,3 +322,21 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] Inspect the existing Arabic slice and select the highest-value bounded teacher capability without claiming general Arabic NLP.
 - [ ] Implement only the smallest safe Arabic teaching extension with deterministic Golden Dataset growth and explicit unsupported boundaries.
 - [ ] Add tests, evidence report, readiness matrix, checkpoint, and stop/continue decision based on true critical blockers.
+
+
+## Gate 6 Arabic Teaching Toolkit — completed; roadmap continuation authorized
+
+- [x] Verify Gate 5 checkpoint `ec5a61756e023b24c610eae56c929d957bbb792c`, main, remotes, status, and existing Arabic evidence.
+- [x] Create exactly `feature/gate-6-arabic-toolkit` without modifying main, force-pushing, rebasing, or opening/merging a PR.
+- [x] Implement the smallest high-value bounded Arabic tool extension using canonical objects, lenses, activities, assessment, feedback, provenance, persistence, and migration.
+- [x] Cover teacher sentence/text interaction, constrained grammar/I3rab, and one bounded reading/comprehension or annotation workflow without inventing source content.
+- [x] Expand Arabic Golden Dataset toward 50 validated cases only with explicit valid/invalid/alternative/incomplete/boundary/unsupported categories.
+- [x] Add unit, integration, round-trip, provenance, assessment, feedback, migration, negative, and regression tests.
+- [x] Run required checks, document readiness and RED/YELLOW/GREEN honestly, save Gate 6 checkpoint, and continue to Gate 7 only if no critical blocker exists.
+
+## Gate 7 Mathematics Toolkit — authorized by roadmap; pending Gate 6 checkpoint
+
+- [ ] Create exactly `feature/gate-7-mathematics-toolkit` from the Gate 6 checkpoint.
+- [ ] Inspect the existing bounded Mathematics slice and select the highest-value teacher workflow without creating a general Math Engine.
+- [ ] Implement deterministic, explainable, source-preserving Math teaching tools only within proven boundaries.
+- [ ] Add tests, evidence report, readiness matrix, checkpoint, and stop/continue decision based on critical blockers.
