@@ -218,3 +218,15 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] Validate UI, RTL, keyboard semantics, accessibility, responsive behavior, presentation mode, and honestly record unavailable browser/hardware validation.
 - [ ] Create Gate 4C architecture, coverage, validation, and owner-review reports.
 - [ ] Run clean-clone install/check/test/build/diff-check, push branch only, do not open PR, do not merge, and stop before Gate 4D.
+
+## Gate 4C Arabic Grammar / I3rab Vertical Slice — authorized
+
+- [x] Verify Gate 4C Discovery branch, Gate 4B Final Hardening baseline, main, remote, and working tree.
+- [x] Create exactly one implementation branch `feature/gate-4c-arabic-i3rab-slice` from approved Discovery baseline.
+- [x] Search and reuse canonical EducationalObject, Registry, Factory, Capabilities, Migration, Adapters, Transformations, Assessment, Feedback, Provenance, Events, and Persistence.
+- [x] Implement only the bounded Arabic sentence/word/I3rab/activity workflow; do not build full Arabic NLP, OCR, AI, morphology, rhetoric, literature, or unrestricted parsing.
+- [x] Preserve sourceObjectId, sourceRange, sourceVersion, IDs, styles, z-order, metadata, lens/activity/assessment/feedback/events, and teacher override through save/reload/restore.
+- [x] Add structured student interaction with deterministic role/case/marker/reasoning assessment and the five shared assessment states.
+- [x] Add Arabic golden fixtures, positive/negative/alternative/determinism/provenance/migration/round-trip tests.
+- [x] Validate RTL, progressive reveal, keyboard/focus/ARIA, responsive layout, presentation mode, and honestly record unavailable browser/hardware validation.
+- [x] Run regression and clean-clone verification, update Gate 4C Arabic slice report, push one branch only, do not open PR, do not merge, and stop before Gate 4D.
