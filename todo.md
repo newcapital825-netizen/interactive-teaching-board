@@ -297,3 +297,28 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Validate existing Golden Datasets, alternatives, unsupported boundaries, diagnostics, feedback, override, provenance, save/restore, migration, RTL, accessibility, and performance without expanding datasets.
 - [x] Add only integration regression tests and required final integration documentation; stop on any real regression or ambiguous merge point.
 - [x] Run clean-clone install/check/test/build/diff-check, record NOT VERIFIED limits honestly, push only the integration branch, and stop for Owner Review.
+
+
+## New Autonomous Product Execution Directive — pending owner scope confirmation
+
+- [ ] Confirm whether the new directive supersedes the explicit Gate 4C Final Integration Stop Rule and authorizes transition to Gate 5 Teacher Productization.
+- [ ] Do not inspect/modify product scope for Gate 5 until the owner confirms the intended boundary: Gate 4C completion only, or Gate 5 Teacher MVP work on a new branch.
+- [ ] If authorized, perform a fresh baseline check and create a separately named Gate 5 feature branch; never modify main, merge, force-push, or rewrite history.
+
+
+## Productization Roadmap — Gate 5 completed; Owner checkpoint pending
+
+- [x] Verify the documented Gate 4C integration checkpoint, current branch, main, remotes, status, and existing product workflow.
+- [x] Create exactly `feature/gate-5-teacher-productization` without modifying main, rewriting history, or opening/merging a PR automatically.
+- [x] Discover existing Teacher Workspace capabilities and identify only the highest-value missing workflow pieces.
+- [x] Implement the smallest complete teacher flow: create lesson, choose subject, add/edit content, create activity, preview student, assess, feedback, save/restore, and present.
+- [x] Preserve canonical architecture, Arabic-first RTL, deterministic assessment, provenance, teacher override, and safe persistence.
+- [x] Add tests, run required checks, document Proven/Ready/Partial/Not Verified/Deferred/Blocked, and save a checkpoint.
+- [x] Continue only to the next roadmap gate if the current gate has no true critical blocker; do not implement billing, collaboration, cloud production, institutional identity, AI, or OCR.
+
+## Gate 6 Arabic Teaching Toolkit — authorized by roadmap; pending Gate 5 checkpoint
+
+- [ ] Start from the Gate 5 checkpoint and create exactly `feature/gate-6-arabic-teaching-toolkit`.
+- [ ] Inspect the existing Arabic slice and select the highest-value bounded teacher capability without claiming general Arabic NLP.
+- [ ] Implement only the smallest safe Arabic teaching extension with deterministic Golden Dataset growth and explicit unsupported boundaries.
+- [ ] Add tests, evidence report, readiness matrix, checkpoint, and stop/continue decision based on true critical blockers.

@@ -444,3 +444,46 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
 .math-teacher-override input, .math-teacher-override select { min-height:2.2rem; border:1px solid var(--line); border-radius:.55rem; background:rgba(251,250,246,.72); color:var(--ink); padding:.35rem .5rem; font:inherit; }
 .math-teacher-override input:focus-visible, .math-teacher-override select:focus-visible { outline:3px solid color-mix(in srgb, #9eaf83 65%, transparent); outline-offset:2px; }
 @media (max-width:700px) { .math-teacher-override { grid-template-columns:1fr; } .math-teacher-override .gate4b-quiet-button { justify-self:start; } }
+
+/* Gate 5 Teacher Productization reminder: teacher-first setup layer over the universal board; warm paper, olive structure, coral evidence, no duplicate subject architecture. */
+.teacher-product-shell { min-height:100vh; background:#f0ece4; color:var(--ink); }
+.teacher-product-bar { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; padding:28px 42px 22px; border-bottom:1px solid var(--line); background:rgba(251,250,246,.92); }
+.teacher-product-bar h1,.teacher-product-preview h1 { margin:5px 0 5px; font-size:26px; letter-spacing:-.045em; }
+.teacher-product-bar p,.teacher-product-preview p { margin:0; color:var(--muted-foreground); font-size:11px; }
+.teacher-product-kicker { color:var(--coral); font-size:9px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
+.teacher-product-actions { display:flex; align-items:center; gap:9px; flex-wrap:wrap; }
+.teacher-product-save { display:flex; align-items:center; gap:7px; color:var(--muted-foreground); font-size:10px; white-space:nowrap; }
+.teacher-product-save span { width:7px; height:7px; border-radius:50%; background:var(--coral); }.teacher-product-save.saved span { background:#6e9c7b; }
+.teacher-product-setup { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(190px,.75fr) minmax(230px,.9fr); gap:0; margin:0 42px 22px; border:1px solid var(--line); background:rgba(251,250,246,.72); box-shadow:0 10px 24px rgba(64,62,54,.05); }
+.teacher-product-fields { display:grid; grid-template-columns:1fr 1fr; gap:13px; padding:18px 20px; }
+.teacher-product-fields label,.teacher-product-preview label { display:flex; flex-direction:column; gap:6px; color:var(--muted-foreground); font-size:10px; }
+.teacher-product-fields label.wide { grid-column:1 / -1; }
+.teacher-product-fields input { width:100%; border:1px solid var(--line); background:#fffefa; color:var(--ink); padding:10px 11px; font:inherit; outline:none; }
+.teacher-product-fields input:focus,.teacher-preview-paper:focus-within { border-color:var(--coral); box-shadow:0 0 0 3px rgba(213,107,88,.12); }
+.teacher-product-pages,.teacher-product-content { padding:18px 18px; border-right:1px solid var(--line); }
+.teacher-product-content { background:rgba(229,232,222,.4); }
+.teacher-product-section-heading { display:flex; justify-content:space-between; align-items:center; margin-bottom:11px; color:var(--olive); font-size:11px; font-weight:800; }
+.teacher-product-section-heading small { color:var(--muted-foreground); font-size:9px; font-weight:500; }
+.teacher-product-icon { display:grid; place-items:center; width:28px; height:28px; border:1px solid var(--line); color:var(--olive); background:transparent; cursor:pointer; }
+.teacher-product-page-list { display:flex; gap:7px; overflow:auto; }
+.teacher-product-page-list button { display:flex; flex-direction:column; gap:4px; min-width:92px; border:1px solid var(--line); padding:9px; text-align:right; color:var(--muted-foreground); background:#fffefa; cursor:pointer; font-size:10px; }
+.teacher-product-page-list button.active { color:var(--olive); border-color:var(--coral); background:var(--coral-soft); }.teacher-product-page-list button span { color:var(--coral); font-size:9px; }.teacher-product-page-list button small { font-size:8px; color:var(--muted-foreground); }
+.teacher-product-adds { display:grid; grid-template-columns:1fr 1fr; gap:7px; }.teacher-product-adds button { display:flex; align-items:center; justify-content:center; gap:6px; border:1px solid var(--line); padding:9px 7px; color:var(--olive); background:#fffefa; cursor:pointer; font:inherit; font-size:10px; }.teacher-product-adds button:hover,.teacher-product-icon:hover { border-color:var(--coral); transform:translateY(-1px); }.teacher-product-notice { min-height:28px; margin:11px 0 0; color:var(--muted-foreground); font-size:9px; line-height:1.6; }
+.teacher-product-preview { min-height:100vh; padding:38px 8vw; background:radial-gradient(circle at 10% 12%,rgba(213,107,88,.08),transparent 25%),linear-gradient(135deg,#f3efe8,#e7e2d8); }.teacher-product-preview>header { display:flex; justify-content:space-between; align-items:flex-start; gap:22px; max-width:880px; margin:0 auto 24px; }.teacher-preview-paper { max-width:880px; min-height:470px; margin:auto; padding:30px 34px; border:1px solid rgba(53,72,59,.24); background:#fffefa; box-shadow:10px 12px 0 rgba(53,72,59,.08),0 20px 40px rgba(51,50,40,.1); }.teacher-preview-paper h2 { margin:12px 0 7px; color:var(--olive); font-size:27px; }.teacher-preview-objective { padding-bottom:18px; border-bottom:1px solid var(--line); }.teacher-preview-content { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; margin-top:24px; }.teacher-preview-content article { display:flex; flex-direction:column; gap:8px; min-height:100px; padding:16px; border:1px solid var(--line); background:#f7f4ec; }.teacher-preview-content small { color:var(--coral); font-size:9px; text-transform:uppercase; }.teacher-preview-content strong { color:var(--ink); font-size:18px; line-height:1.5; }.teacher-preview-footer { display:flex; justify-content:space-between; gap:15px; margin-top:28px; padding-top:14px; border-top:1px solid var(--line); color:var(--muted-foreground); font-size:10px; }
+@media (max-width:900px) { .teacher-product-bar { align-items:flex-start; flex-direction:column; padding:24px 18px 18px; }.teacher-product-actions { width:100%; }.teacher-product-setup { grid-template-columns:1fr; margin:0 18px 18px; }.teacher-product-pages,.teacher-product-content { border-right:0; border-top:1px solid var(--line); }.teacher-product-fields { padding:16px; } }
+@media (max-width:600px) { .teacher-product-fields { grid-template-columns:1fr; }.teacher-product-fields label.wide { grid-column:auto; }.teacher-product-preview { padding:24px 16px; }.teacher-product-preview>header { flex-direction:column; }.teacher-preview-paper { padding:23px 18px; }.teacher-preview-content { grid-template-columns:1fr; }.teacher-preview-footer { flex-direction:column; } }
+
+/* Gate 5 style decision: مِداد is the product anchor; Arabic carries identity, while coral marks active proof and current state only. */
+.teacher-product-kicker { color:var(--olive); letter-spacing:.06em; }
+.teacher-product-heading,.teacher-product-preview-brand { display:flex; align-items:flex-start; gap:14px; }
+.teacher-product-mark { position:relative; width:44px; height:50px; flex:0 0 44px; border:1px solid rgba(53,72,59,.35); background:#fffefa; box-shadow:4px 5px 0 var(--coral-soft); transform:rotate(-3deg); }
+.teacher-product-mark::before { content:""; position:absolute; inset:7px 7px 10px; border:1px solid rgba(53,72,59,.18); border-radius:2px; }
+.teacher-product-mark::after { content:""; position:absolute; top:-1px; left:-1px; width:15px; height:15px; border-right:1px solid var(--coral); border-bottom:1px solid var(--coral); background:#f0ece4; }
+.teacher-product-mark i,.teacher-product-mark b,.teacher-product-mark span { position:absolute; display:block; width:6px; height:6px; border-radius:50%; background:var(--olive); z-index:2; }
+.teacher-product-mark i { top:16px; right:11px; }.teacher-product-mark b { top:26px; right:20px; background:var(--coral); }.teacher-product-mark span { top:35px; right:10px; }
+.teacher-product-mark i::after,.teacher-product-mark b::after { content:""; position:absolute; right:4px; top:2px; width:13px; border-top:1px solid rgba(53,72,59,.55); transform:rotate(145deg); transform-origin:right; }
+.teacher-product-preview .teacher-product-mark { margin-top:3px; }
+.gate4b-eyebrow { color:var(--olive); letter-spacing:.07em; }
+.gate4b-card-label span,.gate4b-activity-kicker { color:var(--olive); }
+.gate4b-card-label b,.gate4b-checklist>span { color:var(--coral); }
+@media (max-width:600px) { .teacher-product-heading,.teacher-product-preview-brand { gap:10px; }.teacher-product-mark { width:38px; height:44px; flex-basis:38px; }.teacher-product-mark i { top:14px; right:9px; }.teacher-product-mark b { top:23px; right:17px; }.teacher-product-mark span { top:32px; right:8px; } }

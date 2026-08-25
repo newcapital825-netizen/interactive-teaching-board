@@ -1,10 +1,10 @@
 /**
- * Gate 4B entry point.
- * Design reminder: the universal board is the product surface; Arabic and
- * Mathematics arrive as toolkits and lenses, never as separate board models.
+ * Gate 5 Teacher Product entry point.
+ * Design reminder: Arabic-first, calm paper-and-olive instrument; product setup
+ * wraps the universal subject workspace without creating a second board model.
  */
-import Gate4BWorkspace from "@/components/Gate4BWorkspace";
+import TeacherProductShell from "@/components/TeacherProductShell";
 
 export default function Home() {
-  return <Gate4BWorkspace />;
+  return <TeacherProductShell />;
 }
