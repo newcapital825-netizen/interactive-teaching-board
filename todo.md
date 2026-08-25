@@ -206,3 +206,15 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Perform feasible static/accessibility/browser/performance validation without claiming unavailable hardware or browser runner results.
 - [x] Create `docs/gates/GATE_4B_FINAL_HARDENING.md` with the required evidence matrix and closure classification.
 - [x] Run clean-clone install/check/test/build/diff-check, push branch only, do not open PR, do not merge, and stop for Owner Review.
+
+## Gate 4C Preparation / Controlled Expansion — authorized pending full directive
+
+- [ ] Verify Gate 4B Final Hardening branch `feature/gate-4b-final-hardening`, HEAD, main, remote, clean working tree, and required evidence states.
+- [ ] Read the complete Gate 4C directive and extract proven, partially proven, not proven, not verified, blocked, and stop-rule items.
+- [ ] Create one precise `feature/gate-4c-...` branch only after baseline verification; never modify main or rewrite shared history.
+- [ ] Define controlled Arabic and Mathematics expansion over canonical EducationalObject, Registry, Factory, Capabilities, Migration, Adapters, Transformations, Assessment, Feedback, Provenance, Events, and Persistence.
+- [ ] Add only bounded Arabic/Mathematics vertical slices with golden fixtures; do not claim full Arabic NLP or a general symbolic engine.
+- [ ] Add golden-dataset, provenance, lifecycle, save/restore, interaction, assessment, feedback, regression, and repeatable performance tests.
+- [ ] Validate UI, RTL, keyboard semantics, accessibility, responsive behavior, presentation mode, and honestly record unavailable browser/hardware validation.
+- [ ] Create Gate 4C architecture, coverage, validation, and owner-review reports.
+- [ ] Run clean-clone install/check/test/build/diff-check, push branch only, do not open PR, do not merge, and stop before Gate 4D.
