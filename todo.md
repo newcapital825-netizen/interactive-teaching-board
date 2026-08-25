@@ -195,3 +195,14 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Validate RTL, accessibility semantics, presentation mode, keyboard behavior, and record unavailable hardware/browser runner limits without downgrading them.
 - [x] Create the required validation reports, coverage matrices, lifecycle validation, and ADR-005.
 - [x] Run clean-clone install/check/test/build/diff-check, push branch only, do not open a PR, do not merge, and stop for Owner Review.
+
+## Gate 4B Final Hardening — authorized
+
+- [ ] Verify current hardening baseline, branch, commit, main, remote, and clean working tree.
+- [ ] Create `feature/gate-4b-final-hardening` from the approved hardening tip only.
+- [ ] Define deterministic lesson workflow migration from previous to current version with safe handling of unknown and malformed fields.
+- [ ] Define auditable teacher override preserving system assessment and teacher decision as distinct events.
+- [ ] Add regression tests for migration round-trip, teacher override persistence, assessment alternatives, incomplete responses, provenance, save/restore, lens regeneration, identity, and error safety.
+- [ ] Perform feasible static/accessibility/browser/performance validation without claiming unavailable hardware or browser runner results.
+- [ ] Create `docs/gates/GATE_4B_FINAL_HARDENING.md` with the required evidence matrix and closure classification.
+- [ ] Run clean-clone install/check/test/build/diff-check, push branch only, do not open PR, do not merge, and stop for Owner Review.

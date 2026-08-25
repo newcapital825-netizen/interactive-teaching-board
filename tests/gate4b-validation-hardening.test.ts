@@ -4,6 +4,7 @@ import { migrateBoardDocument, safeParseBoardDocument } from "../client/src/lib/
 import { duplicateEducationalObject } from "../client/src/lib/educationalObjects";
 import { listObjectDefinitions } from "../client/src/lib/objectRegistry";
 import {
+  applyTeacherOverride,
   assessActivity,
   createArabicSource,
   createGrammarLens,
@@ -12,6 +13,7 @@ import {
   createMathSource,
   createMathVisualizationLens,
   deserializeLesson,
+  migrateLesson,
   evaluateAnswer,
   serializeLesson,
 } from "../client/src/lib/gate4bTeaching";
@@ -149,10 +151,71 @@ describe("Gate 4B validation and hardening", () => {
     }
   });
 
+  it("keeps the same input deterministic at the assessment and serialization boundary", () => {
+    const first = createJourney("mathematics");
+    const second = createJourney("mathematics");
+    const firstResult = assessActivity(first.activity, "8", first.lens.provenance, "2026-01-01T00:00:00.000Z");
+    const secondResult = assessActivity(second.activity, "8", second.lens.provenance, "2026-01-01T00:00:00.000Z");
+    expect(firstResult.assessment.evaluation).toBe(secondResult.assessment.evaluation);
+    expect(firstResult.assessment.diagnostic).toBe(secondResult.assessment.diagnostic);
+    expect(firstResult.feedback.title).toBe(secondResult.feedback.title);
+    expect(firstResult.feedback.nextStep).toBe(secondResult.feedback.nextStep);
+    const normalizedFirst = JSON.stringify({ ...firstResult.activity, id: "", sourceObjectId: "", lensId: "", assessmentId: "", feedbackId: "", createdAt: "", updatedAt: "" });
+    const normalizedSecond = JSON.stringify({ ...secondResult.activity, id: "", sourceObjectId: "", lensId: "", assessmentId: "", feedbackId: "", createdAt: "", updatedAt: "" });
+    expect(normalizedFirst).toBe(normalizedSecond);
+  });
+
+  it("preserves system assessment and teacher override as distinct auditable events", () => {
+    const lesson = createLesson();
+    const assessed = assessActivity(lesson.arabic.activity, "word_1", lesson.arabic.lens.provenance, "2026-01-01T00:00:00.000Z");
+    const overridden = applyTeacherOverride(assessed.assessment, assessed.activity, "valid-alternative", "السياق يسمح بقراءة بديلة", "اعتمدت الإجابة مع الاحتفاظ بالتشخيص النظامي.", lesson.arabic.lens.provenance, "2026-01-01T00:01:00.000Z");
+    expect(overridden.assessment.evaluation).toBe("partially-correct");
+    expect(overridden.assessment.effectiveEvaluation).toBe("valid-alternative");
+    expect(overridden.assessment.events.map((event) => event.eventType)).toEqual(["system-assessment", "teacher-override"]);
+    expect(overridden.assessment.teacherOverride?.reason).toContain("السياق");
+    expect(overridden.assessment.teacherOverride?.provenance.sourceObjectId).toBe(lesson.arabic.source.id);
+    expect(overridden.feedback.state).toBe("valid-alternative");
+    expect(() => applyTeacherOverride(assessed.assessment, assessed.activity, "correct", "", "ملاحظة", lesson.arabic.lens.provenance)).toThrow("reason");
+  });
+
+  it("proves lesson save → migration → restore semantic equivalence and safe future-field handling", () => {
+    const lesson = createLesson();
+    const assessed = assessActivity(lesson.mathematics.activity, "4", lesson.mathematics.lens.provenance, "2026-01-01T00:00:00.000Z");
+    const overridden = applyTeacherOverride(assessed.assessment, assessed.activity, "correct", "مراجعة المعلم", "الحل يطابق خطوات الدرس.", lesson.mathematics.lens.provenance, "2026-01-01T00:01:00.000Z");
+    const populated = { ...lesson, mathematics: { ...lesson.mathematics, activity: assessed.activity, assessment: overridden.assessment, feedback: overridden.feedback } };
+    const previous = JSON.parse(serializeLesson(populated)) as Record<string, unknown>;
+    previous.schemaVersion = 1;
+    (previous.mathematics as Record<string, any>).assessment.events = undefined;
+    (previous.mathematics as Record<string, any>).assessment.effectiveEvaluation = undefined;
+    previous.futureField = JSON.parse('{"__proto__":{"polluted":true},"harmless":"ignored-by-contract"}');
+    const migrated = migrateLesson(previous);
+    expect(migrated?.schemaVersion).toBe(2);
+    expect(migrated?.lessonId).toBe(lesson.lessonId);
+    expect(migrated?.mathematics.source.id).toBe(lesson.mathematics.source.id);
+    expect(migrated?.mathematics.lens.provenance.sourceObjectId).toBe(lesson.mathematics.source.id);
+    expect(migrated?.mathematics.assessment?.teacherOverride?.id).toBe(overridden.assessment.teacherOverride?.id);
+    expect(migrated?.mathematics.assessment?.events.map((event) => event.eventType)).toEqual(["system-assessment", "teacher-override"]);
+    expect(JSON.stringify(migrated)).not.toContain("polluted");
+    expect(deserializeLesson(JSON.stringify(previous))?.mathematics.feedback?.state).toBe("correct");
+    expect(migrateLesson({ ...previous, schemaVersion: 99 })).toBeNull();
+    expect(migrateLesson({ ...previous, mathematics: null })).toBeNull();
+    const malformedAssessment = JSON.parse(JSON.stringify(previous)) as Record<string, any>;
+    malformedAssessment.mathematics.assessment.provenance = { sourceObjectId: "unsafe" };
+    expect(migrateLesson(malformedAssessment)).toBeNull();
+    const malformedFeedback = JSON.parse(JSON.stringify(previous)) as Record<string, any>;
+    malformedFeedback.mathematics.feedback.state = "unknown-state";
+    expect(migrateLesson(malformedFeedback)).toBeNull();
+  });
+
   it("proves canonical board migration and reports unsupported lesson migration as blocked", () => {
-    const legacyBoard = { id: "legacy", title: "Legacy", version: 1, pages: [{ id: "page", name: "One", objects: [{ id: "text", type: "TextObject", content: "نص" }], viewport: { x: 0, y: 0, zoom: 1 } }], activePageId: "page" };
+    const legacyBoard = { id: "legacy", title: "Legacy", version: 1, pages: [{ id: "page", name: "One", objects: [{ id: "text", type: "TextObject", content: "نص", zIndex: 7, style: { color: "#123456", background: "#fff", fontSize: 22, align: "right" }, metadata: { source: "teacher", label: "نص المصدر" } }], viewport: { x: 0, y: 0, zoom: 1 } }], activePageId: "page" };
     const migrated = migrateBoardDocument(legacyBoard);
     expect(migrated?.schemaVersion).toBe(2);
+    expect(migrated?.pages[0].id).toBe("page");
+    expect(migrated?.pages[0].objects[0].id).toBe("text");
+    expect(migrated?.pages[0].objects[0].zIndex).toBe(7);
+    expect(migrated?.pages[0].objects[0].style.align).toBe("right");
+    expect(migrated?.pages[0].objects[0].metadata.label).toBe("نص المصدر");
     expect(safeParseBoardDocument(JSON.stringify(legacyBoard))?.pages[0].objects[0].id).toBe("text");
     expect(deserializeLesson(JSON.stringify({ schemaVersion: 1, lessonId: "old" }))).toBeNull();
     const journey = createJourney("arabic");
