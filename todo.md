@@ -358,3 +358,21 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] Implement capability-driven actions شرح/تحليل/تدريب/تقييم/مثال/مقارنة/تمييز/إخفاء/إظهار/تحويل إلى نشاط without subject logic in Core Board.
 - [ ] Add Arabic and Mathematics action maps over canonical object types, preserve provenance, and test unsupported actions honestly.
 - [ ] Add integration/regression/accessibility tests, evidence report, checkpoint, and continue only if no critical blocker exists.
+
+
+## Gate 8 Contextual Teaching Actions — completed; roadmap continuation authorized
+
+- [x] Verify Gate 7 checkpoint `39c3db5d` and actual remote HEAD, main, status, remotes, and existing branch state.
+- [x] Create exactly `feature/gate-8-contextual-actions` without modifying main, force-pushing, rebasing, or opening/merging a PR.
+- [x] Reuse canonical capability definitions and create one subject-agnostic contextual action contract; no duplicate Registry/Factory/Assessment/Feedback/Persistence engines.
+- [x] Map Arabic and Mathematics object types to شرح/تحليل/تدريب/تقييم/مثال/مقارنة/تمييز/إخفاء-إظهار/تحويل إلى نشاط/عرض بصري with progressive disclosure.
+- [x] Prove Arabic selection actions, Mathematics actions, object mismatch handling, activity→assessment→feedback, provenance, persistence, override compatibility, and unsupported safety.
+- [x] Add integration/regression/accessibility tests and report PROVEN/PARTIALLY PROVEN/NOT PROVEN/NOT VERIFIED/BLOCKED honestly.
+- [x] Run full checks and clean clone, save Gate 8 checkpoint, then continue to Gate 9 only if no critical blocker exists.
+
+## Gate 9 Lesson Builder + Classroom Workflow — authorized by roadmap; pending Gate 8 checkpoint
+
+- [ ] Create exactly `feature/gate-9-lesson-classroom-workflow` from the Gate 8 checkpoint.
+- [ ] Add bounded lesson builder flows for objectives, activities, assessment/feedback sequencing, teacher preview, and classroom presentation without collaboration or cloud services.
+- [ ] Preserve canonical objects, action maps, provenance, deterministic assessment, local persistence, and recovery behavior.
+- [ ] Add tests, evidence report, checkpoint, and continue only if no critical blocker exists.
