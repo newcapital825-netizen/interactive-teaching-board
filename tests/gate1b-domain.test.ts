@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-type EducationalObject = {
+type Gate1BFrozenSentenceFixture = {
   id: string;
   type: string;
   content: string;
@@ -9,7 +9,7 @@ type EducationalObject = {
   source: { kind: string; label: string };
 };
 
-const sentenceObject: EducationalObject = {
+const sentenceObject: Gate1BFrozenSentenceFixture = {
   id: "sentence_01",
   type: "SentenceObject",
   content: "قرأَ الطالبُ الكتابَ",
@@ -29,7 +29,7 @@ describe("Gate 1B Educational Object contract", () => {
   });
 
   it("can be serialized and restored without losing domain identity", () => {
-    const restored = JSON.parse(JSON.stringify(sentenceObject)) as EducationalObject;
+    const restored = JSON.parse(JSON.stringify(sentenceObject)) as Gate1BFrozenSentenceFixture;
     expect(restored).toEqual(sentenceObject);
   });
 });
