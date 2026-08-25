@@ -471,3 +471,22 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Passed frozen install, check, 21 test files/110 tests, build, diff-check, and architecture scan.
 - [ ] Contextual conversion, active Activity browser lifecycle, file picker export/import, real pointer drag/resize, multi-select/group, UI automation, accessibility, touch, stylus, and browser performance remain unverified.
 - [x] Wrote `docs/gates/GATE_13_REPORT.md`; checkpoint and clean clone remain required before moving to Gate 14.
+
+
+## RELEASE PATH v1.0 — Gate 14 Accessibility/Input QA authorized
+
+- [ ] Read the complete release directive and record Gates 14–17 evidence and stop requirements.
+- [ ] Verify Gate 13 checkpoint `656e1954`, actual branch/HEAD, main, remotes, PR state, and working tree.
+- [ ] Create exactly `feature/gate-14-accessibility-input-qa` from Gate 13 without modifying main, merging, force-pushing, or rewriting history.
+- [ ] Gate 14: verify/fix keyboard, focus, focus restoration, Escape, editing, selection, contextual actions, page/presentation/student controls, RTL, semantics, reduced motion, and contrast.
+- [ ] Deliver `docs/gates/GATE_14_REPORT.md`, `docs/qa/ACCESSIBILITY_MATRIX.md`, `docs/qa/KEYBOARD_MATRIX.md`, and `docs/qa/RTL_MATRIX.md`.
+- [ ] Classify real screen-reader, touch, stylus, and unavailable hardware evidence honestly; run check/test/build/diff-check and clean clone.
+- [ ] Gate 15: create the required Playwright E2E branch and deterministic Chromium journeys only after Gate 14 checkpoint.
+- [ ] Gate 16: measure real-browser performance/resilience and apply only objectively required optimizations.
+- [ ] Gate 17: assemble Release Candidate evidence and controlled human-pilot boundaries; do not claim MVP production readiness without human validation.
+- [ ] Save checkpoints at gate boundaries, never publish/merge automatically, and stop at Owner Review after Gate 17.
+
+
+## Gate 14 Accessibility & Input QA — completed; CONDITIONAL
+
+تمت إضافة keyboard selection، multi-select keyboard path، Escape semantics، accessible resize controls، focus-visible، status announcements، reduced-motion safeguards، ومصفوفات accessibility/keyboard/RTL. نجحت الفحوص المحلية: 22 ملف اختبارًا و113 اختبارًا، check، build، diff-check، architecture scan، وvisual smoke على desktop/mobile. Screen reader وtouch وstylus وfull browser keyboard journey وhuman validation بقيت NOT VERIFIED. Gate 15 هو التالي، ولا يُدّعى امتثال WCAG رسمي.

@@ -543,3 +543,11 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
 @media (max-width:900px) { .classroom-activity-list { grid-template-columns:1fr; } .math-step-row { grid-template-columns:1fr 1fr; } .math-step-row strong { grid-column:1/-1; } }
 @media (max-width:560px) { .classroom-loop-panel { padding:15px; } .loop-heading { flex-direction:column; gap:8px; } .activity-source-row { align-items:stretch; flex-direction:column; } .activity-source-row button { text-align:right; } .math-step-row { grid-template-columns:1fr; } }
 @media (prefers-reduced-motion:reduce) { .classroom-activity-card { transition:none; } }
+
+
+/* Gate 14 reminder: paper-and-olive, Arabic-first RTL workspace; preserve semantic focus and provide non-canvas keyboard paths without duplicating interaction logic. */
+button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, [role="button"]:focus-visible, [tabindex]:focus-visible { outline:2px solid #c66e5b; outline-offset:3px; }
+.teacher-product-notice[role="status"], [aria-live="polite"] { min-height:1.2em; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
+}
