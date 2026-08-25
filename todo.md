@@ -378,7 +378,7 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] Add tests, evidence report, checkpoint, and continue only if no critical blocker exists.
 
 
-## Gate 9 Lesson Builder + Complete Classroom Workflow — completed; roadmap continuation authorized
+## Gate 9 Lesson Builder + Complete Classroom Workflow — completed; checkpoint saved
 
 - [x] Read the complete Gate 9 directive and record exit criteria, evidence labels, and stop rules.
 - [x] Verify Gate 8 checkpoint `aca832ea`, actual branch/HEAD, main, remotes, status, and PR state.
@@ -388,6 +388,12 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Prove the available Arabic and Mathematics workflows through the existing bounded content/activity/assessment/feedback/review paths with provenance.
 - [x] Add student mode, presentation mode, autosave states, lesson duplication with ID isolation, malformed/migration/broken-provenance safety, performance measurements, and accessibility evidence.
 - [x] Add complete regression suite and report, run clean clone, save checkpoint, and stop or continue only according to Gate 9 exit criteria.
+
+## Gate 10 Save / Export / Import / Recovery — authorized by roadmap; pending Gate 9 checkpoint
+
+- [ ] Create exactly `feature/gate-10-save-export-import-recovery` from the Gate 9 checkpoint.
+- [ ] Implement safe local export/import/recovery over canonical document persistence without cloud or collaboration.
+- [ ] Add malformed, duplicate-ID, broken-provenance, migration, round-trip, and recovery tests plus evidence report.
 
 ## Gate 10 Save / Export / Import / Recovery — authorized by roadmap; pending Gate 9 checkpoint
 
