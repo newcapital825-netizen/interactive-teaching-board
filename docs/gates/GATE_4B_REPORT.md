@@ -12,9 +12,10 @@
 | Branch | `feature/gate-4b-vertical-slice` |
 | Base | آخر commit منشور لـGate 4A: `ca8f6d6206d852e62bddc023c43e2ecbbf9749a1` |
 | PR | لم يُفتح، وفق التفويض |
-| Final commit | `a853a719177e6e70bd057eef4c73a9a024daecfe` |
-| Clean clone | PASS: `/tmp/interactive-teaching-board-gate4b-clean` |
-| Clean clone HEAD | `a853a719177e6e70bd057eef4c73a9a024daecfe` |
+| Implementation commit | `a853a719177e6e70bd057eef4c73a9a024daecfe` |
+| Documentation tip before this correction | `beb9d11b4649d185c44111bb3925b75c5af900fc` |
+| Clean clone | PASS: `/tmp/interactive-teaching-board-gate4b-final` |
+| Clean clone HEAD | `beb9d11b4649d185c44111bb3925b75c5af900fc` |
 | Gate 4B scope | Arabic + Mathematics controlled vertical slice |
 
 ## ما تم تنفيذه
@@ -35,7 +36,7 @@
 
 الاختبار المخصص يغطي creation، registry/factory reuse، Arabic transformation، Math transformation، provenance، activity، الحالات الثلاث للتقييم، feedback، round-trip، ID/capability preservation، malformed payload rejection، وrepeatable domain benchmark لعدد 100 رحلة. اختبارات Gate 2 وGate 3A وGate 3B تستمر ضمن suite المشروع.
 
-نتيجة clean clone: `pnpm install --frozen-lockfile = PASS`، `pnpm check = PASS`، `pnpm test -- --run = PASS` مع **9 test files و36 tests**، `pnpm build = PASS`، و`git diff --check = PASS`. benchmark domain القابل للتكرار على 100 رحلة سجّل `createTransformAssessSerializeRestoreMs = 12.184 ms` في clean clone. هذا قياس sandbox/Node وليس قياس real-browser performance.
+نتيجة clean clone: `pnpm install --frozen-lockfile = PASS`، `pnpm check = PASS`، `pnpm test -- --run = PASS` مع **9 test files و36 tests**، `pnpm build = PASS`، و`git diff --check = PASS`. benchmark domain القابل للتكرار على 100 رحلة سجّل `createTransformAssessSerializeRestoreMs = 12.859 ms` في clean clone النهائي (وسجل التشغيل المحلي السابق 12.184 ms). هذا قياس sandbox/Node وليس قياس real-browser performance.
 
 ## الملفات المتغيرة
 
