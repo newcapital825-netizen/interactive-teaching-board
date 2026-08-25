@@ -25,6 +25,7 @@ import {
   type MathVisualizationLens,
   type Subject,
 } from "@/lib/gate4bTeaching";
+import { assessMathStep, verifyMathAnswer, type MathStepSession, type SolutionStepObject } from "@/lib/mathStepSlice";
 import { hasCapability } from "@/lib/educationalObjects";
 
 const STORAGE_KEY = "gate4b-controlled-vertical-slice";
@@ -131,6 +132,22 @@ export default function Gate4BWorkspace() {
     setNotice(result.assessment.evaluation === "correct" ? "تم التقييم: إجابة صحيحة." : "تم التقييم؛ راجع التغذية الراجعة ثم أعد المحاولة إن لزم.");
   }
 
+  function submitMathStep(step: SolutionStepObject) {
+    const current = journey.mathStepSession;
+    if (!current) return;
+    const assessed = assessMathStep(current.problem, step, current.problem.provenance, current.disclosureLevel);
+    updateJourney("mathematics", (value) => ({ ...value, mathStepSession: { ...current, assessments: [...current.assessments, assessed], currentStep: assessed.evaluation === "correct" || assessed.evaluation === "valid-alternative" ? (current.currentStep === 1 ? 2 : 2) : current.currentStep }, selectedStage: "feedback" }));
+    setNotice(assessed.evaluation === "correct" || assessed.evaluation === "valid-alternative" ? "تم تقييم الخطوة؛ تابع البناء التدريجي." : "تم تحديد موضع المشكلة في هذه الخطوة.");
+  }
+
+  function verifyMath(expression: string) {
+    const current = journey.mathStepSession;
+    if (!current) return;
+    const verification = verifyMathAnswer(current.problem, expression, current.problem.provenance);
+    updateJourney("mathematics", (value) => ({ ...value, mathStepSession: { ...current, verification }, selectedStage: "feedback" }));
+    setNotice(verification.valid ? "نجح التحقق بالتعويض." : "فشل التحقق؛ راجع التعويض.");
+  }
+
   function applyOverride(state: FeedbackState, reason: string, note: string) {
     if (!journey.assessment) return;
     const result = applyTeacherOverride(journey.assessment, journey.activity, state, reason, note, journey.lens.provenance);
@@ -187,6 +204,7 @@ export default function Gate4BWorkspace() {
             </div>
 
             {activeSubject === "arabic" ? <ArabicLensCard journey={journey as JourneyState & { lens: GrammarLens }} presentation={presentation} onSelectWord={selectArabicWord} onReveal={revealLens} onMode={setArabicMode} /> : <MathLensCard journey={journey as JourneyState & { lens: MathVisualizationLens }} presentation={presentation} onReveal={revealLens} />}
+            {activeSubject === "mathematics" && journey.mathStepSession && <MathStepCard session={journey.mathStepSession} presentation={presentation} onSubmit={submitMathStep} onVerify={verifyMath} />}
             <ActivityCard journey={journey} presentation={presentation} onAnswer={setAnswer} onI3rabField={setI3rabField} onSubmit={submitAnswer} onRetry={retry} />
             {journey.feedback && <FeedbackCard journey={journey} presentation={presentation} onOverride={applyOverride} />}
             <div className="gate4b-canvas-footer"><span>{notice}</span><span className="gate4b-provenance-mark"><Check size={13} /> provenance محفوظ</span></div>
@@ -226,4 +244,40 @@ function FeedbackCard({ journey, presentation, onOverride }: { journey: JourneyS
   if (!journey.feedback || !journey.assessment) return null;
   const positive = journey.feedback.state === "correct" || journey.feedback.state === "valid-alternative";
   return <section className={`gate4b-feedback-card ${journey.feedback.state}`}><div className="gate4b-card-label"><span>04 · FEEDBACK</span><b>{positive ? "COMPLETED" : "RETRY AVAILABLE"}</b></div><div className="gate4b-feedback-content"><div className="gate4b-feedback-icon">{positive ? <Check size={20} /> : <Target size={19} />}</div><div><span>{journey.feedback.state === "correct" || journey.feedback.state === "valid-alternative" ? "دليل واضح" : journey.feedback.state === "partially-correct" ? "إشارة مفيدة" : "مساحة للمحاولة"}</span><h3>{journey.feedback.title}</h3><p>{journey.feedback.explanation}</p>{journey.feedback.hint && <small><b>تلميح:</b> {journey.feedback.hint}</small>}{journey.feedback.nextStep && <small><b>الخطوة التالية:</b> {journey.feedback.nextStep}</small>}</div><div className="gate4b-score"><strong>{Math.round((journey.assessment.effectiveEvaluation === "correct" || journey.assessment.effectiveEvaluation === "valid-alternative" ? 1 : journey.assessment.score) * 100)}%</strong><span>effective score</span></div></div><div className="gate4b-feedback-meta"><span>assessment · {shortId(journey.assessment.id)}</span><span>system · {statusLabel[journey.assessment.evaluation]}</span><span>effective · {statusLabel[journey.assessment.effectiveEvaluation]}</span><span>events · {journey.assessment.events.length}</span><span>diagnostic · {journey.assessment.diagnostic}</span><span>review · {reviewLabel[journey.assessment.reviewState]}</span></div>{!presentation && <div className="gate4b-override-panel" aria-label="اعتماد المعلم"><div><b>قرار المعلم</b><small>لا يحذف نتيجة النظام؛ يضيف حدث teacher-override قابلًا للتتبع.</small></div><select value={overrideState} onChange={(event) => setOverrideState(event.target.value as FeedbackState)} aria-label="الحالة الفعالة"><option value="correct">صحيحة</option><option value="valid-alternative">بديلة صحيحة</option><option value="partially-correct">جزئية</option><option value="incorrect">غير صحيحة</option><option value="incomplete">غير مكتملة</option></select><input value={reason} onChange={(event) => setReason(event.target.value)} aria-label="سبب قرار المعلم" /><input value={note} onChange={(event) => setNote(event.target.value)} aria-label="ملاحظة قرار المعلم" /><button className="gate4b-quiet-button" onClick={() => onOverride(overrideState, reason, note)}><Check size={14} /> حفظ قرار المعلم</button></div>}</section>;
+}
+
+
+/**
+ * Gate 4C-B UI reminder: the math card is a subject lens inside the shared
+ * Arabic-first workspace; it owns no board, registry, persistence, or scoring engine.
+ */
+function MathStepCard({ session, presentation, onSubmit, onVerify }: { session: MathStepSession; presentation: boolean; onSubmit: (step: SolutionStepObject) => void; onVerify: (expression: string) => void }) {
+  const canonical = session.steps[session.currentStep - 1];
+  const [expressionBefore, setExpressionBefore] = useState(canonical?.expressionBefore ?? "");
+  const [operation, setOperation] = useState("");
+  const [expressionAfter, setExpressionAfter] = useState("");
+  const [justification, setJustification] = useState("");
+  const [verification, setVerification] = useState("2(4) + 3 = 11");
+  const [mode, setMode] = useState<"teacher" | "student">(session.mode);
+  useEffect(() => {
+    setExpressionBefore(canonical?.expressionBefore ?? "");
+    setOperation("");
+    setExpressionAfter("");
+    setJustification("");
+  }, [session.currentStep, canonical?.expressionBefore]);
+  const latest = session.assessments[session.assessments.length - 1];
+  return <section className="gate4b-activity-card math-step-card" aria-label="نشاط الحل خطوة بخطوة">
+    <div className="gate4b-card-label"><span>03 · STEP-BY-STEP SOLUTION</span><b>STEP {session.currentStep} / 2</b></div>
+    <div className="gate4b-activity-main"><div><span className="gate4b-activity-kicker">MATH PROBLEM</span><h3>{session.problem.equation}</h3><p>ابنِ الحل خطوة خطوة؛ لا يكفي تطابق الإجابة النهائية.</p></div>{!presentation && <button className="gate4b-quiet-button" onClick={() => setMode(mode === "teacher" ? "student" : "teacher")} aria-pressed={mode === "teacher"}>{mode === "teacher" ? "وضع الطالب" : "وضع المعلم"}</button>}</div>
+    <div className="gate4b-i3rab-form math-step-form" aria-label="إجابة الخطوة المنظمة">
+      <label className="gate4b-i3rab-field"><span>قبل العملية</span><input value={expressionBefore} onChange={(event) => setExpressionBefore(event.target.value)} aria-label="التعبير قبل العملية" /></label>
+      <label className="gate4b-i3rab-field"><span>العملية</span><input value={operation} onChange={(event) => setOperation(event.target.value)} placeholder="مثال: subtract 3 from both sides" aria-label="العملية الرياضية" /></label>
+      <label className="gate4b-i3rab-field"><span>بعد العملية</span><input value={expressionAfter} onChange={(event) => setExpressionAfter(event.target.value)} placeholder="مثال: 2x = 8" aria-label="التعبير بعد العملية" /></label>
+      <label className="gate4b-i3rab-field"><span>التبرير</span><input value={justification} onChange={(event) => setJustification(event.target.value)} placeholder="لماذا يحافظ التحويل على المساواة؟" aria-label="التبرير الرياضي" /></label>
+    </div>
+    {!presentation && <div className="gate4b-activity-actions"><button className="gate4b-primary-button" onClick={() => onSubmit({ ...canonical, expressionBefore, operation, expressionAfter, mathematicalJustification: justification, validityState: "needs-review" })}><Check size={15} /> تقييم الخطوة</button><span className="gate4b-assessment-status">{latest ? `التشخيص: ${latest.diagnostic}` : "لم تُقيّم الخطوة بعد"}</span></div>}
+    {latest && <div className={`gate4b-selected-word math-step-feedback`}><b>{latest.feedback.title}</b><span>{latest.feedback.explanation}</span>{latest.feedback.hint && session.disclosureLevel >= 2 && <small><b>تلميح:</b> {latest.feedback.hint}</small>}{mode === "teacher" && latest.feedback.correctedStep && <small><b>التصحيح:</b> {latest.feedback.correctedStep.expressionBefore} → {latest.feedback.correctedStep.expressionAfter}</small>}</div>}
+    {session.currentStep === 2 && <div className="gate4b-answer-input"><label htmlFor="math-verification">التحقق بالتعويض</label><input id="math-verification" value={verification} onChange={(event) => setVerification(event.target.value)} aria-label="تعبير التحقق بالتعويض" /><span>{session.verification ? session.verification.valid ? "تحقق ناجح" : "تحقق يحتاج مراجعة" : "2(4) + 3 = 11"}</span>{!presentation && <button className="gate4b-quiet-button" onClick={() => onVerify(verification)}>تحقق</button>}</div>}
+    <div className="gate4b-trace-line"><span>PROVENANCE</span><strong>{shortId(session.problem.id)} ← EquationObject</strong><i>{session.assessments.length} step assessments · {session.mode}</i></div>
+  </section>;
 }

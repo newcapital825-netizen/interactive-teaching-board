@@ -427,3 +427,13 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
 .gate4b-i3rab-reveal span { display: grid; gap: 0.15rem; padding: 0.55rem 0.65rem; border-inline-start: 2px solid #c9a55b; background: color-mix(in srgb, var(--card) 86%, #f4ecd9); color: var(--foreground); font-size: 0.78rem; }
 .gate4b-i3rab-reveal b { color: var(--muted-foreground); font-size: 0.66rem; letter-spacing: 0.04em; }
 @media (max-width: 640px) { .gate4b-i3rab-form, .gate4b-i3rab-reveal { grid-template-columns: 1fr; } }
+
+
+/* Gate 4C-B Mathematics slice: step fields remain RTL-first while expressions stay readable LTR; no math-specific board infrastructure. */
+.math-step-card .math-step-form input { min-height: 2.45rem; border: 1px solid color-mix(in srgb, var(--border) 80%, #9eaf83); border-radius: 0.65rem; background: color-mix(in srgb, var(--card) 92%, #f2ead6); color: var(--foreground); padding: 0.45rem 0.6rem; direction: ltr; font-family: Georgia, serif; }
+.math-step-card .math-step-form input:focus-visible, .math-step-card .gate4b-answer-input input:focus-visible { outline: 3px solid color-mix(in srgb, #9eaf83 65%, transparent); outline-offset: 2px; }
+.math-step-feedback { display: grid; align-items: start; gap: 0.35rem; }
+.math-step-feedback span, .math-step-feedback small { line-height: 1.7; }
+.math-step-card .gate4b-answer-input { flex-wrap: wrap; }
+.math-step-card .gate4b-answer-input button { margin-right: auto; }
+@media (max-width: 640px) { .math-step-card .math-step-form { grid-template-columns: 1fr; } .math-step-card .gate4b-activity-main { display: block; } .math-step-card .gate4b-activity-main button { margin-top: 0.7rem; } }

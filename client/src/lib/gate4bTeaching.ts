@@ -10,11 +10,12 @@ import {
   nowIso,
 } from "./educationalObjects";
 import { createRegisteredEducationalObject } from "./objectRegistry";
+import { createMathStepSession, type MathStepSession } from "./mathStepSlice";
 
 export type Subject = "arabic" | "mathematics";
 export type FeedbackState = "correct" | "valid-alternative" | "partially-correct" | "incorrect" | "incomplete";
 export type ArabicReviewState = "supported" | "unsupported" | "needs-review";
-export type AssessmentDiagnostic = "answer-error" | "role-error" | "case-error" | "marker-error" | "reasoning-error" | "step-error" | "conceptual-error" | "procedural-error" | "alternative-solution" | "incomplete" | "unsupported-answer" | "ambiguous-answer" | "irrelevant-explanation";
+export type AssessmentDiagnostic = "answer-error" | "role-error" | "case-error" | "marker-error" | "reasoning-error" | "step-error" | "conceptual-error" | "procedural-error" | "alternative-solution" | "incomplete" | "unsupported-answer" | "ambiguous-answer" | "irrelevant-explanation" | "operation-error" | "arithmetic-error" | "sign-error" | "transformation-error" | "incomplete-step" | "invalid-step" | "unsupported-reasoning" | "correct-alternative" | "correct-step" | "verification-failure";
 export type InteractionKind = "select" | "classify" | "enter" | "verify" | "solve";
 
 export type SourceRange = { start: number; end: number };
@@ -157,6 +158,7 @@ export type JourneyState = {
   assessment: Assessment | null;
   feedback: Feedback | null;
   selectedStage: "create" | "lens" | "activity" | "presentation" | "feedback" | "restore";
+  mathStepSession?: MathStepSession;
 };
 
 export const GATE4B_LESSON_PREVIOUS_VERSION = 1;
@@ -377,7 +379,7 @@ export const createJourney = (subject: Subject): JourneyState => {
   }
   const source = createMathSource();
   const lens = createMathVisualizationLens(source);
-  return { subject, source, lens, activity: createActivity(subject, source, lens), assessment: null, feedback: null, selectedStage: "create" };
+  return { subject, source, lens, activity: createActivity(subject, source, lens), assessment: null, feedback: null, selectedStage: "create", mathStepSession: createMathStepSession(source) };
 };
 
 export const createLesson = (): Gate4BLesson => ({ schemaVersion: GATE4B_LESSON_SCHEMA_VERSION, lessonId: id("lesson"), title: "درس تطبيقي — من الإنشاء إلى التغذية الراجعة", arabic: createJourney("arabic"), mathematics: createJourney("mathematics"), savedAt: nowIso() });
@@ -421,12 +423,13 @@ const migrateJourney = (raw: unknown): JourneyState | null => {
   const legacyWords = raw.subject === "arabic" && Array.isArray(raw.lens.words) && raw.lens.words.every((word) => isRecord(word) && typeof word.id === "string" && typeof word.text === "string" && typeof word.start === "number" && typeof word.end === "number" && typeof word.grammaticalRole === "string" && typeof word.caseMark === "string" && typeof word.explanation === "string") ? raw.lens.words as ArabicWord[] : null;
   const activity = raw.subject === "arabic" && raw.activity.i3rab === undefined && legacyWords ? { ...raw.activity, i3rab: i3rabChallenge(legacyWords) } : raw.activity;
   const lens = raw.subject === "arabic" ? { ...raw.lens, disclosureLevel: raw.lens.disclosureLevel === 2 || raw.lens.disclosureLevel === 3 || raw.lens.disclosureLevel === 4 || raw.lens.disclosureLevel === 5 ? raw.lens.disclosureLevel : 1, mode: raw.lens.mode === "teacher" ? "teacher" : "student" } : raw.lens;
+  const mathStepSession = raw.subject === "mathematics" && raw.mathStepSession && isRecord(raw.mathStepSession) ? raw.mathStepSession as MathStepSession : undefined;
   const assessment = raw.assessment ? migrateAssessment(raw.assessment) : null;
   if (raw.assessment && !assessment) return null;
   const feedback = raw.feedback ? migrateFeedback(raw.feedback, assessment?.id ?? "") : null;
   if (raw.feedback && !feedback) return null;
   if (assessment && feedback?.assessmentId !== assessment.id) return null;
-  return { ...raw, lens, activity, assessment, feedback } as JourneyState;
+  return { ...raw, lens, activity, assessment, feedback, ...(mathStepSession ? { mathStepSession } : {}) } as JourneyState;
 };
 
 export const migrateLesson = (raw: unknown): Gate4BLesson | null => {
