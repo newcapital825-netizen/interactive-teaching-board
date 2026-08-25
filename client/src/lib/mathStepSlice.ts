@@ -97,6 +97,8 @@ const semanticMeaning = (value: string) => {
   return normalize(value);
 };
 const sameMeaning = (left: string, right: string) => semanticMeaning(left) === semanticMeaning(right);
+const isCanonicalProblem = (problem: MathProblemObject) => problem.equation === "2x + 3 = 11" && problem.expectedAnswer === "x = 4";
+const isCanonicalAnswer = (answer: string) => { const value = normalize(answer); return value === "x=4" || value === "4=x"; };
 const validProvenance = (provenance: Provenance, expectedSourceId: string, expectedVersion: number) => Boolean(provenance && provenance.sourceObjectId === expectedSourceId && provenance.sourceVersion === expectedVersion && provenance.derivationType && provenance.sourceRange && provenance.sourceRange.start <= provenance.sourceRange.end);
 const stepId = (problemId: string, number: number, suffix = "canonical") => `${problemId}_step_${number}_${suffix}`;
 const provenanceFor = (sourceObjectId: string, sourceVersion: number, derivationType: string): Provenance => ({ sourceObjectId, sourceRange: { start: 0, end: 10 }, sourceVersion, derivationType, teacherApproved: false });
@@ -177,17 +179,18 @@ const classifyStep = (problem: MathProblemObject, submitted: SolutionStepObject)
 
 export const assessMathStep = (problem: MathProblemObject, submitted: SolutionStepObject, provenance = problem.provenance, level: MathDisclosureLevel = 2, at = DETERMINISTIC_MATH_TIME): MathStepAssessment => {
   const provenanceValid = validProvenance(provenance, problem.sourceObject.id, problem.sourceObject.version);
-  const result = provenanceValid ? classifyStep(problem, submitted) : { state: "unsupported" as const, diagnostic: "unsupported-reasoning" as const, score: 0, corrected: createSolutionSteps(problem)[0] };
+  const result = provenanceValid && isCanonicalProblem(problem) ? classifyStep(problem, submitted) : { state: "unsupported" as const, diagnostic: "unsupported-reasoning" as const, score: 0, corrected: createSolutionSteps({ ...problem, equation: "2x + 3 = 11", expectedAnswer: "x = 4" })[0] };
   const evaluation: FeedbackState = result.state === "valid" ? "correct" : result.state === "valid-alternative" ? "valid-alternative" : result.state === "incomplete" ? "incomplete" : "incorrect";
   const assessmentId = `${submitted.id}_assessment`;
   const feedback = feedbackFor(result.state, result.diagnostic, level, result.corrected, assessmentId, at);
   return { id: assessmentId, activityId: `${problem.id}_step-activity`, attemptId: `${assessmentId}_attempt`, answer: JSON.stringify(submitted), createdAt: at, problemId: problem.id, stepNumber: submitted.stepNumber, submitted: { ...submitted, validityState: result.state }, evaluation, effectiveEvaluation: evaluation, validityState: result.state, score: result.score, maxScore: 1, feedbackId: feedback.id, systemFeedbackId: feedback.id, diagnostic: result.diagnostic, reviewState: result.state === "unsupported" ? "unsupported" : "supported", events: [{ id: `${assessmentId}_system-assessment`, eventType: "system-assessment", assessmentId, state: evaluation, createdAt: at }], feedback, provenance: { ...provenance, derivationType: "deterministic-math-step-assessment" }   };
 };
 
-export type MathFinalAnswerAssessment = { answer: string; correct: boolean; evaluation: FeedbackState; diagnostic: "correct-step" | "answer-error"; provenance: Provenance; createdAt: string };
+export type MathFinalAnswerAssessment = { answer: string; correct: boolean; evaluation: FeedbackState | "unsupported"; diagnostic: "correct-step" | "answer-error" | "unsupported-reasoning"; provenance: Provenance; createdAt: string };
 
 export const assessMathFinalAnswer = (problem: MathProblemObject, answer: string, provenance = problem.provenance, at = DETERMINISTIC_MATH_TIME): MathFinalAnswerAssessment => {
-  const correct = normalize(answer) === normalize(problem.expectedAnswer);
+  if (!isCanonicalProblem(problem)) return { answer, correct: false, evaluation: "unsupported", diagnostic: "unsupported-reasoning", provenance: { ...provenance, derivationType: "deterministic-math-final-answer" }, createdAt: at };
+  const correct = isCanonicalAnswer(answer);
   return { answer, correct, evaluation: correct ? "correct" : "incorrect", diagnostic: correct ? "correct-step" : "answer-error", provenance: { ...provenance, derivationType: "deterministic-math-final-answer" }, createdAt: at };
 };
 
@@ -217,6 +220,7 @@ export const deserializeMathStepSession = (raw: unknown): MathStepSession | null
 };
 
 export const verifyMathAnswer = (problem: MathProblemObject, expression: string, provenance = problem.provenance, at = DETERMINISTIC_MATH_TIME): MathVerification => {
+  if (!isCanonicalProblem(problem)) return { id: `${problem.id}_verification`, problemId: problem.id, expression, expectedExpression: "2(4) + 3 = 11", valid: false, diagnostic: "unsupported-reasoning", provenance: { ...provenance, derivationType: "deterministic-substitution-verification" } };
   const valid = normalize(expression) === normalize("2(4) + 3 = 11") || normalize(expression) === normalize("2 * 4 + 3 = 11");
   return { id: `${problem.id}_verification`, problemId: problem.id, expression, expectedExpression: "2(4) + 3 = 11", valid, diagnostic: valid ? "correct-step" : "verification-failure", provenance: { ...provenance, derivationType: "deterministic-substitution-verification" } };
 };

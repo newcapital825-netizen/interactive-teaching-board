@@ -274,3 +274,14 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Verify teacher/student visibility, RTL, keyboard/focus/labels/contrast/text scaling; record unavailable validation honestly.
 - [x] Add 100/250/500 objects/steps NODE/VITEST benchmark coverage for creation, serialization, restore, assessment, feedback, and verification.
 - [x] Run full Arabic regression, duplicate architecture scan, clean-clone verification, update hardening report, push one branch only, and stop for Owner Review.
+
+## Gate 4C Mathematics Final Validation & Hardening — completed; Owner Review required
+
+- [x] Verify clean-clone baseline from `feature/gate-4c-math-hardening` and record its HEAD, main, checks, and PR state.
+- [x] Create exactly `feature/gate-4c-math-final-hardening`; do not modify main, force-push, rebase, open PR, or merge.
+- [x] Validate all required pedagogical distinctions, alternative methods, Golden Dataset categories, unsupported boundaries, and deterministic normalization.
+- [x] Validate direct teacher override, original/effective results, teacher reference, provenance, events, and save/restore.
+- [x] Validate migration v1→v2, malformed/unsupported schema rejection, broken provenance, orphan data, duplicate IDs, and unknown fields.
+- [x] Validate Arabic-first student/teacher UX, RTL, progressive disclosure, keyboard/focus/labels/contrast, and record unavailable browser/hardware evidence honestly.
+- [x] Run NODE/VITEST benchmarks at 100/250/500 objects/steps without claiming Browser Performance; confirm Gate 3A/3B/4A/4B/Arabic regressions.
+- [x] Create `docs/gates/GATE_4C_MATH_FINAL_HARDENING.md` and required test matrix; run final clean clone; push only the final branch; stop for Owner Review.

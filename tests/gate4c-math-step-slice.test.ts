@@ -38,6 +38,7 @@ describe("Gate 4C-B Mathematics step-by-step vertical slice", () => {
     expect(normalizedAlternative.evaluation).toBe("valid-alternative");
     expect(nearMiss.evaluation).toBe("incorrect");
     expect(assessMathFinalAnswer(problem, "x = 4").correct).toBe(true);
+    expect(assessMathFinalAnswer(problem, "4 = x").correct).toBe(true);
     expect(assessMathFinalAnswer(problem, "x = 5").correct).toBe(false);
   });
 
@@ -132,6 +133,11 @@ describe("Gate 4C-B Mathematics step-by-step vertical slice", () => {
     expect(deserializeMathProblem({ id: "bad", equation: "x + y = 1" })).toBeNull();
     expect(deserializeMathProblem({ id: problem.id, equation: problem.equation, expectedAnswer: problem.expectedAnswer, sourceObject: problem.sourceObject, provenance: { ...problem.provenance, sourceObjectId: "broken" } })).toBeNull();
     expect(deserializeMathProblem({ id: problem.id, equation: problem.equation, expectedAnswer: problem.expectedAnswer, sourceObject: problem.sourceObject, provenance: problem.provenance, unknownField: true })).not.toBeNull();
+    const unsupportedProblem = { ...problem, equation: "-2x + 5 = 11", expectedAnswer: "x = -3" };
+    const unsupportedStep = assessMathStep(unsupportedProblem, createSolutionSteps(problem)[0], problem.provenance);
+    expect(unsupportedStep.validityState).toBe("unsupported");
+    expect(assessMathFinalAnswer(unsupportedProblem, "x = -3").evaluation).toBe("unsupported");
+    expect(verifyMathAnswer(unsupportedProblem, "2(-3) + 5 = 11").diagnostic).toBe("unsupported-reasoning");
   });
 
   it("preserves the shared math session and teacher override through lesson save, migration, and restore", () => {
