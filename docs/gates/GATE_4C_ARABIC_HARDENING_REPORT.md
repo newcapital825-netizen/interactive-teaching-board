@@ -78,7 +78,7 @@ teacher override إضافة audit event مستقلة ولا تمحو `system-ass
 
 ## 14. Performance
 
-سجل الاختبار المحلي لمسار 100 رحلة domain benchmark مقدارًا قدره `22.993 ms` في clean clone النهائي، وهو قياس Vitest/Node sandbox وليس browser performance. لا توجد نتيجة real-device أو real-browser قابلة للإعلان. تظل تحذيرات Vite المتعلقة بحجم bundle فوق 500 kB قائمة دون أن تمنع build.
+سجل الاختبار المحلي لمسار 100 رحلة domain benchmark مقدارًا قدره `20.846 ms` في clean clone النهائي، وهو قياس Vitest/Node sandbox وليس browser performance. لا توجد نتيجة real-device أو real-browser قابلة للإعلان. تظل تحذيرات Vite المتعلقة بحجم bundle فوق 500 kB قائمة دون أن تمنع build.
 
 ## 15. Architectural Hygiene
 
