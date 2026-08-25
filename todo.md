@@ -420,13 +420,26 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Save one Gate 10 checkpoint only, do not start Gate 11, and stop at Owner Review.
 
 
-## Gate 11 Direct Canvas Interaction — authorized
+## Gate 11 Direct Canvas Interaction — completed; STOP — OWNER REVIEW
 
-- [ ] Read the complete Gate 11 directive and record its selection, manipulation, history, security, evidence, and stop requirements.
-- [ ] Verify Gate 10 checkpoint `667e390`, actual branch/HEAD, main, remotes, status, and PR state.
-- [ ] Create exactly `feature/gate-11-direct-canvas-interaction` from the Gate 10 checkpoint without modifying main, merging, opening PR, force-pushing, or rewriting history.
-- [ ] Implement one canonical interaction layer with pointer selection, deselection, multi-select, keyboard selection, direct manipulation, and contextual action resolution.
-- [ ] Preserve IDs, styles, metadata, z-order, provenance, capabilities, and source references through operations.
-- [ ] Add deterministic tests for selection, manipulation, grouping, reorder, context actions, undo/redo, persistence, stale references, and malformed interaction payloads.
-- [ ] Run responsive/accessibility checks and NODE/VITEST performance benchmarks; record touch/stylus/UI automation/browser performance as NOT VERIFIED when unavailable.
-- [ ] Write the Gate 11 report, run clean clone, save checkpoint, and stop at Owner Review; do not start Gate 12.
+- [x] Read the complete Gate 11 directive and record its selection, manipulation, history, security, evidence, and stop requirements.
+- [x] Verify Gate 10 checkpoint `667e390`, actual branch/HEAD, main, remotes, status, and PR state.
+- [x] Create exactly `feature/gate-11-direct-canvas-interaction` from the Gate 10 checkpoint without modifying main, merging, opening PR, force-pushing, or rewriting history.
+- [x] Implement one canonical interaction layer with pointer selection, deselection, multi-select, keyboard selection, direct manipulation, and contextual action resolution.
+- [x] Preserve IDs, styles, metadata, z-order, provenance, capabilities, and source references through operations.
+- [x] Add deterministic tests for selection, manipulation, grouping, reorder, context actions, undo/redo, persistence, stale references, and malformed interaction payloads.
+- [x] Run responsive/accessibility checks and NODE/VITEST performance benchmarks; record touch/stylus/UI automation/browser performance as NOT VERIFIED when unavailable.
+- [x] Write the Gate 11 report, run clean clone, save checkpoint, and stop at Owner Review; do not start Gate 12.
+
+
+## Gate 12 Complete Classroom Learning Loop — authorized
+
+- [ ] Read the complete Gate 12 directive and record lifecycle, attempt, provenance, override, retry, evidence, and stop requirements.
+- [ ] Verify Gate 11 checkpoint `ee2b9468`, actual branch/HEAD, main, remotes, status, and PR state.
+- [ ] Create exactly `feature/gate-12-complete-classroom-loop` from the approved Gate 11 checkpoint without modifying main, merging, opening PR, force-pushing, or rewriting history.
+- [ ] Add one canonical activity lifecycle with guarded transitions and identity-isolated local Attempt records.
+- [ ] Complete Arabic and Mathematics teacher→student→assessment→diagnostic→feedback→review journeys using existing canonical engines and provenance.
+- [ ] Preserve system result, teacher decision, effective result, reason, timestamp, teacher reference, prior attempts, and source links through retry and save/restore.
+- [ ] Add deterministic lifecycle, attempt, alternative-answer, diagnostic, feedback, override, retry, provenance, persistence, malformed-payload, and security tests.
+- [ ] Run regression, architecture, accessibility, responsive, and NODE/VITEST performance checks; record unavailable hardware/browser/UI automation honestly.
+- [ ] Write `docs/gates/GATE_12_REPORT.md`, run clean clone, save checkpoint, and stop at Owner Review; do not start Gate 13.
