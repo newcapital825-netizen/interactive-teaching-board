@@ -371,9 +371,9 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
 @media (max-width:900px) { .evidence-trail { overflow-x:auto; justify-content:flex-start; } .evidence-step { min-width:112px; } .folio-rail { grid-column:1/-1; flex-direction:row; justify-content:center; min-width:0; border-inline-end:0; border-bottom:1px solid rgba(53,72,59,.16); padding:9px 12px; } .folio-label { writing-mode:horizontal-tb; transform:none; margin:0 6px 0 0; } .folio-line { width:24px; height:1px; } }
 @media (max-width:560px) { .evidence-trail { padding-inline:14px; gap:8px; } .evidence-step { min-width:102px; } .evidence-step small { display:none; } .stage-layer-note { margin-inline:12px; } }
 
-/* Gate 3B layout correction: four explicit columns keep the canvas central and prevent implicit grid rows. */
-.ux-layout { grid-template-columns:68px 180px minmax(0,1fr) 250px; }
-@media (max-width:1100px) { .ux-layout { grid-template-columns:68px minmax(0,1fr) 220px; } .folio-rail { grid-column:1/-1; flex-direction:row; justify-content:center; min-width:0; border-inline-end:0; border-bottom:1px solid rgba(53,72,59,.16); padding:9px 12px; } .folio-label { writing-mode:horizontal-tb; transform:none; margin:0 6px 0 0; } .folio-line { width:24px; height:1px; } }
+/* Gate 15 QA correction: TeacherCanvas currently has two direct children; keep the stage and Inspector in explicit non-overlapping columns. */
+.ux-layout { grid-template-columns:minmax(0,1fr) 250px; }
+@media (max-width:1100px) { .ux-layout { grid-template-columns:minmax(0,1fr) 220px; } .folio-rail { grid-column:1/-1; flex-direction:row; justify-content:center; min-width:0; border-inline-end:0; border-bottom:1px solid rgba(53,72,59,.16); padding:9px 12px; } .folio-label { writing-mode:horizontal-tb; transform:none; margin:0 6px 0 0; } .folio-line { width:24px; height:1px; } }
 @media (max-width:760px) { .ux-layout { grid-template-columns:1fr; } .ux-pages { border-block:1px solid var(--line); border-inline:0; } .object-inspector { border-inline:0; border-bottom:1px solid var(--line); } }
 
 /* Gate 4B style reminder: keep the universal workspace calm and teacher-first; use warm paper, olive structure, coral evidence, Arabic-readable type, and purposeful motion only. */

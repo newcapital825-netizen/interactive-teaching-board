@@ -490,3 +490,20 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 ## Gate 14 Accessibility & Input QA — completed; CONDITIONAL
 
 تمت إضافة keyboard selection، multi-select keyboard path، Escape semantics، accessible resize controls، focus-visible، status announcements، reduced-motion safeguards، ومصفوفات accessibility/keyboard/RTL. نجحت الفحوص المحلية: 22 ملف اختبارًا و113 اختبارًا، check، build، diff-check، architecture scan، وvisual smoke على desktop/mobile. Screen reader وtouch وstylus وfull browser keyboard journey وhuman validation بقيت NOT VERIFIED. Gate 15 هو التالي، ولا يُدّعى امتثال WCAG رسمي.
+
+
+## Gate 15 Playwright End-to-End Classroom QA — authorized; not yet executed
+
+- [ ] Read the complete Gate 15 directive and record all Journey A–K evidence and failure-artifact requirements.
+- [ ] Verify Gate 14 checkpoint `2645c285`, branch/HEAD, main, remotes, PR state, and working tree.
+- [ ] Create exactly `feature/gate-15-playwright-classroom-qa` from Gate 14 without modifying main, rebasing, force-pushing, opening PR, or merging.
+- [ ] Add only the minimum Playwright dependency/configuration and deterministic fixtures with stable roles/labels/test IDs.
+- [ ] Run Chromium E2E against development and production build/server for teacher, Canvas, Arabic, Mathematics, student, review, save/restore, export/import, recovery/security, keyboard, presentation, and mobile journeys.
+- [ ] Capture screenshot/trace/console/network evidence on failures and never classify DOM inspection or unit tests as browser E2E.
+- [ ] Fix only proven existing workflow regressions; do not add new product features or duplicate canonical engines.
+- [ ] Write `docs/gates/GATE_15_REPORT.md` and `docs/qa/PLAYWRIGHT_MATRIX.md`, run full regression and clean clone, save checkpoint, and stop; do not start Gate 16.
+
+
+## Gate 15 Execution Update — implementation and E2E passed; final clone pending
+
+أثبت Playwright Chromium خمس Journeys على development وproduction، بإجمالي 10/10 اختبارات ناجحة عبر Desktop Chrome وPixel 5 emulation. أُصلحت فقط regressions مثبتة: تداخل Inspector مع Canvas، غياب عرض Teacher Decision بعد حفظه، وفصل runner الخاص بـPlaywright عن Vitest. بقي `pnpm test` عند 22 ملفًا و113 اختبارًا ناجحًا، مع build warning موثق. لم يُثبت Touch hardware أو Stylus أو Screen Reader أو human classroom validation أو formal browser-performance budgets. التقرير والمصفوفة مكتملان؛ يلزم الآن commit/push ثم Clean Clone وcheckpoint، وبعدهما STOP دون Gate 16.
