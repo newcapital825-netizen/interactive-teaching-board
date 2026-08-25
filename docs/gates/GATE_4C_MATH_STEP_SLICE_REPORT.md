@@ -92,7 +92,7 @@ Teacher override العام الموجود في `FeedbackCard` ما زال يس�
 
 ## 21. Clean Clone Verification
 
-بعد تثبيت التغييرات على الفرع سيُعاد تنفيذ clean clone من `feature/gate-4c-math-step-slice` مع `pnpm install --frozen-lockfile` و`pnpm check` و`pnpm test -- --run` و`pnpm build` و`git diff --check`. يجب أن يُتحقق أيضًا من أن `main` لا يزال عند baseline وأن branch وحده هو الذي يحمل Gate 4C-B، وأن Pull Request غير موجود.
+تم تنفيذ clean clone نهائي من `feature/gate-4c-math-step-slice` عند commit `e6df703d80b3248c4ff4463de31b98a2ecf108f9`. نجحت `pnpm install --frozen-lockfile`، و`pnpm check`، و`pnpm test -- --run`، و`pnpm build`، و`git diff --check`. النتيجة هي 12 test files و69 tests passed، مع build ناجح وتحذير bundle أكبر من 500 kB فقط. working tree في clean clone نظيف، و`main` بقي عند `ee646db6863ef494ddfcb954ac1823413d37db1f`، ونتيجة Pull Request المفتوح للفرع هي `[]`.
 
 ## 22. Evidence Matrix
 
