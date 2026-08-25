@@ -413,9 +413,8 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] Add bounded Arabic and Mathematics demo lessons with known source content, complete final report, save RC checkpoint, and stop at RELEASE CANDIDATE — OWNER REVIEW.
 
 
-## Gate 10 Explicit Authorization — final verification only
-
-- [ ] Confirm current Gate 10 branch/base/HEAD and working tree after the explicit authorization.
-- [ ] Run the exact required commands in the Gate 10 branch and clean clone: frozen install, check, full test run, build, and diff check.
-- [ ] Review export/import/recovery/autosave/security/data-integrity evidence and update the Gate 10 report with exact statuses.
-- [ ] Save one Gate 10 checkpoint only, do not start Gate 11, and stop at Owner Review.
+## Gate 10 Explicit Authorization — completed; STOP — OWNER REVIEW
+- [x] Confirm current Gate 10 branch/base/HEAD and working tree after the explicit authorization.
+- [x] Run the exact required commands in the Gate 10 branch and clean clone: frozen install, check, full test run, build, and diff check.
+- [x] Review export/import/recovery/autosave/security/data-integrity evidence and update the Gate 10 report with exact statuses.
+- [x] Save one Gate 10 checkpoint only, do not start Gate 11, and stop at Owner Review.
