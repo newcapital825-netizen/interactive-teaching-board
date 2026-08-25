@@ -437,3 +437,10 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
 .math-step-card .gate4b-answer-input { flex-wrap: wrap; }
 .math-step-card .gate4b-answer-input button { margin-right: auto; }
 @media (max-width: 640px) { .math-step-card .math-step-form { grid-template-columns: 1fr; } .math-step-card .gate4b-activity-main { display: block; } .math-step-card .gate4b-activity-main button { margin-top: 0.7rem; } }
+
+
+/* Gate 4C-B hardening: teacher step decisions are explicit evidence controls; preserve original system result and show the effective decision separately. */
+.math-teacher-override { display:grid; grid-template-columns: 1fr 150px minmax(0,1fr) auto; gap:.5rem; align-items:center; width:100%; margin-top:.65rem; padding-top:.6rem; border-top:1px dashed var(--line); }
+.math-teacher-override input, .math-teacher-override select { min-height:2.2rem; border:1px solid var(--line); border-radius:.55rem; background:rgba(251,250,246,.72); color:var(--ink); padding:.35rem .5rem; font:inherit; }
+.math-teacher-override input:focus-visible, .math-teacher-override select:focus-visible { outline:3px solid color-mix(in srgb, #9eaf83 65%, transparent); outline-offset:2px; }
+@media (max-width:700px) { .math-teacher-override { grid-template-columns:1fr; } .math-teacher-override .gate4b-quiet-button { justify-self:start; } }

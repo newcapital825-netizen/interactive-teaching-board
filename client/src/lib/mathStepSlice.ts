@@ -6,17 +6,17 @@
  * assessment engine, feedback engine, or symbolic mathematics engine.
  */
 import type { EducationalObject } from "./educationalObjects";
-import type { Assessment, AssessmentDiagnostic, Feedback, FeedbackState, Provenance } from "./gate4bTeaching";
+import type { Assessment, AssessmentDiagnostic, AssessmentEvent, Feedback, FeedbackState, Provenance, TeacherOverride } from "./gate4bTeaching";
 
 export type MathValidityState = "valid" | "valid-alternative" | "invalid" | "incomplete" | "unsupported" | "needs-review";
-export type MathStepDiagnostic = "operation-error" | "arithmetic-error" | "sign-error" | "transformation-error" | "incomplete-step" | "invalid-step" | "unsupported-reasoning" | "correct-alternative" | "correct-step" | "verification-failure";
+export type MathStepDiagnostic = "operation-error" | "arithmetic-error" | "sign-error" | "transformation-error" | "reasoning-error" | "incomplete-step" | "invalid-step" | "unsupported-reasoning" | "correct-alternative" | "correct-step" | "verification-failure";
 export type MathDisclosureLevel = 1 | 2 | 3 | 4 | 5;
 
 export type MathProblemObject = {
   id: string;
   sourceObject: EducationalObject<"EquationObject", string>;
-  equation: "2x + 3 = 11";
-  expectedAnswer: "x = 4";
+  equation: string;
+  expectedAnswer: string;
   learningObjective: "حل معادلة خطية من خطوتين مع تبرير كل تحويل والتحقق بالتعويض";
   provenance: Provenance;
   createdAt: string;
@@ -51,12 +51,21 @@ export type MathStepFeedback = Feedback & {
   nextStep?: string;
 };
 
+export type MathTeacherOverride = TeacherOverride & {
+  originalAssessment: { id: string; evaluation: FeedbackState; effectiveEvaluation: FeedbackState; diagnostic: AssessmentDiagnostic; score: number; createdAt: string };
+  teacherDecision: FeedbackState;
+  timestamp: string;
+  actorContext?: string;
+  event: AssessmentEvent;
+};
+
 export type MathStepAssessment = Assessment & {
   problemId: string;
   stepNumber: number;
   submitted: SolutionStepObject;
   validityState: MathValidityState;
   feedback: MathStepFeedback;
+  teacherOverride?: MathTeacherOverride;
 };
 
 export type MathGoldenCase = {
@@ -66,16 +75,29 @@ export type MathGoldenCase = {
   expectedSteps: SolutionStepObject[];
   acceptableAlternatives: SolutionStepObject[];
   invalidSteps: SolutionStepObject[];
+  invalidFinalAnswers?: string[];
+  expectedFinalAnswer?: string;
   expectedDiagnostic: MathStepDiagnostic;
   expectedFeedback: string;
   explanation: string;
   source: string;
   sourceVersion: number;
   provenance: Provenance;
+  category?: "positive-coefficients" | "negative-coefficient" | "negative-constant" | "fractional-coefficient" | "equivalent-transformation" | "invalid-transformation" | "incomplete-step" | "wrong-intermediate-correct-final" | "wrong-final-correct-intermediate" | "alternative-valid-path";
+  scopeStatus?: "supported" | "unsupported";
 };
 
-const now = () => new Date().toISOString();
+export const DETERMINISTIC_MATH_TIME = "2026-01-01T00:00:00.000Z";
+const now = () => DETERMINISTIC_MATH_TIME;
 const normalize = (value: string) => value.trim().toLocaleLowerCase().replace(/[\s،؛,.]/g, "");
+const semanticMeaning = (value: string) => {
+  const normalized = normalize(value).replace(/[()=+\-*/]/g, "");
+  if (normalize(value).includes("subtract3") || normalize(value).includes("move3") || normalized === "subtract3frombothsides") return "subtract-3-both-sides";
+  if (normalize(value).includes("divide") || normalize(value).includes("قسمة")) return "divide-2-both-sides";
+  return normalize(value);
+};
+const sameMeaning = (left: string, right: string) => semanticMeaning(left) === semanticMeaning(right);
+const validProvenance = (provenance: Provenance, expectedSourceId: string, expectedVersion: number) => Boolean(provenance && provenance.sourceObjectId === expectedSourceId && provenance.sourceVersion === expectedVersion && provenance.derivationType && provenance.sourceRange && provenance.sourceRange.start <= provenance.sourceRange.end);
 const stepId = (problemId: string, number: number, suffix = "canonical") => `${problemId}_step_${number}_${suffix}`;
 const provenanceFor = (sourceObjectId: string, sourceVersion: number, derivationType: string): Provenance => ({ sourceObjectId, sourceRange: { start: 0, end: 10 }, sourceVersion, derivationType, teacherApproved: false });
 
@@ -94,13 +116,13 @@ export const createMathProblem = (sourceObject: EducationalObject<"EquationObjec
 };
 
 const canonicalSteps = (problem: MathProblemObject): SolutionStepObject[] => [
-  { id: stepId(problem.id, 1), sourceProblemId: problem.id, stepNumber: 1, expressionBefore: "2x + 3 = 11", operation: "subtract 3 from both sides", expressionAfter: "2x = 8", mathematicalJustification: "Subtracting the same quantity from both sides preserves equality.", validityState: "valid", provenance: provenanceFor(problem.id, 1, "deterministic-solution-step") },
-  { id: stepId(problem.id, 2), sourceProblemId: problem.id, stepNumber: 2, expressionBefore: "2x = 8", operation: "divide both sides by 2", expressionAfter: "x = 4", mathematicalJustification: "Dividing both sides by the same non-zero quantity preserves equality.", validityState: "valid", provenance: provenanceFor(problem.id, 1, "deterministic-solution-step") },
+  { id: stepId(problem.id, 1), sourceProblemId: problem.id, stepNumber: 1, expressionBefore: "2x + 3 = 11", operation: "subtract 3 from both sides", expressionAfter: "2x = 8", mathematicalJustification: "Subtracting the same quantity from both sides preserves equality.", validityState: "valid", provenance: provenanceFor(problem.id, problem.sourceObject.version, "deterministic-solution-step") },
+  { id: stepId(problem.id, 2), sourceProblemId: problem.id, stepNumber: 2, expressionBefore: "2x = 8", operation: "divide both sides by 2", expressionAfter: "x = 4", mathematicalJustification: "Dividing both sides by the same non-zero quantity preserves equality.", validityState: "valid", provenance: provenanceFor(problem.id, problem.sourceObject.version, "deterministic-solution-step") },
 ];
 
 const alternativeSteps = (problem: MathProblemObject): SolutionStepObject[] => [
-  { id: stepId(problem.id, 1, "alternative"), sourceProblemId: problem.id, stepNumber: 1, expressionBefore: "2x + 3 = 11", operation: "move 3 to the other side", expressionAfter: "2x = 11 - 3", mathematicalJustification: "Moving a term is shorthand for subtracting 3 from both sides.", validityState: "valid-alternative", provenance: provenanceFor(problem.id, 1, "deterministic-alternative-step") },
-  { id: stepId(problem.id, 2, "alternative"), sourceProblemId: problem.id, stepNumber: 2, expressionBefore: "2x = 11 - 3", operation: "divide both sides by 2", expressionAfter: "x = 4", mathematicalJustification: "Dividing both sides by the same non-zero quantity preserves equality.", validityState: "valid-alternative", provenance: provenanceFor(problem.id, 1, "deterministic-alternative-step") },
+  { id: stepId(problem.id, 1, "alternative"), sourceProblemId: problem.id, stepNumber: 1, expressionBefore: "2x + 3 = 11", operation: "move 3 to the other side", expressionAfter: "2x = 11 - 3", mathematicalJustification: "Moving a term is shorthand for subtracting 3 from both sides.", validityState: "valid-alternative", provenance: provenanceFor(problem.id, problem.sourceObject.version, "deterministic-alternative-step") },
+  { id: stepId(problem.id, 2, "alternative"), sourceProblemId: problem.id, stepNumber: 2, expressionBefore: "2x = 11 - 3", operation: "divide both sides by 2", expressionAfter: "x = 4", mathematicalJustification: "Dividing both sides by the same non-zero quantity preserves equality.", validityState: "valid-alternative", provenance: provenanceFor(problem.id, problem.sourceObject.version, "deterministic-alternative-step") },
 ];
 
 export type MathStepSession = { problem: MathProblemObject; steps: SolutionStepObject[]; currentStep: 1 | 2; assessments: MathStepAssessment[]; verification: MathVerification | null; disclosureLevel: MathDisclosureLevel; mode: "teacher" | "student" };
@@ -122,6 +144,7 @@ const feedbackFor = (state: MathValidityState, diagnostic: MathStepDiagnostic, l
     "arithmetic-error": { title: "خطأ حسابي", explanation: "فكرة العملية صحيحة، لكن نتيجة الحساب بعد تنفيذها غير صحيحة.", hint: "احسب 11 − 3 مرة أخرى." },
     "sign-error": { title: "راجع الإشارة", explanation: "تغيّرت إشارة حد أو ناتج دون تحويل مكافئ يحافظ على المعادلة.", hint: "طبّق العملية نفسها على الطرفين ولا تغيّر الإشارة منفردًا." },
     "transformation-error": { title: "تحويل غير مكافئ", explanation: "التعبير الجديد لا ينتج عن عملية قانونية على طرفي المعادلة.", hint: "قارن الطرفين قبل وبعد التحويل." },
+    "reasoning-error": { title: "التبرير يحتاج مراجعة", explanation: "التعبيرات صحيحة، لكن السبب الرياضي لا يثبت لماذا يحافظ التحويل على المساواة.", hint: "اربط العملية بتطبيقها على الطرفين معًا." },
     "incomplete-step": { title: "الخطوة غير مكتملة", explanation: "ينقص الخطوة تعبير أو عملية أو تبرير رياضي.", hint: "أكمل: قبل العملية، العملية، بعدها، ولماذا." },
     "invalid-step": { title: "خطوة غير صالحة", explanation: "هذه الخطوة لا تحافظ على قيمة المعادلة.", hint: "تحقق من التكافؤ قبل متابعة الحل." },
     "unsupported-reasoning": { title: "طريقة خارج النطاق المثبت", explanation: "الصيغة قد تحتاج مراجعة المعلم لأنها ليست من الطرق المحددة لهذه الشريحة.", hint: "استخدم طرح 3 ثم القسمة على 2." },
@@ -137,10 +160,12 @@ const feedbackFor = (state: MathValidityState, diagnostic: MathStepDiagnostic, l
 const classifyStep = (problem: MathProblemObject, submitted: SolutionStepObject): { state: MathValidityState; diagnostic: MathStepDiagnostic; score: number; corrected: SolutionStepObject } => {
   const canonical = canonicalSteps(problem)[submitted.stepNumber - 1];
   const alternative = alternativeSteps(problem)[submitted.stepNumber - 1];
+  if (!Number.isInteger(submitted.stepNumber) || submitted.stepNumber < 1 || submitted.stepNumber > 2) return { state: "unsupported", diagnostic: "unsupported-reasoning", score: 0, corrected: canonicalSteps(problem)[0] };
   if (!canonical || submitted.sourceProblemId !== problem.id) return { state: "unsupported", diagnostic: "unsupported-reasoning", score: 0, corrected: canonicalSteps(problem)[0] };
   if (!submitted.expressionBefore.trim() || !submitted.operation.trim() || !submitted.expressionAfter.trim() || !submitted.mathematicalJustification.trim()) return { state: "incomplete", diagnostic: "incomplete-step", score: 0, corrected: canonical };
-  if (normalize(submitted.expressionBefore) === normalize(canonical.expressionBefore) && normalize(submitted.expressionAfter) === normalize(canonical.expressionAfter) && normalize(submitted.operation) === normalize(canonical.operation) && normalize(submitted.mathematicalJustification) === normalize(canonical.mathematicalJustification)) return { state: "valid", diagnostic: "correct-step", score: 1, corrected: canonical };
-  if (normalize(submitted.expressionBefore) === normalize(alternative.expressionBefore) && normalize(submitted.expressionAfter) === normalize(alternative.expressionAfter) && normalize(submitted.operation) === normalize(alternative.operation) && normalize(submitted.mathematicalJustification) === normalize(alternative.mathematicalJustification)) return { state: "valid-alternative", diagnostic: "correct-alternative", score: 1, corrected: alternative };
+  if (sameMeaning(submitted.expressionBefore, canonical.expressionBefore) && sameMeaning(submitted.expressionAfter, canonical.expressionAfter) && sameMeaning(submitted.operation, canonical.operation) && sameMeaning(submitted.mathematicalJustification, canonical.mathematicalJustification)) return { state: "valid", diagnostic: "correct-step", score: 1, corrected: canonical };
+  if (sameMeaning(submitted.expressionBefore, alternative.expressionBefore) && sameMeaning(submitted.expressionAfter, alternative.expressionAfter) && sameMeaning(submitted.operation, alternative.operation) && sameMeaning(submitted.mathematicalJustification, alternative.mathematicalJustification)) return { state: "valid-alternative", diagnostic: "correct-alternative", score: 1, corrected: alternative };
+  if (sameMeaning(submitted.expressionBefore, canonical.expressionBefore) && sameMeaning(submitted.expressionAfter, canonical.expressionAfter) && sameMeaning(submitted.operation, canonical.operation)) return { state: "invalid", diagnostic: "reasoning-error", score: 0.5, corrected: canonical };
   const after = normalize(submitted.expressionAfter);
   const operation = normalize(submitted.operation);
   if (submitted.stepNumber === 1 && (after === "2x=9" || after === "2x=10")) return { state: "invalid", diagnostic: "arithmetic-error", score: 0, corrected: canonical };
@@ -150,17 +175,50 @@ const classifyStep = (problem: MathProblemObject, submitted: SolutionStepObject)
   return { state: "invalid", diagnostic: "invalid-step", score: 0, corrected: canonical };
 };
 
-export const assessMathStep = (problem: MathProblemObject, submitted: SolutionStepObject, provenance = problem.provenance, level: MathDisclosureLevel = 2, at = now()): MathStepAssessment => {
-  const result = classifyStep(problem, submitted);
+export const assessMathStep = (problem: MathProblemObject, submitted: SolutionStepObject, provenance = problem.provenance, level: MathDisclosureLevel = 2, at = DETERMINISTIC_MATH_TIME): MathStepAssessment => {
+  const provenanceValid = validProvenance(provenance, problem.sourceObject.id, problem.sourceObject.version);
+  const result = provenanceValid ? classifyStep(problem, submitted) : { state: "unsupported" as const, diagnostic: "unsupported-reasoning" as const, score: 0, corrected: createSolutionSteps(problem)[0] };
   const evaluation: FeedbackState = result.state === "valid" ? "correct" : result.state === "valid-alternative" ? "valid-alternative" : result.state === "incomplete" ? "incomplete" : "incorrect";
   const assessmentId = `${submitted.id}_assessment`;
   const feedback = feedbackFor(result.state, result.diagnostic, level, result.corrected, assessmentId, at);
-  return { id: assessmentId, activityId: `${problem.id}_step-activity`, attemptId: `${assessmentId}_attempt`, answer: JSON.stringify(submitted), createdAt: at, problemId: problem.id, stepNumber: submitted.stepNumber, submitted: { ...submitted, validityState: result.state }, evaluation, effectiveEvaluation: evaluation, validityState: result.state, score: result.score, maxScore: 1, feedbackId: feedback.id, systemFeedbackId: feedback.id, diagnostic: result.diagnostic, reviewState: result.state === "unsupported" ? "unsupported" : "supported", events: [{ id: `${assessmentId}_system-assessment`, eventType: "system-assessment", assessmentId, state: evaluation, createdAt: at }], feedback, provenance: { ...provenance, derivationType: "deterministic-math-step-assessment" } };
+  return { id: assessmentId, activityId: `${problem.id}_step-activity`, attemptId: `${assessmentId}_attempt`, answer: JSON.stringify(submitted), createdAt: at, problemId: problem.id, stepNumber: submitted.stepNumber, submitted: { ...submitted, validityState: result.state }, evaluation, effectiveEvaluation: evaluation, validityState: result.state, score: result.score, maxScore: 1, feedbackId: feedback.id, systemFeedbackId: feedback.id, diagnostic: result.diagnostic, reviewState: result.state === "unsupported" ? "unsupported" : "supported", events: [{ id: `${assessmentId}_system-assessment`, eventType: "system-assessment", assessmentId, state: evaluation, createdAt: at }], feedback, provenance: { ...provenance, derivationType: "deterministic-math-step-assessment" }   };
 };
 
-export const verifyMathAnswer = (problem: MathProblemObject, expression: string, provenance = problem.provenance, at = now()): MathVerification => {
+export type MathFinalAnswerAssessment = { answer: string; correct: boolean; evaluation: FeedbackState; diagnostic: "correct-step" | "answer-error"; provenance: Provenance; createdAt: string };
+
+export const assessMathFinalAnswer = (problem: MathProblemObject, answer: string, provenance = problem.provenance, at = DETERMINISTIC_MATH_TIME): MathFinalAnswerAssessment => {
+  const correct = normalize(answer) === normalize(problem.expectedAnswer);
+  return { answer, correct, evaluation: correct ? "correct" : "incorrect", diagnostic: correct ? "correct-step" : "answer-error", provenance: { ...provenance, derivationType: "deterministic-math-final-answer" }, createdAt: at };
+};
+
+export const applyMathStepTeacherOverride = (assessment: MathStepAssessment, teacherDecision: FeedbackState, reason: string, actorContext = "teacher-workspace", at = DETERMINISTIC_MATH_TIME): MathStepAssessment => {
+  const event: AssessmentEvent = { id: `${assessment.id}_teacher-override`, eventType: "teacher-override", assessmentId: assessment.id, state: teacherDecision, createdAt: at, reason };
+  const override: MathTeacherOverride = { id: event.id, assessmentId: assessment.id, state: teacherDecision, reason, note: `Math step override: ${reason}`, createdAt: at, provenance: { ...assessment.provenance, teacherApproved: true, derivationType: "teacher-math-step-override" }, originalAssessment: { id: assessment.id, evaluation: assessment.evaluation, effectiveEvaluation: assessment.effectiveEvaluation, diagnostic: assessment.diagnostic, score: assessment.score, createdAt: assessment.createdAt }, teacherDecision, timestamp: at, actorContext, event };
+  return { ...assessment, effectiveEvaluation: teacherDecision, teacherOverride: override, events: [...assessment.events, override.event] };
+};
+
+export const validateMathStepSequence = (steps: SolutionStepObject[], expectedSourceVersion = 1) => {
+  const ids = steps.map((step) => step.id);
+  return new Set(ids).size === ids.length && steps.every((step) => Number.isInteger(step.stepNumber) && step.stepNumber >= 1 && step.stepNumber <= 2 && validProvenance(step.provenance, step.sourceProblemId, expectedSourceVersion));
+};
+
+export const deserializeMathStepSession = (raw: unknown): MathStepSession | null => {
+  if (!raw || typeof raw !== "object") return null;
+  const value = raw as Partial<MathStepSession>;
+  const problem = deserializeMathProblem(value.problem);
+  if (!problem || !Array.isArray(value.steps) || !validateMathStepSequence(value.steps as SolutionStepObject[], problem.sourceObject.version) || !Array.isArray(value.assessments)) return null;
+  if (value.steps.some((step) => step.sourceProblemId !== problem.id)) return null;
+  if (value.currentStep !== 1 && value.currentStep !== 2) return null;
+  if (value.disclosureLevel !== 1 && value.disclosureLevel !== 2 && value.disclosureLevel !== 3 && value.disclosureLevel !== 4 && value.disclosureLevel !== 5) return null;
+  if (value.mode !== "teacher" && value.mode !== "student") return null;
+  if (value.verification !== null && value.verification !== undefined && (!value.verification || value.verification.problemId !== problem.id || !value.verification.provenance)) return null;
+  if (value.assessments.some((assessment) => !assessment || typeof assessment !== "object" || assessment.problemId !== problem.id || !assessment.provenance || !assessment.feedback || !Array.isArray(assessment.events))) return null;
+  return value as MathStepSession;
+};
+
+export const verifyMathAnswer = (problem: MathProblemObject, expression: string, provenance = problem.provenance, at = DETERMINISTIC_MATH_TIME): MathVerification => {
   const valid = normalize(expression) === normalize("2(4) + 3 = 11") || normalize(expression) === normalize("2 * 4 + 3 = 11");
-  return { id: `${problem.id}_verification_${at.replace(/[^0-9]/g, "").slice(-8)}`, problemId: problem.id, expression, expectedExpression: "2(4) + 3 = 11", valid, diagnostic: valid ? "correct-step" : "verification-failure", provenance: { ...provenance, derivationType: "deterministic-substitution-verification" } };
+  return { id: `${problem.id}_verification`, problemId: problem.id, expression, expectedExpression: "2(4) + 3 = 11", valid, diagnostic: valid ? "correct-step" : "verification-failure", provenance: { ...provenance, derivationType: "deterministic-substitution-verification" } };
 };
 
 export const regenerateMathVisualizationLens = (problem: MathProblemObject) => ({
@@ -182,23 +240,28 @@ export const createMathGoldenDataset = (sourceObject: EducationalObject<"Equatio
   const problem = createMathProblem(sourceObject, "2026-01-01T00:00:00.000Z");
   const expected = createSolutionSteps(problem);
   const alternatives = createAlternativeSolutionSteps(problem);
+  const unsupportedCase = (id: string, label: string, category: MathGoldenCase["category"], equation: string): MathGoldenCase => ({ id, label, category, scopeStatus: "unsupported", problem: { ...problem, equation, expectedAnswer: "غير مثبت" }, expectedSteps: [], acceptableAlternatives: [], invalidSteps: [], expectedDiagnostic: "unsupported-reasoning", expectedFeedback: "طريقة خارج النطاق المثبت", explanation: `الحالة ${equation} موثقة كحد نطاق ولا تُحل في هذه الشريحة.`, source: "Gate 4C-B controlled hardening dataset", sourceVersion: 1, provenance: problem.provenance });
   return [
-    { id: "math-golden-one-step", label: "one-step linear equation boundary", problem, expectedSteps: [expected[0]], acceptableAlternatives: [alternatives[0]], invalidSteps: [], expectedDiagnostic: "correct-step", expectedFeedback: "خطوة صحيحة", explanation: "يثبت العقد خطوة طرح 3 من الطرفين.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
-    { id: "math-golden-two-step", label: "canonical two-step solution", problem, expectedSteps: expected, acceptableAlternatives: alternatives, invalidSteps: [], expectedDiagnostic: "correct-step", expectedFeedback: "خطوة صحيحة", explanation: "المسار الأساسي يطرح 3 ثم يقسم على 2.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
-    { id: "math-golden-negative-sign", label: "negative sign case", problem, expectedSteps: expected, acceptableAlternatives: [], invalidSteps: [invalid(problem, { ...expected[0], expressionAfter: "-2x = 8" }, "sign-error")], expectedDiagnostic: "sign-error", expectedFeedback: "راجع الإشارة", explanation: "لا يجوز تغيير إشارة طرف منفردًا.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
-    { id: "math-golden-incomplete", label: "incomplete solution", problem, expectedSteps: expected, acceptableAlternatives: [], invalidSteps: [{ ...expected[0], id: `${expected[0].id}_incomplete`, operation: "", mathematicalJustification: "", validityState: "incomplete" }], expectedDiagnostic: "incomplete-step", expectedFeedback: "الخطوة غير مكتملة", explanation: "ينقص المحاولة العملية والتبرير.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
-    { id: "math-golden-arithmetic", label: "arithmetic mistake", problem, expectedSteps: expected, acceptableAlternatives: [], invalidSteps: [invalid(problem, { ...expected[0], expressionAfter: "2x = 9" }, "arithmetic-error")], expectedDiagnostic: "arithmetic-error", expectedFeedback: "خطأ حسابي", explanation: "طرح 3 من 11 يساوي 8.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
-    { id: "math-golden-transformation", label: "invalid transformation", problem, expectedSteps: expected, acceptableAlternatives: [], invalidSteps: [invalid(problem, { ...expected[0], expressionAfter: "2x = 4" }, "transformation-error")], expectedDiagnostic: "transformation-error", expectedFeedback: "تحويل غير مكافئ", explanation: "الناتج لا يتبع من طرح 3 على الطرفين.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
-    { id: "math-golden-alternative", label: "correct alternative path", problem, expectedSteps: expected, acceptableAlternatives: alternatives, invalidSteps: [], expectedDiagnostic: "correct-alternative", expectedFeedback: "طريقة بديلة صحيحة", explanation: "نقل الحد اختصار لتحويل مكافئ.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
-    { id: "math-golden-invalid-intermediate", label: "correct answer after invalid intermediate", problem, expectedSteps: expected, acceptableAlternatives: [], invalidSteps: [invalid(problem, { ...expected[0], expressionAfter: "2x = 9" }, "arithmetic-error")], expectedDiagnostic: "arithmetic-error", expectedFeedback: "خطأ حسابي", explanation: "لا يكفي الوصول إلى x = 4 إذا كانت الخطوة الوسيطة غير صحيحة.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
-    { id: "math-golden-malformed", label: "malformed solution payload", problem, expectedSteps: expected, acceptableAlternatives: [], invalidSteps: [], expectedDiagnostic: "unsupported-reasoning", expectedFeedback: "طريقة خارج النطاق المثبت", explanation: "payload ناقص أو غير منظم يحتاج مراجعة.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
-    { id: "math-golden-verification", label: "verification failure", problem, expectedSteps: expected, acceptableAlternatives: [], invalidSteps: [], expectedDiagnostic: "verification-failure", expectedFeedback: "فشل التحقق", explanation: "الإجابة منفصلة عن اختبار التعويض.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
+    { id: "math-golden-one-step", category: "positive-coefficients", scopeStatus: "supported", label: "one-step linear equation boundary", problem, expectedSteps: [expected[0]], acceptableAlternatives: [alternatives[0]], invalidSteps: [], expectedDiagnostic: "correct-step", expectedFeedback: "خطوة صحيحة", explanation: "يثبت العقد خطوة طرح 3 من الطرفين.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
+    { id: "math-golden-two-step", category: "positive-coefficients", scopeStatus: "supported", label: "canonical two-step solution", problem, expectedSteps: expected, acceptableAlternatives: alternatives, invalidSteps: [], expectedDiagnostic: "correct-step", expectedFeedback: "خطوة صحيحة", explanation: "المسار الأساسي يطرح 3 ثم يقسم على 2.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
+    { id: "math-golden-negative-sign", category: "negative-coefficient", scopeStatus: "supported", label: "negative sign case", problem, expectedSteps: expected, acceptableAlternatives: [], invalidSteps: [invalid(problem, { ...expected[0], expressionAfter: "-2x = 8" }, "sign-error")], expectedDiagnostic: "sign-error", expectedFeedback: "راجع الإشارة", explanation: "لا يجوز تغيير إشارة طرف منفردًا.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
+    { id: "math-golden-incomplete", category: "incomplete-step", scopeStatus: "supported", label: "incomplete solution", problem, expectedSteps: expected, acceptableAlternatives: [], invalidSteps: [{ ...expected[0], id: `${expected[0].id}_incomplete`, operation: "", mathematicalJustification: "", validityState: "incomplete" }], expectedDiagnostic: "incomplete-step", expectedFeedback: "الخطوة غير مكتملة", explanation: "ينقص المحاولة العملية والتبرير.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
+    { id: "math-golden-arithmetic", category: "invalid-transformation", scopeStatus: "supported", label: "arithmetic mistake", problem, expectedSteps: expected, acceptableAlternatives: [], invalidSteps: [invalid(problem, { ...expected[0], expressionAfter: "2x = 9" }, "arithmetic-error")], expectedDiagnostic: "arithmetic-error", expectedFeedback: "خطأ حسابي", explanation: "طرح 3 من 11 يساوي 8.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
+    { id: "math-golden-transformation", category: "invalid-transformation", scopeStatus: "supported", label: "invalid transformation", problem, expectedSteps: expected, acceptableAlternatives: [], invalidSteps: [invalid(problem, { ...expected[0], expressionAfter: "2x = 4" }, "transformation-error")], expectedDiagnostic: "transformation-error", expectedFeedback: "تحويل غير مكافئ", explanation: "الناتج لا يتبع من طرح 3 على الطرفين.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
+    { id: "math-golden-alternative", category: "alternative-valid-path", scopeStatus: "supported", label: "correct alternative path", problem, expectedSteps: expected, acceptableAlternatives: alternatives, invalidSteps: [], expectedDiagnostic: "correct-alternative", expectedFeedback: "طريقة بديلة صحيحة", explanation: "نقل الحد اختصار لتحويل مكافئ.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
+    { id: "math-golden-invalid-intermediate", category: "wrong-intermediate-correct-final", scopeStatus: "supported", label: "correct answer after invalid intermediate", problem, expectedSteps: expected, acceptableAlternatives: [], invalidSteps: [invalid(problem, { ...expected[0], expressionAfter: "2x = 9" }, "arithmetic-error")], expectedDiagnostic: "arithmetic-error", expectedFeedback: "خطأ حسابي", explanation: "لا يكفي الوصول إلى x = 4 إذا كانت الخطوة الوسيطة غير صحيحة.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
+    { id: "math-golden-malformed", category: "invalid-transformation", scopeStatus: "supported", label: "malformed solution payload", problem, expectedSteps: expected, acceptableAlternatives: [], invalidSteps: [], expectedDiagnostic: "unsupported-reasoning", expectedFeedback: "طريقة خارج النطاق المثبت", explanation: "payload ناقص أو غير منظم يحتاج مراجعة.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
+    { id: "math-golden-verification", category: "wrong-final-correct-intermediate", scopeStatus: "supported", label: "verification failure", problem, expectedSteps: expected, acceptableAlternatives: [], invalidSteps: [], invalidFinalAnswers: ["x = 5"], expectedFinalAnswer: "x = 4", expectedDiagnostic: "verification-failure", expectedFeedback: "فشل التحقق", explanation: "الإجابة منفصلة عن اختبار التعويض.", source: "Gate 4C-B controlled dataset", sourceVersion: 1, provenance: problem.provenance },
+    unsupportedCase("math-golden-negative-constant", "negative constant boundary", "negative-constant", "2x - 3 = 11"),
+    unsupportedCase("math-golden-fractional-coefficient", "fractional coefficient boundary", "fractional-coefficient", "1/2x + 3 = 11"),
+    unsupportedCase("math-golden-equivalent-transformation", "equivalent transformation boundary", "equivalent-transformation", "2(x + 1) = 12"),
+    unsupportedCase("math-golden-wrong-final", "wrong final answer after correct intermediate", "wrong-final-correct-intermediate", "2x = 8 ثم x = 5"),
   ];
 };
 
 export const deserializeMathProblem = (raw: unknown): MathProblemObject | null => {
   if (!raw || typeof raw !== "object") return null;
   const value = raw as Partial<MathProblemObject>;
-  if (typeof value.id !== "string" || value.equation !== "2x + 3 = 11" || value.expectedAnswer !== "x = 4" || !value.sourceObject || !value.provenance) return null;
+  if (typeof value.id !== "string" || value.equation !== "2x + 3 = 11" || value.expectedAnswer !== "x = 4" || !value.sourceObject || !value.provenance || value.provenance.sourceObjectId !== value.sourceObject.id || value.provenance.sourceVersion !== value.sourceObject.version || !value.provenance.derivationType || !value.provenance.sourceRange) return null;
   return value as MathProblemObject;
 };

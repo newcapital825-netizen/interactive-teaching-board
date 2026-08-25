@@ -10,7 +10,7 @@ import {
   nowIso,
 } from "./educationalObjects";
 import { createRegisteredEducationalObject } from "./objectRegistry";
-import { createMathStepSession, type MathStepSession } from "./mathStepSlice";
+import { createMathStepSession, deserializeMathStepSession, DETERMINISTIC_MATH_TIME, type MathStepSession } from "./mathStepSlice";
 
 export type Subject = "arabic" | "mathematics";
 export type FeedbackState = "correct" | "valid-alternative" | "partially-correct" | "incorrect" | "incomplete";
@@ -423,7 +423,15 @@ const migrateJourney = (raw: unknown): JourneyState | null => {
   const legacyWords = raw.subject === "arabic" && Array.isArray(raw.lens.words) && raw.lens.words.every((word) => isRecord(word) && typeof word.id === "string" && typeof word.text === "string" && typeof word.start === "number" && typeof word.end === "number" && typeof word.grammaticalRole === "string" && typeof word.caseMark === "string" && typeof word.explanation === "string") ? raw.lens.words as ArabicWord[] : null;
   const activity = raw.subject === "arabic" && raw.activity.i3rab === undefined && legacyWords ? { ...raw.activity, i3rab: i3rabChallenge(legacyWords) } : raw.activity;
   const lens = raw.subject === "arabic" ? { ...raw.lens, disclosureLevel: raw.lens.disclosureLevel === 2 || raw.lens.disclosureLevel === 3 || raw.lens.disclosureLevel === 4 || raw.lens.disclosureLevel === 5 ? raw.lens.disclosureLevel : 1, mode: raw.lens.mode === "teacher" ? "teacher" : "student" } : raw.lens;
-  const mathStepSession = raw.subject === "mathematics" && raw.mathStepSession && isRecord(raw.mathStepSession) ? raw.mathStepSession as MathStepSession : undefined;
+  let mathStepSession: MathStepSession | undefined;
+  if (raw.subject === "mathematics") {
+    try {
+      mathStepSession = raw.mathStepSession ? deserializeMathStepSession(raw.mathStepSession) ?? undefined : createMathStepSession(raw.source as EducationalObject<"EquationObject", string>, DETERMINISTIC_MATH_TIME);
+    } catch {
+      return null;
+    }
+    if (!mathStepSession) return null;
+  }
   const assessment = raw.assessment ? migrateAssessment(raw.assessment) : null;
   if (raw.assessment && !assessment) return null;
   const feedback = raw.feedback ? migrateFeedback(raw.feedback, assessment?.id ?? "") : null;

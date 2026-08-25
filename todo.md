@@ -259,3 +259,18 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Add regression, negative, malformed, migration, persistence, round-trip, provenance, UI/RTL/responsive, and deterministic tests.
 - [x] Run check/test/build/diff-check and clean-clone verification; document unavailable hardware/browser/accessibility validation honestly.
 - [x] Write the Gate 4C-B report, push one branch only, do not open PR, do not merge, do not start Gate 4D, and stop for Owner Review.
+
+## Gate 4C-B Mathematics Validation & Hardening — completed; Owner Review required
+
+- [x] Read the complete hardening directive and record all additional acceptance criteria and stop rules.
+- [x] Verify baseline from a clean clone of `feature/gate-4c-math-step-slice` before edits.
+- [x] Create exactly `feature/gate-4c-math-hardening`; never modify main, force-push, rebase destructively, open PR, or merge.
+- [x] Add direct step-level teacher override with original system assessment, teacher decision, timestamp, reason, actor/context, and independent events.
+- [x] Expand the bounded Golden Dataset to the required 10 categories without creating a general corpus or Math Engine.
+- [x] Add normalized mathematical-meaning handling for bounded valid alternatives; avoid raw string equality as the sole acceptance rule.
+- [x] Add deterministic repeated-run, unknown-step, duplicate-ID, broken-provenance, malformed/missing/unknown-field, and migration tests.
+- [x] Add final-answer, step, transformation, reasoning, and verification correctness distinctions.
+- [x] Add save/restore coverage for teacher override and full provenance chain.
+- [x] Verify teacher/student visibility, RTL, keyboard/focus/labels/contrast/text scaling; record unavailable validation honestly.
+- [x] Add 100/250/500 objects/steps NODE/VITEST benchmark coverage for creation, serialization, restore, assessment, feedback, and verification.
+- [x] Run full Arabic regression, duplicate architecture scan, clean-clone verification, update hardening report, push one branch only, and stop for Owner Review.
