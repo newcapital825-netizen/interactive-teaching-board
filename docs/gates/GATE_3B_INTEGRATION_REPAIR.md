@@ -2,11 +2,11 @@
 
 ## Scope and baseline
 
-هذا التقرير يسبق إصلاح التكامل ولا يغيّر `main`. repair branch هو `feature/gate-3b-integration-repair`، وقد اكتمل الإصلاح على رأس الفرع `901e95ac7453bab225d8ce3e30885985fde05cd1`. أُنشئ الفرع من آخر رأس مرفوع لـGate 3B: `0299656e6f07456296659a891df18f008b51d1f5`. Gate 3A موجود على `feature/gate-3a-educational-object-engine` عند `fb7aa15af572733075a765a824bc2c04ac3023c6`.
+هذا التقرير يوثق إصلاح التكامل بعد دمجه في `main`. repair branch هو `feature/gate-3b-integration-repair`، وقد دُمج عبر PR #2 في merge commit `f2c0cf2be65d453c240b90278a2dde030e50e978`. رأس `main` الحالي هو `f2c0cf2be65d453c240b90278a2dde030e50e978`. أُنشئ الفرع من آخر رأس مرفوع لـGate 3B: `0299656e6f07456296659a891df18f008b51d1f5`، وكان Gate 3A عند `fb7aa15af572733075a765a824bc2c04ac3023c6`.
 
 ## 1. ما يستخدمه Gate 3B حاليًا
 
-تستخدم تجربة Gate 3B `CoreBoardBench` و`coreBoard.ts` من baseline Gate 3B، مع CoreObject محلي يملك `type`, `content`, `data`, `position`, `size`, `zIndex`, `style`, `metadata`, وحقولًا متخصصة لبعض الأنواع. تجربة UX تحافظ على pages/history/pan/zoom/presentation/save-state، لكنها تنشئ الأنواع عبر `createObject` وتعرض قائمة insertion ثابتة داخل toolbar. لذلك يصف التقرير الحالي البنية بأنها fallback آمنة عندما لا يكون Gate 3A مدمجًا في `main`.
+تستخدم تجربة Gate 3B `CoreBoardBench` و`coreBoard.ts` بعد ربطهما بعقد Gate 3A canonical. CoreObject هو typed UI projection لحقول العرض، بينما المصدر canonical هو EducationalObject/registry/capability model. تجربة UX تحافظ على pages/history/pan/zoom/presentation/save-state، والـtoolbar يشتق عناصر الإدراج من registry ولا يستخدم fallback architecture.
 
 ## 2. ما يقدمه Gate 3A
 
@@ -34,7 +34,7 @@
 
 ## 6. blockers الفعلية
 
-هناك تداخل متوقع في `coreBoard.ts` و`CoreBoardBench.tsx` لأن كلا الفرعين عدّل هذين الملفين. هذا **merge/integration conflict قابل للإدارة** وليس blocker معماريًا؛ سيُحسم باختيار Gate 3A canonical domain وربط UX بها. إذا اتضح أن Canvas Adapter أو registry لا يوفران projection تكفي لاحتياجات resize/grouping الحالية، فسنتوقف ونصنف الحالة `ARCHITECTURAL BLOCKER` بدل اختراع workaround.
+تم حسم تعارض `coreBoard.ts` و`CoreBoardBench.tsx` باعتماد Gate 3A canonical domain وربط UX بها، ونجحت projection المطلوبة للـresize/grouping. بعد الدمج اكتُشف مكوّن evidence قديم غير مستخدم هو `GeneralWhiteboardBench.tsx` ويحتوي local `EducationalObject` type؛ لا يشارك في المسار المنتج الحالي، لكنه يمنع إعلان خلو كامل source tree من أي duplicate model حتى تتم إزالته أو تحويله في إصلاح مستقل.
 
 ## 7. معيار النجاح
 
@@ -64,7 +64,7 @@
 
 ## 10. Known limitations
 
-Touch and stylus hardware remain **NOT VERIFIED — HARDWARE UNAVAILABLE**. UI automation remains **NOT VERIFIED — RUNNER UNAVAILABLE**. Real-browser performance remains **NOT VERIFIED**. The repair branch is pushed at commit `901e95ac7453bab225d8ce3e30885985fde05cd1`; no Pull Request or merge to `main` is authorized in this repair round.
+Touch and stylus hardware remain **NOT VERIFIED — HARDWARE UNAVAILABLE**. UI automation remains **NOT VERIFIED — RUNNER UNAVAILABLE**. Real-browser performance remains **NOT VERIFIED**. PR #2 is merged normally into `main` at merge commit `f2c0cf2be65d453c240b90278a2dde030e50e978`. The post-merge clean clone at that commit passed the required checks. No further code change is authorized in this round.
 
 ## 11. Post-repair owner review
 

@@ -2,7 +2,7 @@
 
 ## Gate status
 
-**GATE 3B = CONDITIONAL.** تم بناء تجربة Universal Whiteboard subject-agnostic على فرع مستقل، ونجحت الفحوص البرمجية والتحقق البصري اليدوي المحدود. تبقى الحالة `CONDITIONAL` لأن Gate 3A ما زال `READY FOR OWNER REVIEW` وغير مدمج في `main`، ولأن touch/stylus وUI automation وreal browser performance لم تُتحقق في البيئة الحالية. لم يُفتح PR ولم يُنفذ merge.
+**GATE 3B = CONDITIONAL بعد الدمج.** تم دمج Gate 3B Integration Repair إلى `main` عبر PR #2 عند merge commit `f2c0cf2be65d453c240b90278a2dde030e50e978`، ونجحت الفحوص البرمجية وclean clone. تبقى الحالة `CONDITIONAL` لأن القيود التجريبية ما زالت قائمة، ولأن مراجعة canonical architecture كشفت مكوّن evidence قديمًا غير مستخدمًا (`GeneralWhiteboardBench.tsx`) يعرّف local `EducationalObject` projection؛ هذا ليس المسار المنتج الحالي لكنه يحتاج إزالة أو تحويلًا لاحقًا قبل إعلان عدم وجود أي duplicate model في كامل source tree.
 
 ## Branch and commits
 
@@ -13,7 +13,7 @@
 | Branch | `feature/gate-3b-universal-whiteboard-ux` |
 | Commits | `aa68131` UX surface; `b573751` UX tests/benchmark; `0cee0b4` architecture/QA docs; `c3ac6e9` final editorial review/report |
 | Final clean-clone SHA | `c3ac6e9a3b9326f940397fef950fd14b3d013321` |
-| PR / merge | Not opened / not merged |
+| PR / merge | PR #2 merged normally; merge commit `f2c0cf2be65d453c240b90278a2dde030e50e978` |
 
 ## UX changes
 
@@ -75,7 +75,7 @@
 | Stylus | **NOT VERIFIED — HARDWARE UNAVAILABLE** |
 | UI automation | **NOT VERIFIED — RUNNER UNAVAILABLE** |
 | Real browser performance | **NOT VERIFIED** |
-| Gate 3A capability registry | **DEPENDENCY GAP**: Gate 3A is not merged into `main`; this branch uses safe Core Board fallback |
+| Gate 3A capability registry | **MERGED AND ACTIVE** in `main` through PR #2; CoreBoardBench uses the canonical registry/capabilities |
 | Full accessibility audit | **NOT VERIFIED** |
 | Infinite canvas | Deferred; current workspace is a bounded performant stage with pan/zoom |
 
@@ -89,8 +89,8 @@ Arabic/Math/Science toolkits، AI، OCR، PDF Intelligence، collaboration، stu
 
 ## Post-Gate 3B backlog
 
-يوصى قبل إعلان الحالة النهائية أو فتح Gate 4 بدمج/اعتماد Gate 3A، وإضافة UI runner، والتحقق على touch/stylus hardware، وقياس real browser performance، ثم إجراء accessibility audit كامل. لا ينبغي فتح Gate 4 أو subject toolkits قبل قرار المالك على هذه الفجوات.
+يوصى قبل إعلان الحالة النهائية أو فتح Gate 4 بإزالة أو تحويل `GeneralWhiteboardBench.tsx` حتى لا يبقى local EducationalObject model داخل source tree، ثم إضافة UI runner، والتحقق على touch/stylus hardware، وقياس real browser performance، وإجراء accessibility audit كامل. لا ينبغي فتح Gate 4 أو subject toolkits قبل قرار المالك على هذه الفجوات.
 
 ## Decision
 
-**CONDITIONAL — READY FOR OWNER REVIEW OF THIS BRANCH.** تم رفع النطاق إلى مستوى مراجعة المالك، لكن لا يُفتح PR ولا يُنفذ merge ولا يبدأ Gate 4 أو Arabic/Math/AI Toolkit دون تفويض جديد.
+**CONDITIONAL — POST-MERGE VERIFICATION COMPLETE WITH ARCHITECTURAL HYGIENE BLOCKER.** تم الدمج والتحقق، لكن لا يُعلن اكتمال canonical architecture في كامل source tree قبل معالجة `GeneralWhiteboardBench.tsx`. لا يبدأ Gate 4 أو Arabic/Math/AI Toolkit قبل قرار المالك على هذا blocker والقيود المتبقية.
