@@ -285,3 +285,15 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Validate Arabic-first student/teacher UX, RTL, progressive disclosure, keyboard/focus/labels/contrast, and record unavailable browser/hardware evidence honestly.
 - [x] Run NODE/VITEST benchmarks at 100/250/500 objects/steps without claiming Browser Performance; confirm Gate 3A/3B/4A/4B/Arabic regressions.
 - [x] Create `docs/gates/GATE_4C_MATH_FINAL_HARDENING.md` and required test matrix; run final clean clone; push only the final branch; stop for Owner Review.
+
+
+## Gate 4C Final Integration & Validation — completed; Owner Review required
+
+- [x] Read the complete integration directive and record its scope, evidence labels, and stop rules.
+- [x] Verify current branch, main HEAD, existing Gate 4C branches, commits, remotes, docs, tests, and actual integration base.
+- [x] Create exactly `feature/gate-4c-final-integration` only from a documented checkpoint containing Arabic I3rab hardening plus Mathematics final hardening.
+- [x] Validate cross-subject reuse of EducationalObject, Registry, Factory, Capabilities, Migration, Adapters, Transformations, Assessment, Feedback, Provenance, Events, and Persistence.
+- [x] Validate Arabic and Mathematics journeys together in the Universal Teacher Workspace without adding a second engine or architecture.
+- [x] Validate existing Golden Datasets, alternatives, unsupported boundaries, diagnostics, feedback, override, provenance, save/restore, migration, RTL, accessibility, and performance without expanding datasets.
+- [x] Add only integration regression tests and required final integration documentation; stop on any real regression or ambiguous merge point.
+- [x] Run clean-clone install/check/test/build/diff-check, record NOT VERIFIED limits honestly, push only the integration branch, and stop for Owner Review.
