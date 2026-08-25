@@ -2,7 +2,7 @@
 
 ## Gate status
 
-**GATE 3B = CONDITIONAL بعد الدمج.** تم دمج Gate 3B Integration Repair إلى `main` عبر PR #2 عند merge commit `f2c0cf2be65d453c240b90278a2dde030e50e978`، ونجحت الفحوص البرمجية وclean clone. تبقى الحالة `CONDITIONAL` لأن القيود التجريبية ما زالت قائمة، ولأن مراجعة canonical architecture كشفت مكوّن evidence قديمًا غير مستخدمًا (`GeneralWhiteboardBench.tsx`) يعرّف local `EducationalObject` projection؛ هذا ليس المسار المنتج الحالي لكنه يحتاج إزالة أو تحويلًا لاحقًا قبل إعلان عدم وجود أي duplicate model في كامل source tree.
+**GATE 3B = CONDITIONAL بعد الدمج.** تم دمج Gate 3B Integration Repair إلى `main` عبر PR #2 عند merge commit `f2c0cf2be65d453c240b90278a2dde030e50e978`، ونجحت الفحوص البرمجية وclean clone. تبقى الحالة `CONDITIONAL` لأن القيود التجريبية ما زالت قائمة، وكانت قد كشفت مكوّن evidence قديمًا غير مستخدم (`GeneralWhiteboardBench.tsx`) يعرّف local `EducationalObject` projection؛ تم التحقق من عدم وجود مراجع له وإزالته كـarchitectural hygiene cleanup مصرح به في Gate 4A.
 
 ## Branch and commits
 
@@ -89,8 +89,8 @@ Arabic/Math/Science toolkits، AI، OCR، PDF Intelligence، collaboration، stu
 
 ## Post-Gate 3B backlog
 
-يوصى قبل إعلان الحالة النهائية أو فتح Gate 4 بإزالة أو تحويل `GeneralWhiteboardBench.tsx` حتى لا يبقى local EducationalObject model داخل source tree، ثم إضافة UI runner، والتحقق على touch/stylus hardware، وقياس real browser performance، وإجراء accessibility audit كامل. لا ينبغي فتح Gate 4 أو subject toolkits قبل قرار المالك على هذه الفجوات.
+تبقى قبل إعلان الحالة النهائية فجوات UI runner، touch/stylus hardware، real browser performance، وfull accessibility audit. تم إغلاق architectural hygiene finding الخاص بـ`GeneralWhiteboardBench.tsx` في فرع Gate 4A دون بدء production engine.
 
 ## Decision
 
-**CONDITIONAL — POST-MERGE VERIFICATION COMPLETE WITH ARCHITECTURAL HYGIENE BLOCKER.** تم الدمج والتحقق، لكن لا يُعلن اكتمال canonical architecture في كامل source tree قبل معالجة `GeneralWhiteboardBench.tsx`. لا يبدأ Gate 4 أو Arabic/Math/AI Toolkit قبل قرار المالك على هذا blocker والقيود المتبقية.
+**CONDITIONAL — POST-MERGE VERIFICATION COMPLETE; HYGIENE CLEANUP APPLIED ON GATE 4A BRANCH.** تم الدمج والتحقق، وأزيلت نسخة legacy غير المستخدمة بعد التحقق من عدم وجود references. تبقى فجوات الأجهزة وUI runner والأداء والوصول، ولا يبدأ Gate 4B أو Arabic/Math/AI implementation قبل التفويض المناسب.

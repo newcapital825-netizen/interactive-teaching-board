@@ -34,7 +34,7 @@
 
 ## 6. blockers الفعلية
 
-تم حسم تعارض `coreBoard.ts` و`CoreBoardBench.tsx` باعتماد Gate 3A canonical domain وربط UX بها، ونجحت projection المطلوبة للـresize/grouping. بعد الدمج اكتُشف مكوّن evidence قديم غير مستخدم هو `GeneralWhiteboardBench.tsx` ويحتوي local `EducationalObject` type؛ لا يشارك في المسار المنتج الحالي، لكنه يمنع إعلان خلو كامل source tree من أي duplicate model حتى تتم إزالته أو تحويله في إصلاح مستقل.
+تم حسم تعارض `coreBoard.ts` و`CoreBoardBench.tsx` باعتماد Gate 3A canonical domain وربط UX بها، ونجحت projection المطلوبة للـresize/grouping. بعد الدمج كان يوجد مكوّن evidence قديم غير مستخدم هو `GeneralWhiteboardBench.tsx` ويحتوي local `EducationalObject` type؛ تم التحقق من عدم وجود مراجع له وإزالته كـarchitectural hygiene cleanup مصرح به في Gate 4A.
 
 ## 7. معيار النجاح
 
@@ -68,4 +68,4 @@ Touch and stylus hardware remain **NOT VERIFIED — HARDWARE UNAVAILABLE**. UI a
 
 ## 11. Post-repair owner review
 
-يلزم قبل أي PR لاحق مراجعة diff المعماري والتأكد من أن `main` يضم Gate 3A بالطريقة المقصودة، ثم تشغيل clean clone كامل، وvisual smoke للـregistry-driven toolbar، وpersistence round-trip للكائنات العامة. بعد ذلك فقط يقرر المالك إن كان الإصلاح جاهزًا لجولة مراجعة مستقلة. Gate 4 وArabic Toolkit وMath Toolkit وAI خارج النطاق.
+تم إغلاق architectural hygiene finding الخاص بـ`GeneralWhiteboardBench.tsx` على فرع Gate 4A بعد التحقق من عدم وجود references. تبقى قبل أي مرحلة تنفيذية مراجعة diff المعماري، clean clone، visual smoke، وpersistence round-trip؛ Gate 4B وArabic Toolkit وMath Toolkit وAI خارج النطاق.

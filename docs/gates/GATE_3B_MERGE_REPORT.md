@@ -2,7 +2,7 @@
 
 ## Status
 
-**Gate 3B was merged into `main` through PR #2.** The post-merge verification is complete, with one architectural hygiene finding that keeps the overall Gate 3B status conditional rather than claiming a false clean result.
+**Gate 3B was merged into `main` through PR #2.** The post-merge verification is complete. The former architectural hygiene finding was resolved on the authorized Gate 4A branch after verifying that the legacy component had no references.
 
 ## Merge identity
 
@@ -37,7 +37,7 @@ A fresh clone was created from `main` at the merge commit. The working tree was 
 
 The production path uses the Gate 3A canonical `EducationalObject`, registry, factory, capability model, migration, adapter boundaries, and transformation model. Source scans found no `FallbackObject`, `DuplicateRegistry`, or `LegacyObject` implementation in the active path. `CoreObject` in `coreBoard.ts` is a documented typed UI projection over the canonical educational object.
 
-A legacy evidence component, `client/src/components/GeneralWhiteboardBench.tsx`, remains in the source tree and defines a local `EducationalObject` type. It is not referenced by the current product route and is not part of the active Gate 3B path, but its presence means the stronger claim “no duplicate domain model anywhere in source” cannot be made yet. This is an **architectural hygiene blocker**, not a test failure.
+The legacy evidence component `client/src/components/GeneralWhiteboardBench.tsx` was verified as unreferenced and removed on the authorized Gate 4A branch. The active production path uses the canonical Gate 3A model, registry, factory, capabilities, migrations, and adapter boundaries.
 
 ## Known limitations
 
@@ -53,6 +53,6 @@ The following statuses remain explicit and are not counted as successful verific
 
 ## Decision
 
-Gate 3B is **MERGED but CONDITIONAL**. The implementation and required automated checks passed. Before declaring the architecture fully duplicate-free or opening a subsequent subject/toolkit phase, the owner should authorize a narrowly scoped cleanup of `GeneralWhiteboardBench.tsx` or explicitly classify it as retained legacy evidence.
+Gate 3B is **MERGED and conditionally verified**. The implementation and required automated checks passed; the legacy duplicate-model hygiene finding was closed by the authorized cleanup. Hardware, UI automation, browser performance, and full accessibility gaps remain.
 
 No Gate 4, Arabic Engine, Math Engine, AI, OCR, Billing, or Collaboration work was started by this merge verification.
