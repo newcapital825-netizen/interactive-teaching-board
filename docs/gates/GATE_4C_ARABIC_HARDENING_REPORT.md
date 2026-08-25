@@ -78,7 +78,7 @@ teacher override إضافة audit event مستقلة ولا تمحو `system-ass
 
 ## 14. Performance
 
-سجل الاختبار المحلي لمسار 100 رحلة domain benchmark مقدارًا قدره `24.809 ms` في تشغيل واحد، وهو قياس Vitest/Node sandbox وليس browser performance. لا توجد نتيجة real-device أو real-browser قابلة للإعلان. تظل تحذيرات Vite المتعلقة بحجم bundle فوق 500 kB قائمة دون أن تمنع build.
+سجل الاختبار المحلي لمسار 100 رحلة domain benchmark مقدارًا قدره `37.952 ms` في clean clone النهائي، وهو قياس Vitest/Node sandbox وليس browser performance. لا توجد نتيجة real-device أو real-browser قابلة للإعلان. تظل تحذيرات Vite المتعلقة بحجم bundle فوق 500 kB قائمة دون أن تمنع build.
 
 ## 15. Architectural Hygiene
 
@@ -100,7 +100,7 @@ teacher override إضافة audit event مستقلة ولا تمحو `system-ass
 
 ## 17. Clean Clone Verification
 
-سيعاد تشغيل التحقق من clean clone على آخر commit بعد تثبيت التقرير والـtodo. يجب أن يمر من clone نظيف: `pnpm install --frozen-lockfile`، `pnpm check`، `pnpm test -- --run`، `pnpm build`، و`git diff --check`. لا يُعتبر تشغيل local قبل commit بديلًا عن هذا التحقق النهائي.
+تم التحقق من clean clone على آخر commit المنشور `3a986305b4a626a72e07857c2896e109f4c4f066`. نجح من clone نظيف: `pnpm install --frozen-lockfile`، `pnpm check`، `pnpm test -- --run`، `pnpm build`، و`git diff --check`. كانت حالة working tree نظيفة، وكان `main` عند `ee646db6863ef494ddfcb954ac1823413d37db1f`، وكانت نتيجة Pull Request المفتوح للفرع `[]`. لا توجد ادعاءات browser performance أو hardware validation.
 
 ## 18. Evidence Matrix
 
