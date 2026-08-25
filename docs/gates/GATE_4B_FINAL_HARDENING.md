@@ -8,9 +8,9 @@
 
 `2d27e56e2495d3c4af7480e08405bdea8dcaec73`، وهو tip فرع `feature/gate-4b-validation-hardening` المنشور والمعتمد للمراجعة.
 
-## 3. Final commit
+## 3. Implementation and final documentation commits
 
-Commit التنفيذ النهائي قبل توثيق الإغلاق هو `baf27e1732e0fc9eab7b923e1f6c9bd559929d16`. سيضيف commit توثيقي لاحق التقرير النهائي وtodo فقط؛ لم يُعد كتابة أي تاريخ منشور، ولم يُعدّل `main`.
+Commit التنفيذ النهائي هو `baf27e1732e0fc9eab7b923e1f6c9bd559929d16`. Tip التوثيق النهائي المنشور هو `654578ba90209262b1df9cd9f5764191d9c6cb35`. commit التوثيق غيّر التقرير وtodo فقط؛ لم يُعد كتابة أي تاريخ منشور، ولم يُعدّل `main`.
 
 ## 4. Files changed
 
@@ -45,7 +45,7 @@ Commit التنفيذ النهائي قبل توثيق الإغلاق هو `baf2
 
 ## 8. Clean-clone results
 
-تم تنفيذ clean clone من فرع `feature/gate-4b-final-hardening` المنشور عند `baf27e1732e0fc9eab7b923e1f6c9bd559929d16`. نجحت `pnpm install --frozen-lockfile` و`pnpm check` و`pnpm test -- --run` و`pnpm build` و`git diff --check`، وكان working tree نظيفًا. GitHub أكد أن `main` عند `ee646db6863ef494ddfcb954ac1823413d37db1f` دون تغيير، وأن قائمة Pull Requests للفرع فارغة.
+تم تنفيذ clean clone من فرع `feature/gate-4b-final-hardening` المنشور عند `654578ba90209262b1df9cd9f5764191d9c6cb35`. نجحت `pnpm install --frozen-lockfile` و`pnpm check` و`pnpm test -- --run` و`pnpm build` و`git diff --check`، وكان working tree نظيفًا. GitHub أكد أن `main` عند `ee646db6863ef494ddfcb954ac1823413d37db1f` دون تغيير، وأن قائمة Pull Requests للفرع فارغة.
 
 ## 9. Migration evidence
 
