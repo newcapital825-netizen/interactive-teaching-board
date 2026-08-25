@@ -443,3 +443,20 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Add deterministic lifecycle, attempt, alternative-answer, diagnostic, feedback, override, retry, provenance, persistence, malformed-payload, and security tests.
 - [x] Run regression, architecture, accessibility, responsive, and NODE/VITEST performance checks; record unavailable hardware/browser/UI automation honestly.
 - [x] Write `docs/gates/GATE_12_REPORT.md`, run clean clone, save checkpoint, and stop at Owner Review; do not start Gate 13.
+
+
+## Post-Gate-12 → Release Candidate → Pilot — authorized by directive; not yet executed
+
+- [ ] Read the complete post-Gate-12 directive and record all Gate 13–21 evidence and stop requirements.
+- [ ] Verify Gate 12 checkpoint `ac29062b`, current branch/HEAD, main, remotes, PR state, and working tree.
+- [ ] Create a controlled feature branch from the Gate 12 checkpoint; never modify main, merge, force-push, rewrite history, or start a later gate before the previous gate is evidenced.
+- [ ] Gate 13: build runnable browser QA/smoke matrix covering teacher and student workflows; record unavailable runner honestly.
+- [ ] Gate 14: build accessibility acceptance matrix and executable keyboard/RTL assertions; do not claim WCAG compliance without audit.
+- [ ] Gate 15: implement touch/stylus abstraction and automated contracts/device matrix; do not claim hardware verification.
+- [ ] Gate 16: establish browser performance budgets for 100/250/500/1000 objects and safely address bundle warning only if justified.
+- [ ] Gate 17: create Teacher Acceptance Test scenarios and a realistic controlled pilot plan.
+- [ ] Gate 18: expand Arabic and Mathematics golden datasets with provenance, alternatives, misconceptions, and unsupported cases without generalizing beyond evidence.
+- [ ] Gate 19: audit security, privacy, recovery, unsafe payloads, student data minimization, and provenance integrity.
+- [ ] Gate 20: assemble Release Candidate evidence and classify readiness honestly.
+- [ ] Gate 21: prepare Controlled Pilot scope, participant safeguards, success criteria, rollback, and owner review stop.
+- [ ] Write gate reports, run clean clone and final regressions, save one checkpoint, and stop for Owner Review; do not publish or merge.
