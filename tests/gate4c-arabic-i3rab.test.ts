@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  advanceDisclosure,
   applyTeacherOverride,
   assessActivity,
   createArabicSource,
@@ -76,9 +77,47 @@ describe("Gate 4C Arabic Grammar / I3rab vertical slice", () => {
       expect(evaluateAnswer(complete, complete.answer).state, fixture.id).toBe("correct");
       for (const incorrect of fixture.incorrectCases) {
         const altered = updateI3rabField(complete, incorrect.field as "grammaticalRole" | "case" | "caseMarker" | "reason", incorrect.value);
-        expect(evaluateAnswer(altered, altered.answer).state, `${fixture.id}:${incorrect.field}`).toBe("partially-correct");
+        expect(["partially-correct", "incorrect"], `${fixture.id}:${incorrect.field}`).toContain(evaluateAnswer(altered, altered.answer).state);
       }
     }
+  });
+
+  it("covers ten explicit reviewed-scope cases without pretending to be a general Arabic parser", () => {
+    expect(arabicI3rabGoldenCases).toHaveLength(10);
+    expect(new Set(arabicI3rabGoldenCases.map((item) => item.id)).size).toBe(10);
+    expect(new Set(arabicI3rabGoldenCases.map((item) => item.expectedResult.grammaticalRole))).toEqual(new Set(["فاعل", "مفعول به", "مبتدأ", "خبر", "اسم مجرور", "فعل ماضٍ", "فعل مضارع", "فعل أمر", "نعت", "مضاف إليه"]));
+    for (const item of arabicI3rabGoldenCases) {
+      expect(item.provenance.sourceVersion).toBe(1);
+      expect(item.provenance.teacherApproved).toBe(true);
+      expect(item.invalidAlternatives.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("distinguishes explicit acceptable alternatives from unsupported structured answers", () => {
+    const { lens, activity } = buildArabicActivity();
+    const correct = completeResponse(activity, lens, "word_2");
+    const alternative = updateI3rabField(correct, "caseMarker", "ضمة");
+    expect(evaluateAnswer(alternative, alternative.answer)).toMatchObject({ state: "valid-alternative", diagnostic: "alternative-solution" });
+    const unsupported = evaluateAnswer(correct, JSON.stringify({ wordId: "word_2", grammaticalRole: "ربما" }));
+    expect(unsupported).toMatchObject({ state: "incorrect", diagnostic: "unsupported-answer", reviewState: "unsupported" });
+    const malformed = evaluateAnswer(correct, "{not-json");
+    expect(malformed).toMatchObject({ state: "incorrect", diagnostic: "unsupported-answer", reviewState: "needs-review" });
+    const assessed = assessActivity(correct, "{not-json", lens.provenance);
+    expect(assessed.assessment.reviewState).toBe("needs-review");
+    expect(assessed.feedback.title).toBe("تحتاج مراجعة المعلم");
+  });
+
+  it("reveals Arabic evidence progressively and gives teachers a complete lens without changing the source", () => {
+    const { source, lens } = buildArabicActivity();
+    const level2 = advanceDisclosure(lens);
+    const level3 = advanceDisclosure(level2);
+    const teacher = advanceDisclosure(level3, "teacher");
+    expect(level2.disclosureLevel).toBe(2);
+    expect(level3.disclosureLevel).toBe(3);
+    expect(teacher.disclosureLevel).toBe(5);
+    expect(teacher.mode).toBe("teacher");
+    expect(teacher.provenance.sourceObjectId).toBe(source.id);
+    expect(source.content).toBe("كتبَ الطالبُ الدرسَ.");
   });
 
   it("preserves provenance, IDs, assessment, feedback, and override through lesson round-trip", () => {

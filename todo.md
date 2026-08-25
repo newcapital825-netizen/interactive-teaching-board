@@ -230,3 +230,16 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Add Arabic golden fixtures, positive/negative/alternative/determinism/provenance/migration/round-trip tests.
 - [x] Validate RTL, progressive reveal, keyboard/focus/ARIA, responsive layout, presentation mode, and honestly record unavailable browser/hardware validation.
 - [x] Run regression and clean-clone verification, update Gate 4C Arabic slice report, push one branch only, do not open PR, do not merge, and stop before Gate 4D.
+
+## Gate 4C-A Arabic I3rab Hardening & Pedagogical Validation — authorized
+
+- [ ] Read the complete Gate 4C-A directive and record the proven-versus-assumed gap report.
+- [ ] Verify current Arabic I3rab branch, HEAD, Gate 4C baseline, main, remote, and working tree.
+- [ ] Create exactly one `feature/gate-4c-a-arabic-i3rab-hardening` branch from the approved Arabic slice.
+- [ ] Expand the bounded golden dataset to the required ten representative cases with stable IDs, provenance, and explicit alternatives/invalid cases.
+- [ ] Strengthen diagnostics for role/case/marker/reasoning/incomplete/unsupported/ambiguous responses without fuzzy acceptance.
+- [ ] Add progressive disclosure levels and distinguish teacher mode from student guided mode.
+- [ ] Preserve canonical provenance, teacher override auditability, migration, save/restore, and deterministic behavior.
+- [ ] Add pedagogical, negative, malformed, alternative, provenance, round-trip, migration, and assessment-to-feedback tests.
+- [ ] Run RTL/Arabic UX/accessibility/performance validation and record unavailable browser/hardware limits honestly.
+- [ ] Create the Gate 4C-A hardening report, run clean verification, push one branch only, do not open PR, do not merge, and stop for Owner Review.

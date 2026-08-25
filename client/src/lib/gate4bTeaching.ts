@@ -13,7 +13,8 @@ import { createRegisteredEducationalObject } from "./objectRegistry";
 
 export type Subject = "arabic" | "mathematics";
 export type FeedbackState = "correct" | "valid-alternative" | "partially-correct" | "incorrect" | "incomplete";
-export type AssessmentDiagnostic = "answer-error" | "role-error" | "case-error" | "marker-error" | "reasoning-error" | "step-error" | "conceptual-error" | "procedural-error" | "alternative-solution" | "incomplete";
+export type ArabicReviewState = "supported" | "unsupported" | "needs-review";
+export type AssessmentDiagnostic = "answer-error" | "role-error" | "case-error" | "marker-error" | "reasoning-error" | "step-error" | "conceptual-error" | "procedural-error" | "alternative-solution" | "incomplete" | "unsupported-answer" | "ambiguous-answer" | "irrelevant-explanation";
 export type InteractionKind = "select" | "classify" | "enter" | "verify" | "solve";
 
 export type SourceRange = { start: number; end: number };
@@ -45,7 +46,7 @@ export type ArabicWord = {
   text: string;
   start: number;
   end: number;
-  grammaticalRole: "فعل" | "فاعل" | "مفعول به";
+  grammaticalRole: "فعل" | "فاعل" | "مفعول به" | "مبتدأ" | "خبر" | "اسم مجرور" | "فعل ماضٍ" | "فعل مضارع" | "فعل أمر" | "نعت" | "مضاف إليه";
   caseMark: string;
   explanation: string;
 };
@@ -55,6 +56,8 @@ export type GrammarLens = LensBase & {
   subject: "arabic";
   words: ArabicWord[];
   selectedWordId: string | null;
+  disclosureLevel: 1 | 2 | 3 | 4 | 5;
+  mode: "teacher" | "student";
 };
 
 export type MathPoint = { x: number; y: number; label?: string };
@@ -68,11 +71,11 @@ export type MathVisualizationLens = LensBase & {
 };
 
 export type ActivityAnswer = string;
-export type ArabicCase = "مرفوع" | "منصوب";
+export type ArabicCase = "مرفوع" | "منصوب" | "مجرور" | "مبني";
 export type I3rabField = "grammaticalRole" | "case" | "caseMarker" | "reason";
 export type I3rabExpected = { grammaticalRole: ArabicWord["grammaticalRole"]; case: ArabicCase; caseMarker: string; reason: string };
 export type I3rabResponse = { wordId: string; grammaticalRole?: string; case?: string; caseMarker?: string; reason?: string };
-export type I3rabChallenge = { targetWordId: string; expected: I3rabExpected; response: I3rabResponse; options: { roles: string[]; cases: string[]; markers: string[]; reasons: string[] } };
+export type I3rabChallenge = { targetWordId: string; expected: I3rabExpected; response: I3rabResponse; acceptableAlternatives: Partial<Record<I3rabField, string[]>>; options: { roles: string[]; cases: string[]; markers: string[]; reasons: string[] } };
 export type ActivityDefinition = {
   id: string;
   subject: Subject;
@@ -125,6 +128,7 @@ export type Assessment = {
   createdAt: string;
   provenance: Provenance;
   diagnostic: AssessmentDiagnostic;
+  reviewState: ArabicReviewState;
   events: AssessmentEvent[];
   teacherOverride?: TeacherOverride;
 };
@@ -141,6 +145,7 @@ export type Feedback = {
   nextStep?: string;
   misconception?: string;
   teacherOverride?: { state: FeedbackState; note: string };
+  reviewState?: ArabicReviewState;
   createdAt: string;
 };
 
@@ -178,7 +183,7 @@ const sanitize = (value: unknown): unknown => {
 };
 const deterministicEventId = (assessmentId: string, eventType: string) => `${assessmentId}_${eventType.replace(/[^a-z-]/g, "-")}`;
 const feedbackStates: FeedbackState[] = ["correct", "valid-alternative", "partially-correct", "incorrect", "incomplete"];
-const diagnostics: AssessmentDiagnostic[] = ["answer-error", "role-error", "case-error", "marker-error", "reasoning-error", "step-error", "conceptual-error", "procedural-error", "alternative-solution", "incomplete"];
+const diagnostics: AssessmentDiagnostic[] = ["answer-error", "role-error", "case-error", "marker-error", "reasoning-error", "step-error", "conceptual-error", "procedural-error", "alternative-solution", "incomplete", "unsupported-answer", "ambiguous-answer", "irrelevant-explanation"];
 const isFeedbackState = (value: unknown): value is FeedbackState => typeof value === "string" && feedbackStates.includes(value as FeedbackState);
 const readProvenance = (value: unknown): Provenance | null => {
   if (!isRecord(value) || typeof value.sourceObjectId !== "string" || typeof value.sourceVersion !== "number" || !Number.isFinite(value.sourceVersion) || typeof value.derivationType !== "string" || typeof value.teacherApproved !== "boolean") return null;
@@ -189,19 +194,57 @@ const isStringArray = (value: unknown): value is string[] => Array.isArray(value
 const isI3rabResponse = (value: unknown): value is I3rabResponse => isRecord(value) && typeof value.wordId === "string" && ["grammaticalRole", "case", "caseMarker", "reason"].every((field) => value[field] === undefined || typeof value[field] === "string");
 const isI3rabChallenge = (value: unknown): value is I3rabChallenge => {
   if (!isRecord(value) || typeof value.targetWordId !== "string" || !isRecord(value.expected) || typeof value.expected.grammaticalRole !== "string" || typeof value.expected.case !== "string" || typeof value.expected.caseMarker !== "string" || typeof value.expected.reason !== "string" || !isI3rabResponse(value.response) || !isRecord(value.options)) return false;
-  return isStringArray(value.options.roles) && isStringArray(value.options.cases) && isStringArray(value.options.markers) && isStringArray(value.options.reasons);
+  const alternatives = value.acceptableAlternatives === undefined || (isRecord(value.acceptableAlternatives) && Object.values(value.acceptableAlternatives).every((entry) => isStringArray(entry)));
+  return alternatives && isStringArray(value.options.roles) && isStringArray(value.options.cases) && isStringArray(value.options.markers) && isStringArray(value.options.reasons);
 };
 
+type ArabicWordSpec = { grammaticalRole: ArabicWord["grammaticalRole"]; caseMark: string; explanation: string };
+const controlledSentenceSpecs: Record<string, ArabicWordSpec[]> = {
+  "كتبَ الطالبُ الدرسَ.": [
+    { grammaticalRole: "فعل", caseMark: "مبني · الفتح", explanation: "يصف حدثًا وقع في الزمن الماضي." },
+    { grammaticalRole: "فاعل", caseMark: "مرفوع · الضمة", explanation: "من قام بالفعل في الجملة." },
+    { grammaticalRole: "مفعول به", caseMark: "منصوب · الفتحة", explanation: "ما وقع عليه الفعل." },
+  ],
+  "العلمُ نورٌ.": [
+    { grammaticalRole: "مبتدأ", caseMark: "مرفوع · الضمة", explanation: "اسم تبدأ به الجملة الاسمية." },
+    { grammaticalRole: "خبر", caseMark: "مرفوع · الضمة", explanation: "المعلومة التي تخبر عن المبتدأ." },
+  ],
+  "مررتُ بالبيتِ.": [
+    { grammaticalRole: "فعل ماضٍ", caseMark: "مبني · الفتح", explanation: "يصف حدثًا وقع في الزمن الماضي." },
+    { grammaticalRole: "اسم مجرور", caseMark: "مجرور · الكسرة", explanation: "سبقته الباء فجرته." },
+  ],
+  "قرأَ الطفلُ.": [
+    { grammaticalRole: "فعل ماضٍ", caseMark: "مبني · الفتح", explanation: "يصف حدثًا وقع في الزمن الماضي." },
+    { grammaticalRole: "فاعل", caseMark: "مرفوع · الضمة", explanation: "من قام بالفعل في الجملة." },
+  ],
+  "يكتبُ الطالبُ.": [
+    { grammaticalRole: "فعل مضارع", caseMark: "مرفوع · الضمة", explanation: "يدل على حدث يقع في زمن الحال أو الاستقبال." },
+    { grammaticalRole: "فاعل", caseMark: "مرفوع · الضمة", explanation: "من قام بالفعل في الجملة." },
+  ],
+  "اكتبْ الدرسَ.": [
+    { grammaticalRole: "فعل أمر", caseMark: "مبني · السكون", explanation: "يدل على طلب وقوع الفعل." },
+    { grammaticalRole: "مفعول به", caseMark: "منصوب · الفتحة", explanation: "ما وقع عليه الفعل." },
+  ],
+  "جاءَ الطالبُ المجتهدُ.": [
+    { grammaticalRole: "فعل ماضٍ", caseMark: "مبني · الفتح", explanation: "يصف حدثًا وقع في الزمن الماضي." },
+    { grammaticalRole: "فاعل", caseMark: "مرفوع · الضمة", explanation: "من قام بالفعل في الجملة." },
+    { grammaticalRole: "نعت", caseMark: "مرفوع · الضمة", explanation: "صفة تتبع الاسم الذي قبلها في الإعراب." },
+  ],
+  "كتابُ الطالبِ جديدٌ.": [
+    { grammaticalRole: "مبتدأ", caseMark: "مرفوع · الضمة", explanation: "اسم تبدأ به الجملة الاسمية." },
+    { grammaticalRole: "مضاف إليه", caseMark: "مجرور · الكسرة", explanation: "جاء بعد اسم قبله في تركيب الإضافة." },
+    { grammaticalRole: "خبر", caseMark: "مرفوع · الضمة", explanation: "المعلومة التي تخبر عن المبتدأ." },
+  ],
+};
 const wordsForSentence = (sentence: string): ArabicWord[] => {
   const source = sentence.split(" ");
   let cursor = 0;
-  const roles: Array<ArabicWord["grammaticalRole"]> = ["فعل", "فاعل", "مفعول به"];
-  const marks = ["فعل ماضٍ مبني على الفتح", "فاعل مرفوع وعلامة رفعه الضمة", "مفعول به منصوب وعلامة نصبه الفتحة"];
-  const explanations = ["يصف الحدث الذي وقع.", "من قام بالفعل في الجملة.", "ما وقع عليه الفعل."];
+  const specs = controlledSentenceSpecs[sentence];
   return source.map((text, index) => {
     const start = cursor;
     cursor += text.length + 1;
-    return { id: `word_${index + 1}`, text, start, end: start + text.length, grammaticalRole: roles[index] ?? "فعل", caseMark: marks[index] ?? "تحليل محدد مسبقًا", explanation: explanations[index] ?? "تمثيل نحوي مشتق من الجملة." };
+    const spec = specs?.[index] ?? { grammaticalRole: index === 0 ? "فعل" : "فاعل", caseMark: "مرفوع · الضمة", explanation: "تمثيل نحوي مشتق من هذا المثال المحدد." };
+    return { id: `word_${index + 1}`, text, start, end: start + text.length, ...spec };
   });
 };
 
@@ -214,7 +257,7 @@ export const createMathSource = (equation = "2x + 3 = 11"): EducationalObject<"E
 export const createGrammarLens = (source: EducationalObject<"SentenceObject", string>, at = nowIso()): GrammarLens => ({
   id: id("grammar-lens"), type: "GrammarLens", lensType: "I3rab", subject: "arabic", sourceObjectId: source.id, sourceRange: { start: 0, end: source.content.length }, sourceVersion: source.version,
   provenance: { sourceObjectId: source.id, sourceRange: { start: 0, end: source.content.length }, sourceVersion: source.version, derivationType: "deterministic-grammar-lens", teacherApproved: false }, revealAnswer: false, editable: true,
-  words: wordsForSentence(source.content), selectedWordId: null, createdAt: at, updatedAt: at,
+  words: wordsForSentence(source.content), selectedWordId: null, disclosureLevel: 1, mode: "student", createdAt: at, updatedAt: at,
 });
 
 export const createMathVisualizationLens = (source: EducationalObject<"EquationObject", string>, at = nowIso()): MathVisualizationLens => ({
@@ -223,14 +266,19 @@ export const createMathVisualizationLens = (source: EducationalObject<"EquationO
   equation: source.content, operationSteps: [{ label: "اطرح 3 من الطرفين", equation: "2x = 8" }, { label: "اقسم الطرفين على 2", equation: "x = 4" }], points: [{ x: 4, y: 0, label: "الحل x = 4" }], solutionX: 4, createdAt: at, updatedAt: at,
 });
 
-const i3rabForWord = (word: ArabicWord): I3rabExpected => ({ grammaticalRole: word.grammaticalRole, case: word.grammaticalRole === "مفعول به" ? "منصوب" : word.grammaticalRole === "فاعل" ? "مرفوع" : "مرفوع", caseMarker: word.grammaticalRole === "مفعول به" ? "الفتحة" : word.grammaticalRole === "فاعل" ? "الضمة" : "الفتح", reason: word.grammaticalRole === "فاعل" ? "لأنه فاعل" : word.grammaticalRole === "مفعول به" ? "لأنه مفعول به" : "لأنه فعل ماضٍ" });
-const i3rabChallenge = (words: ArabicWord[], targetWordId = "word_2"): I3rabChallenge => ({ targetWordId, expected: i3rabForWord(words.find((word) => word.id === targetWordId) ?? words[1]), response: { wordId: targetWordId }, options: { roles: Array.from(new Set(words.map((word) => word.grammaticalRole))), cases: ["مرفوع", "منصوب"], markers: ["الضمة", "الفتحة", "الفتح"], reasons: ["لأنه فاعل", "لأنه مفعول به", "لأنه فعل ماضٍ"] } });
+const i3rabForWord = (word: ArabicWord): I3rabExpected => {
+  const [casePart, markerPart] = word.caseMark.split(" · ");
+  const reasons: Partial<Record<ArabicWord["grammaticalRole"], string>> = { "فاعل": "لأنه فاعل", "مفعول به": "لأنه مفعول به", "مبتدأ": "لأنه مبتدأ", "خبر": "لأنه خبر", "اسم مجرور": "لأنه اسم مجرور", "فعل ماضٍ": "لأنه فعل ماضٍ", "فعل مضارع": "لأنه فعل مضارع", "فعل أمر": "لأنه فعل أمر", "نعت": "لأنه نعت", "مضاف إليه": "لأنه مضاف إليه", "فعل": "لأنه فعل" };
+  return { grammaticalRole: word.grammaticalRole, case: (casePart === "مرفوع" || casePart === "منصوب" || casePart === "مجرور" || casePart === "مبني" ? casePart : "مرفوع"), caseMarker: markerPart ?? word.caseMark, reason: reasons[word.grammaticalRole] ?? "لأنه عنصر نحوي محدد" };
+};
+const alternativesForWord = (word: ArabicWord): Partial<Record<I3rabField, string[]>> => ({ caseMarker: word.caseMark.includes("الضمة") ? ["ضمة"] : word.caseMark.includes("الفتحة") ? ["فتحة"] : word.caseMark.includes("الكسرة") ? ["كسرة"] : word.caseMark.includes("السكون") ? ["سكون"] : [] });
+const i3rabChallenge = (words: ArabicWord[], targetWordId = "word_2"): I3rabChallenge => { const target = words.find((word) => word.id === targetWordId) ?? words[1] ?? words[0];   return { targetWordId: target.id, expected: i3rabForWord(target), response: { wordId: target.id }, acceptableAlternatives: alternativesForWord(target), options: { roles: Array.from(new Set(words.map((word) => word.grammaticalRole))), cases: ["مرفوع", "منصوب", "مجرور", "مبني"], markers: ["الضمة", "الفتحة", "الكسرة", "السكون", "الفتح", "ضمة", "فتحة", "كسرة", "سكون", "فتح"], reasons: Array.from(new Set(words.map((word) => i3rabForWord(word).reason))) } }; };
 
 export const updateI3rabTarget = (activity: ActivityDefinition, lens: GrammarLens, targetWordId: string): ActivityDefinition => {
   const word = lens.words.find((candidate) => candidate.id === targetWordId);
   if (!word || !activity.i3rab) return activity;
   const response: I3rabResponse = { wordId: targetWordId };
-  return { ...activity, expectedAnswer: targetWordId, answer: JSON.stringify(response), i3rab: { ...activity.i3rab, targetWordId, expected: i3rabForWord(word), response }, updatedAt: nowIso() };
+  return { ...activity, expectedAnswer: targetWordId, answer: JSON.stringify(response), i3rab: { ...activity.i3rab, targetWordId, expected: i3rabForWord(word), response, acceptableAlternatives: alternativesForWord(word) }, updatedAt: nowIso() };
 };
 
 export const updateI3rabField = (activity: ActivityDefinition, field: I3rabField, value: string): ActivityDefinition => {
@@ -250,8 +298,9 @@ export const createActivity = (subject: Subject, source: EducationalObject, lens
   id: id("activity"), subject, prompt: "حل المعادلة: 2x + 3 = 11", interactionKind: "solve", sourceObjectId: source.id, lensId: lens.id, expectedAnswer: "4", acceptedAnswers: ["4"], answer: "", attemptCount: 0, completionState: "incomplete", assessmentId: null, feedbackId: null, createdAt: at, updatedAt: at,
 };
 
-export const evaluateAnswer = (activity: ActivityDefinition, answer: string): { state: FeedbackState; score: number; diagnostic?: AssessmentDiagnostic } => {
+export const evaluateAnswer = (activity: ActivityDefinition, answer: string): { state: FeedbackState; score: number; diagnostic?: AssessmentDiagnostic; reviewState?: ArabicReviewState } => {
   if (activity.subject === "arabic" && activity.i3rab) {
+    const challenge = activity.i3rab;
     const submitted = normalize(answer);
     if (!submitted) return { state: "incomplete", score: 0, diagnostic: "incomplete" };
     if (!answer.trim().startsWith("{") && activity.acceptedAnswers.some((candidate) => normalize(candidate) === submitted)) return { state: "correct", score: 1 };
@@ -259,20 +308,26 @@ export const evaluateAnswer = (activity: ActivityDefinition, answer: string): { 
       if (submitted === "word_1" || submitted === "word_3" || submitted.includes("فعل") || submitted.includes("مفعول")) return { state: "partially-correct", score: 0.5, diagnostic: "role-error" };
       return { state: "incorrect", score: 0, diagnostic: "answer-error" };
     }
-    const response = readI3rabResponse({ ...activity, answer });
-    const expected = activity.i3rab.expected;
+    let parsedResponse: unknown;
+    try { parsedResponse = JSON.parse(answer); } catch { return { state: "incorrect", score: 0, diagnostic: "unsupported-answer", reviewState: "needs-review" }; }
+    if (!isI3rabResponse(parsedResponse)) return { state: "incorrect", score: 0, diagnostic: "unsupported-answer", reviewState: "needs-review" };
+    const response = parsedResponse;
+    const unsupportedField = (response.grammaticalRole && !challenge.options.roles.includes(response.grammaticalRole)) || (response.case && !challenge.options.cases.includes(response.case)) || (response.caseMarker && !challenge.options.markers.includes(response.caseMarker) && !(challenge.acceptableAlternatives.caseMarker ?? []).includes(response.caseMarker)) || (response.reason && !challenge.options.reasons.includes(response.reason) && !(challenge.acceptableAlternatives.reason ?? []).includes(response.reason));
+    if (unsupportedField) return { state: "incorrect", score: 0, diagnostic: "unsupported-answer", reviewState: "unsupported" };
+    const expected = challenge.expected;
     const normalizedMarker = normalize(response.caseMarker ?? "").replace(/^ال/, "");
     const normalizedExpectedMarker = normalize(expected.caseMarker).replace(/^ال/, "");
     const matches = {
       wordId: response.wordId === activity.i3rab.targetWordId,
-      grammaticalRole: normalize(response.grammaticalRole ?? "") === normalize(expected.grammaticalRole),
-      case: normalize(response.case ?? "") === normalize(expected.case),
-      caseMarker: normalizedMarker === normalizedExpectedMarker,
-      reason: normalize(response.reason ?? "") === normalize(expected.reason),
+      grammaticalRole: normalize(response.grammaticalRole ?? "") === normalize(expected.grammaticalRole) || ((activity.i3rab.acceptableAlternatives ?? {}).grammaticalRole ?? []).some((value) => normalize(value) === normalize(response.grammaticalRole ?? "")),
+      case: normalize(response.case ?? "") === normalize(expected.case) || ((activity.i3rab.acceptableAlternatives ?? {}).case ?? []).some((value) => normalize(value) === normalize(response.case ?? "")),
+      caseMarker: normalizedMarker === normalizedExpectedMarker || ((activity.i3rab.acceptableAlternatives ?? {}).caseMarker ?? []).some((value) => normalize(value).replace(/^ال/, "") === normalizedMarker),
+      reason: normalize(response.reason ?? "") === normalize(expected.reason) || ((activity.i3rab.acceptableAlternatives ?? {}).reason ?? []).some((value) => normalize(value) === normalize(response.reason ?? "")),
     };
     const totalMatches = Object.values(matches).filter(Boolean).length;
     if (!response.wordId || totalMatches === 0) return { state: "incomplete", score: 0, diagnostic: "incomplete" };
-    if (totalMatches === 5 && normalize(response.caseMarker ?? "") !== normalize(expected.caseMarker)) return { state: "valid-alternative", score: 1, diagnostic: "alternative-solution" };
+    const usedAlternative = (Object.keys(matches) as Array<keyof typeof matches>).some((field) => matches[field] && normalize((response as Record<string, string | undefined>)[field] ?? "") !== normalize((expected as Record<string, string>)[field] ?? "") && ((challenge.acceptableAlternatives ?? {})[field as I3rabField] ?? []).some((value) => normalize(value).replace(/^ال/, "") === normalize((response as Record<string, string | undefined>)[field] ?? "").replace(/^ال/, "")));
+    if (totalMatches === 5 && usedAlternative) return { state: "valid-alternative", score: 1, diagnostic: "alternative-solution" };
     if (totalMatches === 5) return { state: "correct", score: 1 };
     const diagnostic: AssessmentDiagnostic = !matches.wordId ? "answer-error" : !matches.grammaticalRole ? "role-error" : !matches.case ? "case-error" : !matches.caseMarker ? "marker-error" : "reasoning-error";
     return { state: totalMatches > 0 ? "partially-correct" : "incorrect", score: totalMatches > 0 ? totalMatches / 5 : 0, diagnostic };
@@ -287,7 +342,8 @@ export const evaluateAnswer = (activity: ActivityDefinition, answer: string): { 
 
 export const createFeedback = (assessment: Assessment, activity: ActivityDefinition): Feedback => {
   const state = assessment.effectiveEvaluation ?? assessment.evaluation;
-  const common = { id: id("feedback"), assessmentId: assessment.id, state, retryAllowed: !["correct", "valid-alternative"].includes(state), teacherNote: activity.subject === "arabic" ? "تذكير للمعلم: الفاعل هو من قام بالفعل." : "تذكير للمعلم: حافظ على تكافؤ الطرفين في كل خطوة.", createdAt: nowIso() };
+  const common = { id: id("feedback"), assessmentId: assessment.id, state, reviewState: assessment.reviewState, retryAllowed: !["correct", "valid-alternative"].includes(state), teacherNote: activity.subject === "arabic" ? "تذكير للمعلم: الفاعل هو من قام بالفعل." : "تذكير للمعلم: حافظ على تكافؤ الطرفين في كل خطوة.", createdAt: nowIso() };
+  if (assessment.reviewState !== "supported") return { ...common, title: "تحتاج مراجعة المعلم", explanation: "هذه الصيغة خارج الحالات المثبتة في مجموعة الأمثلة الحالية، لذلك لم تُقبل تلقائيًا كإجابة صحيحة.", hint: "ارجع إلى النص وحدد الحقل الذي يحتاج دليلًا.", nextStep: "افحص الإجابة ثم قرر قبولها أو تعديلها يدويًا." };
   if (state === "correct") return { ...common, title: "إجابة صحيحة", explanation: activity.subject === "arabic" ? "أحسنت؛ الطالبُ هو الفاعل لأنه قام بالقراءة." : "أحسنت؛ بعد طرح 3 ثم القسمة على 2، يكون x = 4." };
   if (state === "valid-alternative") return { ...common, title: "إجابة صحيحة بصيغة مقبولة", explanation: activity.subject === "arabic" ? "استخدمت صيغة مقبولة للعلامة الإعرابية ضمن هذا المثال المحدد." : "أثبتت الصيغة x = 4 القيمة نفسها؛ نحتفظ بها كطريقة تعبير صحيحة.", hint: activity.subject === "arabic" ? "قارن العلامة بالصيغة المعروضة في العدسة." : "يمكنك الآن التحقق بالتعويض.", nextStep: activity.subject === "arabic" ? "راجع سبب الرفع ثم اعتمد الصيغة المناسبة." : "تحقق من الحل بالتعويض في المعادلة." };
   if (state === "incomplete") return { ...common, title: "لم تُرسل إجابة بعد", explanation: activity.subject === "arabic" ? "اختر كلمة من الجملة لتحديد الفاعل." : "اكتب قيمة x أو صيغة حل واضحة قبل الإرسال.", hint: activity.subject === "arabic" ? "ابدأ بالسؤال: من قام بالفعل؟" : "ابدأ بطرح 3 من الطرفين.", nextStep: "أكمل الحقل أو الاختيار ثم أرسل المحاولة." };
@@ -300,7 +356,7 @@ export const assessActivity = (activity: ActivityDefinition, answer: string, pro
   const assessmentId = id("assessment");
   const nextActivity: ActivityDefinition = { ...activity, answer, attemptCount: activity.attemptCount + 1, completionState: ["correct", "valid-alternative"].includes(result.state) ? "complete" : "incomplete", assessmentId, feedbackId: null, updatedAt: at };
   const diagnostic: AssessmentDiagnostic = result.diagnostic ?? (result.state === "valid-alternative" ? "alternative-solution" : result.state === "incomplete" ? "incomplete" : result.state === "partially-correct" ? (activity.subject === "mathematics" ? "step-error" : "conceptual-error") : result.state === "incorrect" ? "answer-error" : "procedural-error");
-  const assessment: Assessment = { id: assessmentId, activityId: activity.id, attemptId: id("attempt"), answer, evaluation: result.state, effectiveEvaluation: result.state, score: result.score, maxScore: 1, feedbackId: "pending", createdAt: at, provenance: clone(provenance), diagnostic, events: [{ id: id("assessment-event"), eventType: "system-assessment", assessmentId, state: result.state, createdAt: at }] };
+  const assessment: Assessment = { id: assessmentId, activityId: activity.id, attemptId: id("attempt"), answer, evaluation: result.state, effectiveEvaluation: result.state, score: result.score, maxScore: 1, feedbackId: "pending", createdAt: at, provenance: clone(provenance), diagnostic, reviewState: result.reviewState ?? (activity.subject === "arabic" ? "supported" : "supported"), events: [{ id: id("assessment-event"), eventType: "system-assessment", assessmentId, state: result.state, createdAt: at }] };
   const feedback = createFeedback(assessment, nextActivity);
   return { activity: { ...nextActivity, feedbackId: feedback.id }, assessment: { ...assessment, feedbackId: feedback.id }, feedback };
 };
@@ -350,7 +406,7 @@ const migrateAssessment = (raw: unknown): Assessment | null => {
   const finalEvents = teacherOverride && !normalizedEvents.some((event) => event.eventType === "teacher-override")
     ? [...normalizedEvents, { id: teacherOverride.id, eventType: "teacher-override" as const, assessmentId: raw.id, state: teacherOverride.state, reason: teacherOverride.reason, createdAt: teacherOverride.createdAt }]
     : normalizedEvents;
-  return { ...raw, effectiveEvaluation, events: finalEvents, diagnostic, provenance, teacherOverride, feedbackId: typeof raw.feedbackId === "string" ? raw.feedbackId : "", systemFeedbackId: typeof raw.systemFeedbackId === "string" ? raw.systemFeedbackId : undefined, score: typeof raw.score === "number" && Number.isFinite(raw.score) ? raw.score : 0, maxScore: typeof raw.maxScore === "number" && Number.isFinite(raw.maxScore) ? raw.maxScore : 1, attemptId: typeof raw.attemptId === "string" ? raw.attemptId : deterministicEventId(raw.id, "attempt") } as Assessment;
+  return { ...raw, effectiveEvaluation, events: finalEvents, diagnostic, reviewState: raw.reviewState === "unsupported" || raw.reviewState === "needs-review" || raw.reviewState === "supported" ? raw.reviewState : "needs-review", provenance, teacherOverride, feedbackId: typeof raw.feedbackId === "string" ? raw.feedbackId : "", systemFeedbackId: typeof raw.systemFeedbackId === "string" ? raw.systemFeedbackId : undefined, score: typeof raw.score === "number" && Number.isFinite(raw.score) ? raw.score : 0, maxScore: typeof raw.maxScore === "number" && Number.isFinite(raw.maxScore) ? raw.maxScore : 1, attemptId: typeof raw.attemptId === "string" ? raw.attemptId : deterministicEventId(raw.id, "attempt") } as Assessment;
 };
 
 const migrateFeedback = (raw: unknown, assessmentId: string): Feedback | null => {
@@ -364,12 +420,13 @@ const migrateJourney = (raw: unknown): JourneyState | null => {
   if (raw.subject === "arabic" && raw.activity.i3rab !== undefined && !isI3rabChallenge(raw.activity.i3rab)) return null;
   const legacyWords = raw.subject === "arabic" && Array.isArray(raw.lens.words) && raw.lens.words.every((word) => isRecord(word) && typeof word.id === "string" && typeof word.text === "string" && typeof word.start === "number" && typeof word.end === "number" && typeof word.grammaticalRole === "string" && typeof word.caseMark === "string" && typeof word.explanation === "string") ? raw.lens.words as ArabicWord[] : null;
   const activity = raw.subject === "arabic" && raw.activity.i3rab === undefined && legacyWords ? { ...raw.activity, i3rab: i3rabChallenge(legacyWords) } : raw.activity;
+  const lens = raw.subject === "arabic" ? { ...raw.lens, disclosureLevel: raw.lens.disclosureLevel === 2 || raw.lens.disclosureLevel === 3 || raw.lens.disclosureLevel === 4 || raw.lens.disclosureLevel === 5 ? raw.lens.disclosureLevel : 1, mode: raw.lens.mode === "teacher" ? "teacher" : "student" } : raw.lens;
   const assessment = raw.assessment ? migrateAssessment(raw.assessment) : null;
   if (raw.assessment && !assessment) return null;
   const feedback = raw.feedback ? migrateFeedback(raw.feedback, assessment?.id ?? "") : null;
   if (raw.feedback && !feedback) return null;
   if (assessment && feedback?.assessmentId !== assessment.id) return null;
-  return { ...raw, activity, assessment, feedback } as JourneyState;
+  return { ...raw, lens, activity, assessment, feedback } as JourneyState;
 };
 
 export const migrateLesson = (raw: unknown): Gate4BLesson | null => {
@@ -387,4 +444,5 @@ export const deserializeLesson = (raw: string): Gate4BLesson | null => {
 };
 
 export const updateLensSelection = (lens: GrammarLens, wordId: string): GrammarLens => ({ ...lens, selectedWordId: wordId, updatedAt: nowIso() });
+export const advanceDisclosure = (lens: GrammarLens, mode: GrammarLens["mode"] = lens.mode): GrammarLens => { const nextLevel = mode === "teacher" ? 5 : (lens.disclosureLevel % 5 + 1) as GrammarLens["disclosureLevel"]; return { ...lens, mode, disclosureLevel: nextLevel, revealAnswer: nextLevel === 5, updatedAt: nowIso() }; };
 export const toggleLensAnswer = <T extends GrammarLens | MathVisualizationLens>(lens: T): T => ({ ...lens, revealAnswer: !lens.revealAnswer, updatedAt: nowIso() });
