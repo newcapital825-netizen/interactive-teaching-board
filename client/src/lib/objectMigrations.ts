@@ -5,6 +5,7 @@
 import type { BoardDocument, BoardPage, CoreObject } from "./coreBoard";
 import { getObjectDefinition } from "./objectRegistry";
 import { EDUCATIONAL_OBJECT_SCHEMA_VERSION, EducationalCapability } from "./educationalObjects";
+import { deserializeClassroomLesson } from "./classroomLoop";
 
 const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const numberOr = (value: unknown, fallback: number) => typeof value === "number" && Number.isFinite(value) ? value : fallback;
@@ -82,6 +83,8 @@ export const migrateBoardDocument = (raw: unknown): BoardDocument | null => {
   const pages = raw.pages.map(migrateBoardPage).filter(Boolean) as BoardPage[];
   if (!pages.length) return null;
   const requestedActive = stringOr(raw.activePageId, pages[0].id);
+  const classroom = raw.classroom === undefined ? undefined : deserializeClassroomLesson(JSON.stringify(raw.classroom));
+  if (raw.classroom !== undefined && !classroom) return null;
   return {
     id: stringOr(raw.id, "migrated_board"),
     title: stringOr(raw.title, "درس تفاعلي جديد"),
@@ -90,6 +93,7 @@ export const migrateBoardDocument = (raw: unknown): BoardDocument | null => {
     pages,
     activePageId: pages.some((page) => page.id === requestedActive) ? requestedActive : pages[0].id,
     updatedAt: stringOr(raw.updatedAt, new Date().toISOString()),
+    ...(classroom ? { classroom } : {}),
   };
 };
 

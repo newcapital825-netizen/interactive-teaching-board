@@ -5,6 +5,7 @@
 import { createRegisteredEducationalObject } from "./objectRegistry";
 import { safeParseBoardDocument } from "./objectMigrations";
 import type { EducationalCapability, ObjectSource } from "./educationalObjects";
+import type { ClassroomLessonState } from "./classroomLoop";
 
 export type CoreObjectType =
   | "TextObject"
@@ -49,7 +50,7 @@ export type CoreObject = {
 };
 
 export type BoardPage = { id: string; name: string; objects: CoreObject[]; viewport: { x: number; y: number; zoom: number } };
-export type BoardDocument = { id: string; title: string; version: number; schemaVersion: number; pages: BoardPage[]; activePageId: string; updatedAt: string };
+export type BoardDocument = { id: string; title: string; version: number; schemaVersion: number; pages: BoardPage[]; activePageId: string; updatedAt: string; classroom?: ClassroomLessonState };
 
 export const STORAGE_KEY = "gate2-core-board-document";
 export const uid = (prefix: string) => `${prefix}_${Math.random().toString(36).slice(2, 8)}`;
