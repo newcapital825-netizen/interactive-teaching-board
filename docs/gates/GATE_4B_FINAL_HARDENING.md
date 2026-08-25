@@ -10,7 +10,7 @@
 
 ## 3. Final commit
 
-سيُسجل SHA النهائي بعد commit هذا الإغلاق والـclean-clone verification في نهاية هذه الجولة. لم يُعد كتابة أي تاريخ منشور، ولم يُعدّل `main`.
+Commit التنفيذ النهائي قبل توثيق الإغلاق هو `baf27e1732e0fc9eab7b923e1f6c9bd559929d16`. سيضيف commit توثيقي لاحق التقرير النهائي وtodo فقط؛ لم يُعد كتابة أي تاريخ منشور، ولم يُعدّل `main`.
 
 ## 4. Files changed
 
@@ -39,13 +39,13 @@
 | `pnpm check` | PASS |
 | Targeted hardening suite | PASS — 11 tests |
 | Existing regression suites أثناء التشغيل المستهدف | PASS |
-| Full `pnpm test -- --run` | سيُسجل بعد clean clone النهائي |
-| `pnpm build` | سيُسجل بعد clean clone النهائي |
-| `git diff --check` | سيُسجل بعد clean clone النهائي |
+| Full `pnpm test -- --run` | PASS — 10 test files، 47 tests |
+| `pnpm build` | PASS — Vite production build؛ تحذير chunk أكبر من 500 kB |
+| `git diff --check` | PASS |
 
 ## 8. Clean-clone results
 
-سيُنفذ clean clone من فرع `feature/gate-4b-final-hardening` بعد رفعه. يجب أن تكون النتيجة: install frozen، check، test، build، diff check = PASS، وworking tree clean. هذا التقرير لا يعتبر الجولة مكتملة قبل ذلك.
+تم تنفيذ clean clone من فرع `feature/gate-4b-final-hardening` المنشور عند `baf27e1732e0fc9eab7b923e1f6c9bd559929d16`. نجحت `pnpm install --frozen-lockfile` و`pnpm check` و`pnpm test -- --run` و`pnpm build` و`git diff --check`، وكان working tree نظيفًا. GitHub أكد أن `main` عند `ee646db6863ef494ddfcb954ac1823413d37db1f` دون تغيير، وأن قائمة Pull Requests للفرع فارغة.
 
 ## 9. Migration evidence
 

@@ -198,11 +198,11 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 
 ## Gate 4B Final Hardening — authorized
 
-- [ ] Verify current hardening baseline, branch, commit, main, remote, and clean working tree.
-- [ ] Create `feature/gate-4b-final-hardening` from the approved hardening tip only.
-- [ ] Define deterministic lesson workflow migration from previous to current version with safe handling of unknown and malformed fields.
-- [ ] Define auditable teacher override preserving system assessment and teacher decision as distinct events.
-- [ ] Add regression tests for migration round-trip, teacher override persistence, assessment alternatives, incomplete responses, provenance, save/restore, lens regeneration, identity, and error safety.
-- [ ] Perform feasible static/accessibility/browser/performance validation without claiming unavailable hardware or browser runner results.
-- [ ] Create `docs/gates/GATE_4B_FINAL_HARDENING.md` with the required evidence matrix and closure classification.
-- [ ] Run clean-clone install/check/test/build/diff-check, push branch only, do not open PR, do not merge, and stop for Owner Review.
+- [x] Verify current hardening baseline, branch, commit, main, remote, and clean working tree.
+- [x] Create `feature/gate-4b-final-hardening` from the approved hardening tip only.
+- [x] Define deterministic lesson workflow migration from previous to current version with safe handling of unknown and malformed fields.
+- [x] Define auditable teacher override preserving system assessment and teacher decision as distinct events.
+- [x] Add regression tests for migration round-trip, teacher override persistence, assessment alternatives, incomplete responses, provenance, save/restore, lens regeneration, identity, and error safety.
+- [x] Perform feasible static/accessibility/browser/performance validation without claiming unavailable hardware or browser runner results.
+- [x] Create `docs/gates/GATE_4B_FINAL_HARDENING.md` with the required evidence matrix and closure classification.
+- [x] Run clean-clone install/check/test/build/diff-check, push branch only, do not open PR, do not merge, and stop for Owner Review.
