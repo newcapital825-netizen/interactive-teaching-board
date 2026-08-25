@@ -12,10 +12,14 @@
 | --- | --- |
 | Branch | `feature/gate-4c-arabic-i3rab-slice` |
 | Base | `feature/gate-4c-discovery` عند `2f948548a30ae4219edb4b36ff15723225385747` |
+| HEAD | `3e151885eb761565b77b683dc07252632f504028` |
+| Clean clone | PASS من GitHub branch؛ working tree clean |
+| Remote branch | يطابق HEAD `3e151885eb761565b77b683dc07252632f504028` |
 | Repository | [interactive-teaching-board](https://github.com/newcapital825-netizen/interactive-teaching-board) |
 | Main | لم يُعدّل |
-| Pull Request | لا يوجد |
+| Pull Request | لا يوجد — `gh pr list` أعاد `[]` |
 | Merge | لم يحدث |
+| Main remote | `ee646db6863ef494ddfcb954ac1823413d37db1f` — unchanged |
 
 ## FILES CREATED
 
@@ -104,6 +108,8 @@ Golden Dataset صغير من حالتين: `فاعل مرفوع بالضمة` و
 | Determinism | PASS عبر الدوال المشتركة |
 | `pnpm build` | PASS |
 | `git diff --check` | PASS |
+| Clean-clone install | PASS — `pnpm install --frozen-lockfile` |
+| Clean-clone check/test/build | PASS — 11 files، 54 tests، build completed with bundle-size warning |
 
 ## PERFORMANCE RESULTS
 
