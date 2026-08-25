@@ -376,3 +376,21 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] Add bounded lesson builder flows for objectives, activities, assessment/feedback sequencing, teacher preview, and classroom presentation without collaboration or cloud services.
 - [ ] Preserve canonical objects, action maps, provenance, deterministic assessment, local persistence, and recovery behavior.
 - [ ] Add tests, evidence report, checkpoint, and continue only if no critical blocker exists.
+
+
+## Gate 9 Lesson Builder + Complete Classroom Workflow — completed; roadmap continuation authorized
+
+- [x] Read the complete Gate 9 directive and record exit criteria, evidence labels, and stop rules.
+- [x] Verify Gate 8 checkpoint `aca832ea`, actual branch/HEAD, main, remotes, status, and PR state.
+- [x] Create exactly `feature/gate-9-lesson-classroom-workflow` without modifying main, force-pushing, rebasing, or opening/merging a PR.
+- [x] Complete practical lesson builder: subject, grade, objectives, page add/reorder/duplicate/delete/rename/navigation, object copy, undo/redo, save/restore, teacher/student preview, and presentation mode.
+- [x] Replace last-added-object fallback with direct product-shell selection, deselection, keyboard-reachable controls, contextual action resolution, and capability-safe actions; renderer-level pointer selection remains documented as partial.
+- [x] Prove the available Arabic and Mathematics workflows through the existing bounded content/activity/assessment/feedback/review paths with provenance.
+- [x] Add student mode, presentation mode, autosave states, lesson duplication with ID isolation, malformed/migration/broken-provenance safety, performance measurements, and accessibility evidence.
+- [x] Add complete regression suite and report, run clean clone, save checkpoint, and stop or continue only according to Gate 9 exit criteria.
+
+## Gate 10 Save / Export / Import / Recovery — authorized by roadmap; pending Gate 9 checkpoint
+
+- [ ] Create exactly `feature/gate-10-save-export-import-recovery` from the Gate 9 checkpoint.
+- [ ] Implement safe local export/import/recovery over canonical document persistence without cloud or collaboration.
+- [ ] Add malformed, duplicate-ID, broken-provenance, migration, round-trip, and recovery tests plus evidence report.
