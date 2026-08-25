@@ -100,7 +100,7 @@ teacher override إضافة audit event مستقلة ولا تمحو `system-ass
 
 ## 17. Clean Clone Verification
 
-تم التحقق من clean clone على آخر commit المنشور `3f3e68c5570aa53bf4e824287c0bf48793f44538`. نجح من clone نظيف: `pnpm install --frozen-lockfile`، `pnpm check`، `pnpm test -- --run`، `pnpm build`، و`git diff --check`. كانت حالة working tree نظيفة، وكان `main` عند `ee646db6863ef494ddfcb954ac1823413d37db1f`، وكانت نتيجة Pull Request المفتوح للفرع `[]`. لا توجد ادعاءات browser performance أو hardware validation.
+تم التحقق من clean clone على آخر commit المنشور `5be7b2b9d96e62af22c79bc07017c57bbdf20cef`. نجح من clone نظيف: `pnpm install --frozen-lockfile`، `pnpm check`، `pnpm test -- --run`، `pnpm build`، و`git diff --check`. كانت حالة working tree نظيفة، وكان `main` عند `ee646db6863ef494ddfcb954ac1823413d37db1f`، وكانت نتيجة Pull Request المفتوح للفرع `[]`. لا توجد ادعاءات browser performance أو hardware validation.
 
 ## 18. Evidence Matrix
 
