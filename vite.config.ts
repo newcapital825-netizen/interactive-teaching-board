@@ -219,6 +219,16 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return undefined;
+          if (/[\\/]react(?:-dom)?[\\/]/.test(id) || id.includes("scheduler")) return "vendor-react";
+          if (id.includes("lucide-react")) return "vendor-icons";
+          return "vendor-ui";
+        },
+      },
+    },
   },
   server: {
     port: 3000,

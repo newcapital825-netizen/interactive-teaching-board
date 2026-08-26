@@ -517,3 +517,16 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Clean Clone from GitHub branch passed install/check/test/build/e2e/diff-check with clean working tree.
 - [x] Gate 15 report and Playwright matrix updated with final SHA `aa79ef5acaeed3acd116c9dcc0c9eb2c7e9e625e`.
 - [x] Stop now; Gate 16, PR, merge, main modification, and production claims are not authorized in this checkpoint.
+
+
+## Gate 16 Performance & Resilience — validation in progress
+
+- [x] Verify Gate 15 checkpoint `691ace48`, branch/HEAD, main, remotes, PR state, and working tree.
+- [x] Create exactly `feature/gate-16-performance-resilience` from Gate 15 without modifying main, merging, opening PR, force-pushing, or rewriting history.
+- [x] Read the current Playwright config and canonical board/transfer contracts before designing browser metrics and realistic 10/100/250/500-object fixtures.
+- [x] Measure bounded real Chromium initial load, creation, selection, drag, group/ungroup, save/restore, and export paths; lens/student/assessment/override timings remain explicitly unverified.
+- [x] Separate NODE benchmark, browser benchmark, E2E timing, and human performance; never promote Node timings to browser evidence.
+- [x] Exercise large documents and malformed/partial/unsupported/duplicate/unsafe/empty payloads with safe failure; crash/quota injection remains unverified.
+- [x] Analyze bundle chunks and apply conservative vendor code-splitting; document results.
+- [x] Run full regression and performance suite; write `docs/gates/GATE_16_REPORT.md`, `docs/gates/PERFORMANCE_MATRIX.md`, and `docs/gates/RESILIENCE_MATRIX.md`.
+- [ ] Commit and push the feature branch, save one checkpoint, and stop. Do not start Gate 17, open PR, merge, or modify main.
