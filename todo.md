@@ -530,3 +530,17 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Analyze bundle chunks and apply conservative vendor code-splitting; document results.
 - [x] Run full regression and performance suite; write `docs/gates/GATE_16_REPORT.md`, `docs/gates/PERFORMANCE_MATRIX.md`, and `docs/gates/RESILIENCE_MATRIX.md`.
 - [ ] Commit and push the feature branch, save one checkpoint, and stop. Do not start Gate 17, open PR, merge, or modify main.
+
+
+## Release Path v1.0 — owner authorization required before execution
+
+- [ ] تثبيت Source of Truth: فحص Git state، main HEAD، آخر Gate معتمد، architecture، الاختبارات، وتصنيفات الأدلة.
+- [ ] Gate 17: إنشاء وتجميد `RELEASE_SCOPE.md` مع INCLUDED/LIMITED/NOT INCLUDED/KNOWN LIMITATIONS والرحلات الحرجة.
+- [ ] Gate 18: تنفيذ `TEACHER_ACCEPTANCE_MATRIX.md` للرحلة الكاملة وتصنيف PASS/PARTIAL/FAIL/NOT VERIFIED.
+- [ ] Gate 19: تنفيذ `STUDENT_ACCEPTANCE_MATRIX.md` مع student isolation وattempt isolation وretry وprovenance، وتصنيف HUMAN VALIDATION بدقة.
+- [ ] Gate 20: تنفيذ `CONTENT_QA_REPORT.md` على Golden Dataset فقط، مع مبدأ ABSTAIN > WRONG ANSWER.
+- [ ] Gate 21: تنفيذ `SECURITY_PRIVACY_RELEASE_AUDIT.md` ومراجعة local-first data safety وXSS/file/migration/provenance isolation.
+- [ ] Gate 22: التحقق من production deployment فقط إذا كانت منصة جاهزة؛ وإلا تسجيل DEPLOYMENT NOT VERIFIED دون اختلاق URL أو نجاح.
+- [ ] Gate 23: إنشاء `RELEASE_CANDIDATE_REPORT.md` وإصدار GO أو CONDITIONAL GO أو NO-GO وفق Critical Journey وsecurity وproduction smoke.
+- [ ] لا إنشاء Gate 24، ولا AI/OCR/Collaboration/Billing/Cloud/general Arabic NLP/general symbolic algebra/mobile native app.
+- [ ] التوقف عند كل stop condition وانتظار مراجعة/تفويض المالك قبل البوابة التالية.
