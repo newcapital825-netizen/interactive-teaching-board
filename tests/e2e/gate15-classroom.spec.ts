@@ -90,7 +90,7 @@ test("Journeys C–F: Arabic activity reaches student attempt, deterministic rev
   await expect(page.getByTestId("classroom-loop-student")).toBeVisible();
   await expect(page.getByTestId("classroom-loop-student")).toContainText("مساحة إجابة الطالب");
   await page.getByRole("textbox", { name: "الإجابة النهائية" }).fill("الطالبُ، فاعل، مرفوع، الضمة، لأنه فاعل");
-  const submitAttempt = page.getByRole("button", { name: "إرسال المحاولة" });
+  const submitAttempt = page.getByRole("button", { name: "إرسال الإجابة" });
   await submitAttempt.scrollIntoViewIfNeeded();
   await submitAttempt.press("Enter");
   const backToTeacher = page.getByRole("button", { name: "العودة إلى المعلم" });
@@ -99,7 +99,7 @@ test("Journeys C–F: Arabic activity reaches student attempt, deterministic rev
   await expect(page.getByTestId("teacher-workspace")).toBeVisible();
   const reviewedActivity = page.getByTestId("classroom-activity").first();
   await reviewedActivity.click();
-  await reviewedActivity.getByRole("button", { name: /تقييم deterministic/ }).click();
+  await reviewedActivity.getByRole("button", { name: /تقييم حتمي/ }).click();
   await page.getByRole("button", { name: "فتح للمراجعة" }).click();
   await reviewedActivity.getByRole("textbox", { name: "سبب قرار المعلم" }).fill("قبول تربوي موثق");
   await reviewedActivity.getByRole("textbox", { name: "ملاحظة المعلم" }).fill("تأكيد المسار العربي");
@@ -121,7 +121,7 @@ test("Journey D/G/H/I/J/K: Mathematics, persistence, export/import, recovery gua
   await page.getByTestId("student-preview-button").click();
   await expect(page.getByTestId("classroom-loop-student")).toContainText("الخطوة 1");
   await page.getByRole("textbox", { name: "الإجابة النهائية" }).fill("x = 4");
-  const submitAttempt = page.getByRole("button", { name: "إرسال المحاولة" });
+  const submitAttempt = page.getByRole("button", { name: "إرسال الإجابة" });
   await submitAttempt.scrollIntoViewIfNeeded();
   await submitAttempt.press("Enter");
   const backToTeacher = page.getByRole("button", { name: "العودة إلى المعلم" });

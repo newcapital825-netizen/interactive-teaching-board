@@ -12,13 +12,13 @@ export default function ContextualActionBar({ object, onNotice, onConvert }: Pro
   if (!object) return <section className="contextual-action-bar empty" aria-label="الإجراءات السياقية"><span>حدد عنصرًا من المحتوى لتظهر الإجراءات المناسبة.</span></section>;
   const selectedObject = object;
   function perform(id: ContextualActionId, available: boolean) {
-    if (!available) return onNotice("هذا الإجراء غير متاح لهذا النوع من العناصر؛ لم يُنفذ إجراء وهمي.");
+    if (!available) return onNotice("هذا الإجراء غير متاح لهذا النوع من المحتوى.");
     if (id === "convert-to-activity") {
-      try { const result = convertToActivity(selectedObject); if (result.createdObject) onConvert(result.createdObject); onNotice("تحوّل العنصر إلى نشاط مع الحفاظ على provenance."); } catch { onNotice("تعذر تحويل العنصر؛ راجع capabilities الخاصة به."); }
+      try { const result = convertToActivity(selectedObject); if (result.createdObject) onConvert(result.createdObject); onNotice("تحوّل المحتوى إلى نشاط مع حفظ مرجعه."); } catch { onNotice("تعذر تحويل المحتوى إلى نشاط؛ راجع الخيارات المتاحة له."); }
       return;
     }
-    if (id === "toggle-visibility") return onNotice("تغيير الظهور جاهز كإجراء سياقي؛ يُحفظ عبر Core Board عند تطبيقه.");
+    if (id === "toggle-visibility") return onNotice("تغيير الظهور متاح من إجراءات المحتوى، ويُحفظ عند تطبيقه.");
     onNotice(`${actions.find((action) => action.id === id)?.label ?? "الإجراء"} مرتبط بالعنصر المحدد: ${String(selectedObject.content)}.`);
   }
-  return <section className="contextual-action-bar" aria-label="الإجراءات السياقية" data-testid="contextual-actions"><div className="contextual-action-context"><span>العنصر المحدد</span><strong>{object.type} · {String(object.content).slice(0, 42)}</strong></div><div className="contextual-action-list">{actions.map((action) => { const Icon = icons[action.id]; return <button key={action.id} data-testid={`contextual-action-${action.id}`} className={action.available ? "contextual-action available" : "contextual-action unavailable"} aria-disabled={!action.available} title={action.description} onClick={() => perform(action.id, action.available)}><Icon size={14} />{action.label}{action.id === "toggle-visibility" && (selectedObject.metadata.visible ? <Eye size={11} /> : <EyeOff size={11} />)}</button>; })}</div></section>;
+  return <section className="contextual-action-bar" aria-label="الإجراءات السياقية" data-testid="contextual-actions"><div className="contextual-action-context"><span>العنصر المحدد</span><strong>{object.type === "SentenceObject" ? "جملة" : object.type === "EquationObject" ? "معادلة" : "محتوى"} · {String(object.content).slice(0, 42)}</strong></div><div className="contextual-action-list">{actions.map((action) => { const Icon = icons[action.id]; return <button key={action.id} data-testid={`contextual-action-${action.id}`} className={action.available ? "contextual-action available" : "contextual-action unavailable"} aria-disabled={!action.available} title={action.description} onClick={() => perform(action.id, action.available)}><Icon size={14} />{action.label}{action.id === "toggle-visibility" && (selectedObject.metadata.visible ? <Eye size={11} /> : <EyeOff size={11} />)}</button>; })}</div></section>;
 }
