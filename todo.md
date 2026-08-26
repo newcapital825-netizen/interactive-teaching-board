@@ -573,3 +573,19 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] إبقاء Human Validation = NOT VERIFIED وعدم إنشاء نتائج بشرية افتراضية.
 - [ ] تشغيل `pnpm check` و`pnpm test -- --run` و`pnpm build` و`git diff --check`.
 - [ ] إنشاء checkpoint واضح وتقرير نهائي مختصر، ثم التوقف دون Gate أو feature أو PR أو merge أو deploy.
+
+
+## Workspace visibility bug
+
+- [ ] فحص سجل الخادم والمتصفح والـDOM لتحديد سبب عدم ظهور مساحة العمل.
+- [ ] تطبيق أقل إصلاح ممكن فقط إذا ثبت السبب.
+- [ ] تشغيل الفحوص ولقطة desktop/mobile وتوثيق النتيجة.
+
+
+## MVP UX Refinement — context-first workspace
+
+- [ ] تثبيت baseline وbranch وHEAD وmain والـworking tree قبل التعديل.
+- [ ] تحسين هوية الدرس: عنوان مرن، مادة وفئة ومستوى واضحون ومحفوظون دون كسر metadata الحالية.
+- [ ] إعادة تنظيم الرأس ومساحة العمل حول Canvas مع Inspector سياقي وحالات فارغة مفهومة.
+- [ ] تحسين Teacher/Student/Presentation separation وRTL وkeyboard وresponsive behavior.
+- [ ] تشغيل الفحوص والـbrowser evidence وتوثيق الفجوات، دون Gate أو engine أو architecture جديدة.

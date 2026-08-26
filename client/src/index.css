@@ -551,3 +551,46 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
 }
+
+
+/* MVP UX refinement: context-first Arabic RTL workspace; canvas leads, metadata stays calm, secondary proof opens on demand. */
+.teacher-product-bar { align-items:center; }
+.teacher-product-heading h1 { max-width:30rem; }
+.teacher-product-setup { grid-template-columns:minmax(0,1.4fr) minmax(220px,.72fr) minmax(230px,.9fr); }
+.teacher-product-fields { align-content:start; }
+.lesson-title-field input { min-height:44px; font-size:15px; font-weight:700; }
+.context-field { display:flex; flex-direction:column; gap:7px; grid-column:1 / -1; color:var(--muted-foreground); font-size:10px; }
+.context-choice-row { display:flex; gap:7px; overflow-x:auto; padding-bottom:3px; scrollbar-width:thin; }
+.context-choice-row button { position:relative; display:inline-flex; align-items:center; gap:6px; flex:0 0 auto; min-height:36px; padding:8px 14px; border:1px solid var(--line); background:#fffefa; color:var(--olive); cursor:pointer; font:inherit; font-size:11px; transition:background 160ms ease-out,border-color 160ms ease-out,transform 160ms ease-out; }
+.context-choice-row button:hover { border-color:var(--coral); transform:translateY(-1px); }
+.context-choice-row button.selected { border-color:var(--olive); background:var(--olive); color:#fffefa; box-shadow:3px 3px 0 rgba(53,72,59,.12); }
+.context-choice-row button small { color:var(--muted-foreground); font-size:8px; }
+.context-choice-row button.selected small { color:var(--coral-soft); }
+.level-field { display:flex; flex-direction:column; gap:7px; grid-column:1 / -1; color:var(--muted-foreground); font-size:10px; }
+.level-field select { width:100%; min-height:38px; border:1px solid var(--line); background:#fffefa; color:var(--ink); padding:8px 10px; font:inherit; outline:none; }
+.level-field select:focus { border-color:var(--coral); box-shadow:0 0 0 3px rgba(213,107,88,.12); }
+.lesson-details { grid-column:1 / -1; border-top:1px solid var(--line); padding-top:11px; }
+.lesson-details summary,.teacher-product-secondary summary { display:flex; align-items:center; justify-content:space-between; gap:12px; color:var(--olive); cursor:pointer; font-size:11px; font-weight:800; list-style:none; }
+.lesson-details summary::-webkit-details-marker,.teacher-product-secondary summary::-webkit-details-marker { display:none; }
+.lesson-details summary::before,.teacher-product-secondary summary::before { content:"+"; display:grid; place-items:center; width:20px; height:20px; border:1px solid var(--line); color:var(--coral); font-size:15px; font-weight:400; }
+.lesson-details[open] summary::before,.teacher-product-secondary[open] summary::before { content:"−"; }
+.lesson-details summary span,.teacher-product-secondary summary span { margin-right:auto; color:var(--muted-foreground); font-size:9px; font-weight:500; }
+.lesson-details-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding-top:14px; }
+.lesson-details-grid label { display:flex; flex-direction:column; gap:6px; color:var(--muted-foreground); font-size:10px; }
+.lesson-details-grid input { width:100%; border:1px solid var(--line); background:#fffefa; color:var(--ink); padding:9px 10px; font:inherit; outline:none; }
+.teacher-product-stage { margin:0 42px 22px; border:1px solid var(--line); background:#fffefa; box-shadow:0 12px 28px rgba(64,62,54,.06); }
+.teacher-product-stage-heading { display:flex; align-items:end; justify-content:space-between; gap:18px; padding:22px 26px 16px; border-bottom:1px solid var(--line); }
+.teacher-product-stage-heading h2 { margin:4px 0; color:var(--olive); font-size:25px; letter-spacing:-.04em; }
+.teacher-product-stage-heading p { margin:0; color:var(--muted-foreground); font-size:10px; }
+.teacher-product-stage-step { color:var(--coral); font-size:10px; white-space:nowrap; }
+.teacher-product-stage > .teacher-canvas { min-height:560px; }
+.teacher-product-secondary { margin:0 42px 22px; border:1px solid var(--line); background:rgba(251,250,246,.6); }
+.teacher-product-secondary > summary { padding:16px 22px; }
+.teacher-product-secondary > summary:hover { background:rgba(220,229,219,.25); }
+.teacher-product-secondary > .arabic-toolkit-panel,.teacher-product-secondary > .math-toolkit-panel,.teacher-product-secondary > .gate4b-workspace { margin:0; border:0; border-top:1px solid var(--line); box-shadow:none; }
+@media (max-width:900px) { .teacher-product-stage,.teacher-product-secondary { margin-inline:18px; }.teacher-product-stage-heading { padding-inline:18px; }.teacher-product-stage-step { display:none; } }
+@media (max-width:600px) { .lesson-details-grid { grid-template-columns:1fr; }.teacher-product-stage { margin-inline:18px; }.teacher-product-stage-heading { align-items:flex-start; padding:18px; }.teacher-product-stage-heading h2 { font-size:21px; }.teacher-product-stage > .teacher-canvas { min-height:490px; }.teacher-product-secondary { margin-inline:18px; }.teacher-product-bar { gap:16px; }.teacher-product-heading h1 { font-size:23px; } }
+
+
+/* Responsive correction: the context-first setup must stack below 900px so pages and content never overlap on narrow viewports. */
+@media (max-width:900px) { .teacher-product-setup { grid-template-columns:1fr; } .teacher-product-pages,.teacher-product-content { border-right:0; border-top:1px solid var(--line); } }
