@@ -544,3 +544,14 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] Gate 23: إنشاء `RELEASE_CANDIDATE_REPORT.md` وإصدار GO أو CONDITIONAL GO أو NO-GO وفق Critical Journey وsecurity وproduction smoke.
 - [ ] لا إنشاء Gate 24، ولا AI/OCR/Collaboration/Billing/Cloud/general Arabic NLP/general symbolic algebra/mobile native app.
 - [ ] التوقف عند كل stop condition وانتظار مراجعة/تفويض المالك قبل البوابة التالية.
+
+
+## FINAL MVP PILOT ACTIVATION — closed human pilot preparation
+
+- [ ] التحقق من baseline `671a337...`، فرع productization، main، والـworking tree قبل أي تعديل.
+- [ ] فحص الرحلة الكاملة من إنشاء الدرس حتى العرض والحفظ والنقل دون إعادة كتابة ما ينجح.
+- [ ] تطبيق blocker-only UX أو data-safety fixes فقط إذا ثبتت ضرورتها.
+- [ ] إنشاء `REAL_HUMAN_PILOT_PROTOCOL.md` و`TEACHER_OBSERVATION_FORM.md` و`STUDENT_OBSERVATION_FORM.md`.
+- [ ] تشغيل check/test/build/diff-check وPlaywright المتاح فقط.
+- [ ] إنشاء `docs/gates/FINAL_MVP_PILOT_STATUS.md`، مع إبقاء Human Validation = NOT VERIFIED عند غياب المشاركين.
+- [ ] التوقف: لا Gates ولا features ولا PR ولا merge ولا deploy ولا RELEASE READY.
