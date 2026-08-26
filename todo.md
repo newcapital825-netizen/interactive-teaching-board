@@ -555,3 +555,21 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] تشغيل check/test/build/diff-check وPlaywright المتاح فقط.
 - [ ] إنشاء `docs/gates/FINAL_MVP_PILOT_STATUS.md`، مع إبقاء Human Validation = NOT VERIFIED عند غياب المشاركين.
 - [ ] التوقف: لا Gates ولا features ولا PR ولا merge ولا deploy ولا RELEASE READY.
+
+
+## REAL HUMAN PILOT — execution only
+
+- [ ] التحقق من توفر 3 معلمين و5 طلاب حقيقيين وجلسات فعلية مجهولة الهوية.
+- [ ] تنفيذ بروتوكول المعلم والطالب فقط عند توفر المشاركين، دون قيادة غير لازمة.
+- [ ] تسجيل النتائج والمشكلات المتكررة ودرجات الخطورة دون اختلاق أو تعميم من automation.
+- [ ] إنشاء `docs/pilot/HUMAN_PILOT_RESULTS.md` مع Unverified Areas.
+- [ ] إبقاء `STATUS = PILOT CANDIDATE` عند غياب الجلسات أو وجود مشاكل حرجة، والتوقف دون Gate أو feature أو إصلاح تلقائي.
+
+
+## HUMAN PILOT PACKAGE — docs-only execution
+
+- [ ] التحقق من الفرع والـHEAD والـbaseline وmain وGitHub backup والـworking tree.
+- [ ] مراجعة أو تحسين الملفات الأربعة المحددة فقط: protocol وteacher form وstudent form وresults template.
+- [ ] إبقاء Human Validation = NOT VERIFIED وعدم إنشاء نتائج بشرية افتراضية.
+- [ ] تشغيل `pnpm check` و`pnpm test -- --run` و`pnpm build` و`git diff --check`.
+- [ ] إنشاء checkpoint واضح وتقرير نهائي مختصر، ثم التوقف دون Gate أو feature أو PR أو merge أو deploy.
