@@ -15,14 +15,15 @@ type EducationalAssistantPanelProps = {
 };
 
 export default function EducationalAssistantPanel({ subject, level, lessonContext, selectedContent }: EducationalAssistantPanelProps) {
-  const [persisted] = useState(() => readAssistantReviewSnapshot("midad-assistant-review-v2"));
+  const reviewStorageKey = `midad-assistant-review-v2:${JSON.stringify([subject, level, lessonContext])}`;
+  const [persisted] = useState(() => readAssistantReviewSnapshot(reviewStorageKey));
   const [messages, setMessages] = useState<Message[]>(persisted?.messages ?? []);
   const [lastEvidence, setLastEvidence] = useState<EducationalAssistOutput | null>(persisted?.lastEvidence ?? null);
   const [reviewState, setReviewState] = useState<TeacherReviewState>(persisted?.reviewState ?? "pending");
   const [correction, setCorrection] = useState(persisted?.correction ?? "");
   const [providedSource, setProvidedSource] = useState(persisted?.providedSource ?? "");
   const [intent, setIntent] = useState<"explain" | "analyze" | "question" | "activity" | "clarify">(persisted?.intent ?? "explain");
-  useEffect(() => { writeAssistantReviewSnapshot("midad-assistant-review-v2", { messages, lastEvidence, reviewState, correction, providedSource, intent }); }, [messages, lastEvidence, reviewState, correction, providedSource, intent]);
+  useEffect(() => { writeAssistantReviewSnapshot(reviewStorageKey, { messages, lastEvidence, reviewState, correction, providedSource, intent }); }, [reviewStorageKey, messages, lastEvidence, reviewState, correction, providedSource, intent]);
   const resources = resourcesForSubject(subject);
   const assist = trpc.educational.assist.useMutation({
     onSuccess: (result, variables) => {

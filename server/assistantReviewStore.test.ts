@@ -43,4 +43,11 @@ describe("assistant review store", () => {
     expect(result?.correction).toHaveLength(2000);
     expect(result?.providedSource).toHaveLength(500);
   });
+
+  it("does not restore incomplete evidence as trusted output", () => {
+    storage.set("assistant", JSON.stringify({
+      lastEvidence: { confidence: "high", provenanceStatus: "unknown", sources: [], limitations: [], teacherReviewRequired: false, evidenceClass: "not-a-class", verificationState: "verified" },
+    }));
+    expect(readAssistantReviewSnapshot("assistant")?.lastEvidence).toBeUndefined();
+  });
 });

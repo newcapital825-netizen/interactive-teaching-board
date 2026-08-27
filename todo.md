@@ -664,14 +664,14 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 
 ## Master Productization Prompt 59 — current authorized scope
 
-- [ ] فحص baseline `588da835` والفرع والـremote وmain والـworking tree قبل المتابعة.
-- [ ] إغلاق فجوات رحلة المعلم والطالب والتحويلات والعرض والحفظ ضمن السبورة الحالية.
-- [ ] توسيع قدرات العربية والرياضيات والشعر والمصادر فقط عندما تكون bounded وقابلة للإثبات.
-- [ ] تقوية AI grounding وsource hierarchy وconflict handling وuncertainty وmalformed response safety.
-- [ ] إضافة اختبارات E2E متماسكة للعربية والرياضيات والـAI والـpoetry والـproduct coherence.
-- [ ] تشغيل check/test/build/diff-check وChromium/mobile والتحقق الأمني والاستجابي.
-- [ ] تحديث `PRODUCTIZATION_RELEASE_REPORT.md` وإعداد حزمة human acceptance دون إعلان Pilot Ready قبل التحقق البشري.
-- [ ] حفظ checkpoint ورفع آخر commit إلى `feature/productization-v1` دون PR أو merge أو تعديل main.
+- [x] فحص baseline `588da835` والفرع والـremote وmain والـworking tree قبل المتابعة.
+- [x] إغلاق فجوات رحلة المعلم والطالب والتحويلات والعرض والحفظ ضمن السبورة الحالية ضمن المسارات bounded المتاحة.
+- [x] توسيع قدرات العربية والرياضيات والشعر والمصادر فقط عندما تكون bounded وقابلة للإثبات؛ الوزن والتحليل الأدبي العام والمناهج الرسمية بقيت غير متحققة.
+- [x] تقوية AI grounding وsource hierarchy وuncertainty وmalformed response safety ضمن عقد bounded؛ conflict handling بين مصادر خارجية حية بقي محدودًا ويحتاج مراجعة بشرية.
+- [x] إضافة اختبارات E2E متماسكة للعربية والرياضيات والشعر والمراجع وواجهات المساعد والـproduct coherence.
+- [x] تشغيل check/test/build/diff-check وChromium/mobile والتحقق الأمني والاستجابي المتاح آليًا.
+- [x] تحديث `PRODUCTIZATION_RELEASE_REPORT.md` وإعداد حزمة human acceptance دون إعلان Pilot Ready قبل التحقق البشري.
+- [x] حفظ checkpoints ورفع آخر commit إلى `feature/productization-v1` دون PR أو merge أو تعديل main.
 - [x] تقوية source hierarchy بمستويات السلطة والعلاقة بالمناهج وfreshness المعلن، وإضافة اختبار يمنع ادعاء التحقق المنهجي.
 - [x] تحديث source hierarchy والتقرير ثم نجاح check وVitest 6/6 وbuild وdiff-check وPlaywright 14/14 على Chromium و14/14 على mobile-chromium.
 - [x] إضافة نوايا تعليمية صريحة للمساعد: شرح، تحليل، سؤال، نشاط، وتبسيط، بدل chatbot عام.
@@ -685,3 +685,8 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] إضافة local persistence محدودة لرسائل المساعد وقرار المعلم والتصحيح والمصدر والنية، مع رفض malformed values.
 - [x] إضافة اختبار round-trip واختبار حدود للقيم غير الصالحة؛ نجحت Vitest 9/9 وPlaywright 15/15 على Chromium وmobile-chromium.
 - [x] إضافة E2E لاستعادة نية المساعد والمصدر المقدم بعد reload؛ نجحت 1/1 على Chromium و1/1 على mobile-chromium.
+- [x] تحصين استعادة evidence من التخزين المحلي بالتحقق البنيوي والتصنيفات المسموحة، مع اختبار رفض evidence الناقص.
+- [x] نجاح check وVitest 10/10 وbuild وdiff-check وPlaywright 16/16 على Chromium و16/16 على mobile-chromium.
+- [x] عزل حالة مراجعة المساعد محليًا بحسب المادة والمستوى وسياق الدرس لمنع التسرب بين الدروس.
+- [x] إعادة التحقق بعد العزل: check وVitest 10/10 وbuild وdiff-check وPlaywright 16/16 على Chromium و16/16 على mobile-chromium.
+- [x] إنشاء `docs/pilot/HUMAN_ACCEPTANCE_CHECKLIST.md` لربط الأدلة الآلية بما يجب إثباته مع المعلمين والطلاب، دون اختلاق نتائج بشرية.
