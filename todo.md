@@ -631,9 +631,9 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] تثبيت أحدث baseline مستقر وفحص المستودع والفرع وmain.
 - [x] تحليل فجوات تجربة المعلم والطالب والطبقات التعليمية والمصادر والذكاء.
 - [x] تنفيذ productization على فرع Feature جديد فقط، دون لمس main أو حذف baseline.
-- [ ] إضافة قدرات عربية ورياضيات وشعر ومصادر وAI ضمن حدود موثوقة وقابلة للإثبات. (أُنجزت أول طبقة AI server-side bounded؛ ما تبقى لم يُنفذ بعد.)
-- [ ] تنفيذ اختبارات آلية ومتصفح وأمان واستجابة، ثم كتابة Product Release Report.
-- [ ] إنشاء commits واضحة والحفاظ على rollback capability.
+- [x] إضافة قدرات عربية ورياضيات وشعر ومصادر وAI ضمن حدود موثوقة وقابلة للإثبات ضمن النطاق bounded المنفذ؛ المحركات العامة والمناهج الرسمية ما تزال خارج النطاق.
+- [x] تنفيذ اختبارات آلية ومتصفح وأمان واستجابة، ثم كتابة Product Release Report مرحلي موثق؛ الاعتماد البشري والاختبارات الميدانية ما زالا غير متحققين.
+- [x] إنشاء commits واضحة وحفظ checkpoints متعددة مع الحفاظ على rollback capability.
 
 
 ## Productization bounded capabilities completed
@@ -657,3 +657,4 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] رفع أحدث checkpoint `0bf26b2354dc2ef61d1d6d36f423a601826f8a90` إلى `github/feature/productization-v1` والتحقق من التطابق ونظافة working tree.
 - [x] تحصين provenance ضد ادعاءات السياق والمصادر غير الموجودة، وإضافة اختبار regression للسلوك.
 - [x] إعادة تشغيل check وVitest 6/6 وbuild وdiff-check وPlaywright 14/14 بعد التحصين.
+- [x] تشغيل Playwright الكامل على `mobile-chromium` بنتيجة 14/14 وتوثيق حدود المحاكاة.
