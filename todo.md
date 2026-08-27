@@ -701,3 +701,9 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] إنشاء commit محلي لكل التغييرات الحالية فقط.
 - [x] رفع `feature/productization-v1` بالطريقة العادية والتحقق من SHA البعيد.
 - [x] التحقق من بقاء `main` دون تغيير ونظافة working tree.
+
+## Recovery after sandbox reset — current execution
+
+- [x] استعادة `feature/productization-v1` من GitHub بعد عودة sandbox إلى `main` والـremote الداخلي.
+- [x] التحقق من تطابق الفرع المستعاد مع المرجع البعيد الفعلي، مع حفظ baseline دون reset أو force push.
+- [ ] مواصلة التحقق المتكامل على الفرع المستعاد، مع إبقاء `main` دون تعديل.
