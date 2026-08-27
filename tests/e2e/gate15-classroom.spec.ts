@@ -268,3 +268,18 @@ test("Productization: assistant intent and source evidence remain teacher-led", 
   await expect(assistant).toContainText("العلاقة بالمنهج");
   await expect(assistant).toContainText("المعلم صاحب القرار");
 });
+
+
+test("Productization: assistant review context survives reload", async ({ page }) => {
+  await openWorkspace(page);
+  await page.getByRole("button", { name: "العربية", exact: true }).click();
+  const assistant = page.getByRole("region", { name: "المساعد التعليمي" });
+  await assistant.scrollIntoViewIfNeeded();
+  await assistant.getByRole("combobox", { name: "ما الذي تريده من المساعد؟" }).selectOption("activity");
+  await assistant.getByRole("textbox", { name: "مصدر يقدمه المعلم (اختياري)" }).fill("مرجع يراجعه المعلم");
+  await page.reload();
+  const restoredAssistant = page.getByRole("region", { name: "المساعد التعليمي" });
+  await restoredAssistant.scrollIntoViewIfNeeded();
+  await expect(restoredAssistant.getByRole("combobox", { name: "ما الذي تريده من المساعد؟" })).toHaveValue("activity");
+  await expect(restoredAssistant.getByRole("textbox", { name: "مصدر يقدمه المعلم (اختياري)" })).toHaveValue("مرجع يراجعه المعلم");
+});

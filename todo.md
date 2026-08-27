@@ -684,3 +684,4 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] إضافة رحلة E2E لنوايا المساعد وطبقات الدليل وقرار المعلم؛ نجحت 1/1 على Chromium و1/1 على mobile-chromium.
 - [x] إضافة local persistence محدودة لرسائل المساعد وقرار المعلم والتصحيح والمصدر والنية، مع رفض malformed values.
 - [x] إضافة اختبار round-trip واختبار حدود للقيم غير الصالحة؛ نجحت Vitest 9/9 وPlaywright 15/15 على Chromium وmobile-chromium.
+- [x] إضافة E2E لاستعادة نية المساعد والمصدر المقدم بعد reload؛ نجحت 1/1 على Chromium و1/1 على mobile-chromium.
