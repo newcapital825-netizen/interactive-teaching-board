@@ -348,6 +348,7 @@ test("Journey O: unified input recognizes content and keeps intelligence in the 
   await page.getByTestId("add-unified-content").click();
   const verse = page.getByTestId("canvas-object").filter({ hasText: "وإذا أتتك مذمتي من ناقص" }).first();
   await verse.click();
+  await expect(page.getByTestId("contextual-action-word-map")).toBeDisabled();
   await page.getByTestId("contextual-action-analyze").click();
   await expect(page.getByTestId("contextual-intelligence-result")).toContainText("قراءة شعرية أولية");
   await expect(page.getByTestId("contextual-intelligence-result")).toContainText("الوزن: غير متحقق");

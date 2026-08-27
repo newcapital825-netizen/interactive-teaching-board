@@ -721,3 +721,4 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] تحسين تجربة الطالب والعرض وخارطة الدرس بما يثبت المسار التعليمي المتدرج.
 - [x] تقوية اختبارات product coherence والتعرف bounded والفشل الآمن والرحلات العربية والرياضيات والشعر والمساعد.
 - [x] تحديث PRODUCT_RELEASE_REPORT.md وإنشاء FINAL_HUMAN_VALIDATION.md وحفظ النسخة على فرع productization-v1 فقط.
+- [x] إجبار حالات conflicting_sources وlow-confidence وAI inference على مراجعة المعلم، مع اختبار عقدي deterministic وفشل آمن.

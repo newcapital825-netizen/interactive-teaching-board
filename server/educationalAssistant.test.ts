@@ -63,6 +63,25 @@ describe("educational assistant contract", () => {
     expect(result.teacherReviewRequired).toBe(true);
   });
 
+  it("forces teacher review when the model reports conflicting sources", async () => {
+    invokeLLM.mockResolvedValueOnce({ choices: [{ message: { content: JSON.stringify({
+      answer: "إجابة متعارضة",
+      explanation: "تعارضت الإشارات المتاحة",
+      why: "المصدران لا يتفقان",
+      confidence: "متوسط",
+      provenanceStatus: "استدلال يحتاج مراجعة",
+      sources: [{ label: "سياق المعلم", kind: "teacher_context", note: "مقدم داخل السؤال" }],
+      limitations: ["يلزم قرار المعلم"],
+      teacherReviewRequired: false,
+      evidenceClass: "ai_inference",
+      verificationState: "conflicting_sources",
+    }) } }] });
+
+    const result = await runEducationalAssistant({ question: "هل هذا متفق عليه؟", subject: "العربية", lessonContext: "درس تجريبي" });
+    expect(result.verificationState).toBe("conflicting_sources");
+    expect(result.teacherReviewRequired).toBe(true);
+  });
+
   it("fails closed when the model response is malformed", async () => {
     invokeLLM.mockResolvedValueOnce({ choices: [{ message: { content: "not-json" } }] });
     const result = await runEducationalAssistant({ question: "هل هذا مؤكد؟", subject: "الرياضيات" });

@@ -16,7 +16,7 @@ The current productization slice is suitable for a controlled pilot candidate re
 | Area | Result | Evidence |
 |---|---|---|
 | TypeScript | **PROVEN** | `pnpm check` passed with zero TypeScript errors. |
-| Vitest | **PROVEN** | 26 test files, 130 tests passed. |
+| Vitest | **PROVEN** | 26 test files, 131 tests passed, including the conflicting-sources teacher-review hardening contract. |
 | Production build | **PROVEN** | `pnpm build` completed successfully; Vite and server bundle both built. |
 | Git diff check | **PROVEN** | `git diff --check` passed. |
 | Playwright desktop Chromium | **PROVEN** | 18/18 passed, including unified input, Arabic, Mathematics, word map, poetry, and safe unsupported journeys. |
@@ -56,7 +56,7 @@ The assistant retains server-side structured responses, explicit intent, evidenc
 
 The new browser journey verifies the teacher-facing Arabic sequence in the rendered DOM rather than only inspecting internal state. It opens the Arabic toolkit, confirms the source text, requests analysis, asserts that the analysis card appears, asserts the selected word's grammatical role and explanation, then replaces the source with an unsupported sentence and asserts the explicit no-fabrication message.
 
-This closes the previously identified product gap in which the canonical Arabic teaching capability existed in the codebase but was not visible in the teacher-first toolkit surface. The current productization pass also adds a single bounded recognition path, a contextual action surface that keeps the source selected, reusable result objects for word map, I3rab, explanation, solution steps, and poetry, and a teacher/student learning map that mirrors the existing classroom lifecycle.
+This closes the previously identified product gap in which the canonical Arabic teaching capability existed in the codebase but was not visible in the teacher-first toolkit surface. The current productization pass also adds a single bounded recognition path, a contextual action surface that keeps the source selected, reusable result objects for word map, I3rab, explanation, solution steps, and poetry, a teacher/student learning map that mirrors the existing classroom lifecycle, and a fail-closed rule that forces teacher review for conflicting or low-confidence assistant evidence.
 
 ## Implemented capabilities
 

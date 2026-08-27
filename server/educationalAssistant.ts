@@ -41,11 +41,13 @@ function sanitizeAssistantOutput(output: EducationalAssistOutput, input: Educati
   const safeSources = sources.length > 0 ? sources : [{ label: "لا يوجد مصدر متاح", kind: "none" as const, note: "تحتاج الإجابة إلى مصدر أو مراجعة المعلم." }];
   const hasClaimedContext = output.provenanceStatus === "معلومة من سياق المعلم" && !hasTeacherContext;
   const hasUnverifiedSource = safeSources.some((source) => source.kind !== "none" && source.kind !== (hasTeacherContext ? "teacher_context" : "provided_source"));
+  const verificationRequiresReview = ["unverified", "low_confidence", "conflicting_sources", "requires_teacher_review"].includes(output.verificationState);
+  const evidenceRequiresReview = ["ai_inference", "uncertain_claim"].includes(output.evidenceClass);
   return {
     ...output,
     sources: safeSources,
     provenanceStatus: hasClaimedContext || hasUnverifiedSource ? "استدلال يحتاج مراجعة" : output.provenanceStatus,
-    teacherReviewRequired: output.teacherReviewRequired || !hasTeacherContext || hasUnverifiedSource,
+    teacherReviewRequired: output.teacherReviewRequired || !hasTeacherContext || hasUnverifiedSource || verificationRequiresReview || evidenceRequiresReview,
   };
 }
 
