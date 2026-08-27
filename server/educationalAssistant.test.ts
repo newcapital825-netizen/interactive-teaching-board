@@ -33,10 +33,28 @@ describe("educational assistant contract", () => {
       teacherReviewRequired: true,
     }) } }] });
 
-    const result = await runEducationalAssistant({ question: "اشرح", subject: "العربية" });
+    const result = await runEducationalAssistant({ question: "اشرح", subject: "العربية", lessonContext: "درس النحو" });
     expect(result.answer).toBe("الإجابة التعليمية");
     expect(result.teacherReviewRequired).toBe(true);
     expect(result.sources[0]?.kind).toBe("teacher_context");
+  });
+
+  it("removes unsupported source claims when no context was provided", async () => {
+    invokeLLM.mockResolvedValueOnce({ choices: [{ message: { content: JSON.stringify({
+      answer: "إجابة",
+      explanation: "شرح",
+      why: "سبب",
+      confidence: "مرتفع",
+      provenanceStatus: "معلومة من سياق المعلم",
+      sources: [{ label: "مصدر مخترع", kind: "provided_source", note: "غير مقدم" }],
+      limitations: [],
+      teacherReviewRequired: false,
+    }) } }] });
+
+    const result = await runEducationalAssistant({ question: "اشرح" });
+    expect(result.sources).toEqual([{ label: "لا يوجد مصدر متاح", kind: "none", note: "تحتاج الإجابة إلى مصدر أو مراجعة المعلم." }]);
+    expect(result.provenanceStatus).toBe("استدلال يحتاج مراجعة");
+    expect(result.teacherReviewRequired).toBe(true);
   });
 
   it("fails closed when the model response is malformed", async () => {

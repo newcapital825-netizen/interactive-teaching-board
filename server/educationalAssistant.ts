@@ -30,6 +30,22 @@ export const educationalAssistOutput = z.object({
 export type EducationalAssistInput = z.infer<typeof educationalAssistInput>;
 export type EducationalAssistOutput = z.infer<typeof educationalAssistOutput>;
 
+function sanitizeAssistantOutput(output: EducationalAssistOutput, input: EducationalAssistInput): EducationalAssistOutput {
+  const hasTeacherContext = Boolean(input.lessonContext?.trim() || input.selectedContent?.trim());
+  const hasProvidedSource = Boolean(input.providedSource?.trim());
+  const allowedKinds = new Set(hasTeacherContext ? ["teacher_context", "none"] : hasProvidedSource ? ["provided_source", "none"] : ["none"]);
+  const sources = output.sources.filter((source) => allowedKinds.has(source.kind));
+  const safeSources = sources.length > 0 ? sources : [{ label: "لا يوجد مصدر متاح", kind: "none" as const, note: "تحتاج الإجابة إلى مصدر أو مراجعة المعلم." }];
+  const hasClaimedContext = output.provenanceStatus === "معلومة من سياق المعلم" && !hasTeacherContext;
+  const hasUnverifiedSource = safeSources.some((source) => source.kind !== "none" && source.kind !== (hasTeacherContext ? "teacher_context" : "provided_source"));
+  return {
+    ...output,
+    sources: safeSources,
+    provenanceStatus: hasClaimedContext || hasUnverifiedSource ? "استدلال يحتاج مراجعة" : output.provenanceStatus,
+    teacherReviewRequired: output.teacherReviewRequired || !hasTeacherContext || hasUnverifiedSource,
+  };
+}
+
 const fallback = (reason: string): EducationalAssistOutput => ({
   answer: "لم أتمكن من التحقق من إجابة تعليمية آمنة الآن.",
   explanation: "لم تُعرض نتيجة غير موثوقة على أنها حقيقة.",
@@ -107,7 +123,7 @@ export async function runEducationalAssistant(input: EducationalAssistInput): Pr
       console.warn("[EducationalAssistant] Schema validation failed", parsed.error.issues.map((issue) => issue.path.join(".")).join(","));
       return fallback("وصلت استجابة لا تطابق عقد المساعد الآمن.");
     }
-    return parsed.data;
+    return sanitizeAssistantOutput(parsed.data, normalized);
   } catch (error) {
     console.warn("[EducationalAssistant] Provider request failed", error instanceof Error ? error.message : "unknown error");
     return fallback("تعذر الوصول إلى خدمة المساعد التعليمية.");
