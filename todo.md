@@ -751,3 +751,24 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] استكمال provenance الخاص بمحاولات ClassroomLoop بـsourceRange صالح حتى يمر تقييم mathStepSlice ولا يُصنّف الإدخال غير المعبأ unsupported.
 - [x] مواءمة assertion الرياضي في Journey D مع feedback المبسط الظاهر عند disclosureLevel 1، مع استمرار إثبات تشخيص incomplete-step.
 - [x] جعل مثال الإجابة الرياضية في Student View مشتقًا من المعادلة الحالية بدل placeholder ثابت `x = 4`.
+
+## Executive Visual Refactoring — UI-only
+
+- [ ] مراجعة أنماط tldraw وExcalidraw وتوثيق القرارات البصرية القابلة للتطبيق دون نسخ معماريتهما.
+- [ ] تحويل مساحة المعلم إلى hero canvas أكثر اتساعًا وتقليل الحاويات الثقيلة والضوضاء البصرية.
+- [ ] تحسين ContextualActionBar إلى floating action pill مرتبط بالكائن المحدد مع الحفاظ على testids والسلوك الحالي.
+- [ ] توحيد الألوان والطباعة والمسافات RTL للوحة والمعلم والطالب والعرض دون تعديل backend أو domain contracts.
+- [ ] تنفيذ تحقق بصري Desktop/Mobile واختبارات check وVitest وPlaywright وbuild وdiff-check.
+- [ ] تحديث ملاحظات التصميم وحفظ checkpoint ورفع feature/productization-v1 فقط، مع إبقاء main دون تغيير.
+
+
+## Executive Visual Refactor — feature/productization-v1
+
+- [x] Refactor TeacherCanvas into a hero-canvas presentation with lighter surface, floating tool controls, contextual object strip, and non-blocking inspector sheet.
+- [x] Redesign ContextualActionBar as a floating contextual pill with compact RTL actions and bounded result surface.
+- [x] Remove visible developer-facing canvas labels and raw object IDs from the teacher-facing UI while preserving accessible behavior and evidence semantics.
+- [x] Refine TeacherProductShell identity, Arabic typography, calm olive/terracotta/paper palette, responsive setup controls, and teacher/student/presentation shell styling.
+- [x] Fix desktop canvas hit-testing regression caused by an inspector overlay covering selectable objects.
+- [x] Fix mobile header hit-testing regression by making teacher actions a responsive two-column grid with an in-viewport save action.
+- [x] Run pnpm check, Vitest 132/132, production build, git diff --check, and Playwright 36/36 across Chromium and mobile-chromium.
+- [x] Capture final visual verification at 1280×720 and 390×844 and record evidence in docs/qa/UI_REFACTOR_VISUAL_FINDINGS.md.
