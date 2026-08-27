@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AlertTriangle, BookOpenCheck, Check, ChevronDown, Pencil, ShieldCheck, X } from "lucide-react";
 import { AIChatBox, type Message } from "@/components/AIChatBox";
 import { trpc } from "@/lib/trpc";
-import { resourcesForSubject } from "@/lib/teachingResources";
+import { resourcesForSubject, sourceTierLabel } from "@/lib/teachingResources";
 import { reviewLabel, type TeacherReviewState } from "@/lib/teacherReview";
 
 type EducationalAssistantPanelProps = {
@@ -24,6 +24,7 @@ export default function EducationalAssistantPanel({ subject, level, lessonContex
   const [reviewState, setReviewState] = useState<TeacherReviewState>("pending");
   const [correction, setCorrection] = useState("");
   const [providedSource, setProvidedSource] = useState("");
+  const [intent, setIntent] = useState<"explain" | "analyze" | "question" | "activity" | "clarify">("explain");
   const resources = resourcesForSubject(subject);
   const assist = trpc.educational.assist.useMutation({
     onSuccess: (result, variables) => {
@@ -42,7 +43,7 @@ export default function EducationalAssistantPanel({ subject, level, lessonContex
   function ask(question: string) {
     const trimmed = question.trim();
     if (!trimmed || assist.isPending) return;
-    assist.mutate({ question: trimmed, subject, level, lessonContext, selectedContent, providedSource: providedSource.trim() || undefined });
+    assist.mutate({ question: trimmed, subject, level, lessonContext, selectedContent, providedSource: providedSource.trim() || undefined, intent });
   }
 
   function applyCorrection() {
@@ -71,6 +72,8 @@ export default function EducationalAssistantPanel({ subject, level, lessonContex
               <strong>{resource.title}</strong>
               <span>{resource.description}</span>
               <small>{resource.verification}</small>
+              <small>{sourceTierLabel(resource.tier)} · {resource.authority}</small>
+              <small>العلاقة بالمنهج: {resource.curriculumRelationship} · {resource.freshness}</small>
             </a>
           ))}
         </div>
@@ -78,6 +81,16 @@ export default function EducationalAssistantPanel({ subject, level, lessonContex
       <div className="educational-assistant-source">
         <label htmlFor="assistant-source">مصدر يقدمه المعلم (اختياري)</label>
         <input id="assistant-source" value={providedSource} onChange={(event) => setProvidedSource(event.target.value)} placeholder="عنوان أو مرجع للمراجعة، لا يتم التحقق منه تلقائيًا" />
+      </div>
+      <div className="educational-assistant-intent">
+        <label htmlFor="assistant-intent">ما الذي تريده من المساعد؟</label>
+        <select id="assistant-intent" value={intent} onChange={(event) => setIntent(event.target.value as typeof intent)}>
+          <option value="explain">شرح الفكرة</option>
+          <option value="analyze">تحليل المحتوى</option>
+          <option value="question">إنشاء سؤال</option>
+          <option value="activity">اقتراح نشاط</option>
+          <option value="clarify">تبسيط الشرح</option>
+        </select>
       </div>
       <AIChatBox
         messages={messages}

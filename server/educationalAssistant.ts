@@ -14,6 +14,7 @@ export const educationalAssistInput = z.object({
   lessonContext: z.string().trim().max(2000).optional(),
   selectedContent: z.string().trim().max(4000).optional(),
   providedSource: z.string().trim().max(500).optional(),
+  intent: z.enum(["explain", "analyze", "question", "activity", "clarify"]).default("explain"),
 });
 
 export const educationalAssistOutput = z.object({
@@ -65,6 +66,7 @@ export async function runEducationalAssistant(input: EducationalAssistInput): Pr
     normalized.lessonContext ? `سياق الدرس الذي أدخله المعلم: ${normalized.lessonContext}` : "لا يوجد سياق درس إضافي.",
     normalized.selectedContent ? `المحتوى المحدد من المعلم: ${normalized.selectedContent}` : "لا يوجد محتوى محدد.",
     normalized.providedSource ? `مصدر قدمه المعلم للمراجعة فقط: ${normalized.providedSource}` : "لا يوجد مصدر قدمه المعلم.",
+    `نية المعلم: ${normalized.intent === "explain" ? "شرح" : normalized.intent === "analyze" ? "تحليل" : normalized.intent === "question" ? "إنشاء سؤال" : normalized.intent === "activity" ? "اقتراح نشاط" : "تبسيط وتوضيح"}`,
   ].join("\n");
 
   try {
@@ -79,7 +81,7 @@ export async function runEducationalAssistant(input: EducationalAssistInput): Pr
             "أجب فقط ضمن السؤال والسياق المقدمين. لا تخترع مصادر أو منهجًا أو اقتباسًا أو تحليلًا غير متحقق.",
             "إذا لم توجد مصادر في السياق، اجعل sources قائمة بمصدر none فقط، واجعل provenanceStatus غير متحقق أو استدلال يحتاج مراجعة.",
             "المصدر الذي يكتبه المعلم ليس تحققًا خارجيًا؛ لا تصفه كمصدر موثوق، واستخدم teacher_context أو provided_source مع teacherReviewRequired=true.",
-            "أظهر الإجابة والسبب والشرح والحدود بوضوح. اجعل teacherReviewRequired=true لأي استدلال أو نقص تحقق.",
+            "أظهر الإجابة والسبب والشرح والحدود بوضوح، ونفّذ نية المعلم المحددة فقط. اجعل teacherReviewRequired=true لأي استدلال أو نقص تحقق.",
             "لا تستخدم HTML ولا تعليمات تقنية للمستخدم. أخرج JSON مطابقًا للمخطط فقط.",
           ].join("\n"),
         },

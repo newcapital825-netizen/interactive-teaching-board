@@ -21,6 +21,12 @@ describe("educational assistant contract", () => {
     expect(result.success).toBe(true);
   });
 
+  it("defaults to explanation and accepts explicit educational intents", () => {
+    expect(educationalAssistInput.parse({ question: "اشرح" }).intent).toBe("explain");
+    expect(educationalAssistInput.parse({ question: "أنشئ سؤالًا", intent: "question" }).intent).toBe("question");
+    expect(educationalAssistInput.safeParse({ question: "نفذ", intent: "chat" }).success).toBe(false);
+  });
+
   it("returns structured evidence when the model response is valid", async () => {
     invokeLLM.mockResolvedValueOnce({ choices: [{ message: { content: JSON.stringify({
       answer: "الإجابة التعليمية",

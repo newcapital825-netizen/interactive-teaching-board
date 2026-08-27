@@ -660,3 +660,19 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] تشغيل Playwright الكامل على `mobile-chromium` بنتيجة 14/14 وتوثيق حدود المحاكاة.
 - [x] إنشاء `docs/release/PRODUCTIZATION_SCOPE.md` لتثبيت Included/Limited/Not Included وقواعد اعتماد المساعد.
 - [x] التحقق من بقاء GitHub `main` عند `ee646db6863ef494ddfcb954ac1823413d37db1f` بعد رفع productization-v1.
+
+
+## Master Productization Prompt 59 — current authorized scope
+
+- [ ] فحص baseline `588da835` والفرع والـremote وmain والـworking tree قبل المتابعة.
+- [ ] إغلاق فجوات رحلة المعلم والطالب والتحويلات والعرض والحفظ ضمن السبورة الحالية.
+- [ ] توسيع قدرات العربية والرياضيات والشعر والمصادر فقط عندما تكون bounded وقابلة للإثبات.
+- [ ] تقوية AI grounding وsource hierarchy وconflict handling وuncertainty وmalformed response safety.
+- [ ] إضافة اختبارات E2E متماسكة للعربية والرياضيات والـAI والـpoetry والـproduct coherence.
+- [ ] تشغيل check/test/build/diff-check وChromium/mobile والتحقق الأمني والاستجابي.
+- [ ] تحديث `PRODUCTIZATION_RELEASE_REPORT.md` وإعداد حزمة human acceptance دون إعلان Pilot Ready قبل التحقق البشري.
+- [ ] حفظ checkpoint ورفع آخر commit إلى `feature/productization-v1` دون PR أو merge أو تعديل main.
+- [x] تقوية source hierarchy بمستويات السلطة والعلاقة بالمناهج وfreshness المعلن، وإضافة اختبار يمنع ادعاء التحقق المنهجي.
+- [x] تحديث source hierarchy والتقرير ثم نجاح check وVitest 6/6 وbuild وdiff-check وPlaywright 14/14 على Chromium و14/14 على mobile-chromium.
+- [x] إضافة نوايا تعليمية صريحة للمساعد: شرح، تحليل، سؤال، نشاط، وتبسيط، بدل chatbot عام.
+- [x] تشغيل check وVitest 7/7 وbuild وdiff-check وPlaywright 14/14 على Chromium و14/14 على mobile-chromium بعد إضافة النوايا.

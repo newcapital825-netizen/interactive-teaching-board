@@ -641,3 +641,8 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .educational-assistant-resource-link strong { color:var(--olive); font-size:10px; }
 .educational-assistant-resource-link span,.educational-assistant-resource-link small { color:var(--muted-foreground); font-size:9px; line-height:1.5; }
 .educational-assistant-resource-link small { color:#9a6d25; }
+
+.educational-assistant-intent { display:grid; gap:6px; margin:10px 0; }
+.educational-assistant-intent label { color:var(--olive); font-size:10px; }
+.educational-assistant-intent select { width:100%; border:1px solid var(--line); padding:9px; background:#fffefa; color:var(--ink); font:12px 'IBM Plex Sans Arabic',sans-serif; }
+.educational-assistant-intent select:focus { border-color:var(--coral); box-shadow:0 0 0 3px rgba(213,107,88,.12); outline:none; }
