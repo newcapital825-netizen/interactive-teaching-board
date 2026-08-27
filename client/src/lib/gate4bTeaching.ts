@@ -238,6 +238,16 @@ const controlledSentenceSpecs: Record<string, ArabicWordSpec[]> = {
     { grammaticalRole: "خبر", caseMark: "مرفوع · الضمة", explanation: "المعلومة التي تخبر عن المبتدأ." },
   ],
 };
+
+export const supportedArabicSentences = Object.freeze(Object.keys(controlledSentenceSpecs));
+export const isSupportedArabicSentence = (sentence: string) => supportedArabicSentences.includes(sentence.trim());
+
+export type ArabicWordMap = { word: string; root: string; grammaticalType: string; number: string; gender: string; pattern: string; meaning: string; derivedForms: string[]; contextNote: string; provenance: string };
+const controlledWordMaps: Record<string, ArabicWordMap> = {
+  "المعلم": { word: "المعلم", root: "ع ل م", grammaticalType: "اسم فاعل معرّف بـ«ال»", number: "مفرد", gender: "مذكر", pattern: "مُفَعِّل", meaning: "من يعلّم أو يقدّم التعليم", derivedForms: ["معلّمون", "معلّمين", "معلّمة"], contextNote: "في سياق الدرس تشير الكلمة إلى الشخص الذي يقدّم التعليم.", provenance: "قاموس تعليمي محدود مضمّن للمثال؛ يحتاج التوسع إلى مصدر معجمي موثق" },
+};
+export const getSupportedArabicWordMap = (word: string) => controlledWordMaps[word.trim()];
+
 const wordsForSentence = (sentence: string): ArabicWord[] => {
   const source = sentence.split(" ");
   let cursor = 0;

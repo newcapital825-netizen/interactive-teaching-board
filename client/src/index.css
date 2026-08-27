@@ -646,3 +646,35 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .educational-assistant-intent label { color:var(--olive); font-size:10px; }
 .educational-assistant-intent select { width:100%; border:1px solid var(--line); padding:9px; background:#fffefa; color:var(--ink); font:12px 'IBM Plex Sans Arabic',sans-serif; }
 .educational-assistant-intent select:focus { border-color:var(--coral); box-shadow:0 0 0 3px rgba(213,107,88,.12); outline:none; }
+
+
+/* Master product coherence: one entry point, one contextual result surface, and explicit evidence state. */
+.teacher-product-unified-entry { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:9px; align-items:end; margin:12px 0; padding:12px; border:1px solid rgba(53,72,59,.18); background:rgba(220,229,219,.22); }
+.teacher-product-unified-entry label { display:grid; gap:6px; color:var(--olive); font-size:10px; }
+.teacher-product-unified-entry textarea { width:100%; min-height:76px; resize:vertical; border:1px solid var(--line); padding:10px; background:#fffefa; color:var(--ink); font:13px 'IBM Plex Sans Arabic',sans-serif; direction:rtl; text-align:right; }
+.teacher-product-unified-entry textarea:focus { border-color:var(--coral); box-shadow:0 0 0 3px rgba(213,107,88,.12); outline:none; }
+.teacher-product-unified-entry .gate4b-primary-button { min-height:42px; white-space:nowrap; }
+.contextual-action-bar { align-items:stretch; flex-wrap:wrap; }
+.contextual-action-context { display:grid; gap:5px; align-content:center; }
+.contextual-action-context small { color:var(--coral); font-size:9px; line-height:1.5; }
+.contextual-intelligence-result { flex:1 1 100%; display:grid; gap:7px; margin-top:4px; padding:12px 14px; border-right:3px solid var(--olive); background:rgba(220,229,219,.4); color:var(--ink); }
+.contextual-intelligence-result.uncertain { border-right-color:#b6853d; background:rgba(246,235,207,.5); }
+.contextual-intelligence-result.not-applicable { border-right-color:var(--muted-foreground); background:rgba(233,227,217,.6); }
+.contextual-result-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; color:var(--olive); }
+.contextual-result-heading span { display:inline-flex; align-items:center; gap:6px; font-weight:800; font-size:11px; }
+.contextual-result-heading small { color:var(--coral); font-size:9px; }
+.contextual-intelligence-result p { margin:0; font-size:11px; line-height:1.7; }
+.contextual-intelligence-result details { border-top:1px dashed var(--line); padding-top:7px; }
+.contextual-intelligence-result summary { color:var(--olive); cursor:pointer; font-size:10px; font-weight:700; }
+.contextual-intelligence-result details div { margin-top:6px; }
+.contextual-intelligence-result details p { color:var(--muted-foreground); font-size:10px; line-height:1.6; }
+.contextual-result-provenance { color:var(--muted-foreground); font-size:9px; line-height:1.5; }
+@media (max-width:700px) { .teacher-product-unified-entry { grid-template-columns:1fr; } .teacher-product-unified-entry .gate4b-primary-button { width:100%; } .contextual-action-bar { margin-inline:18px; } }
+
+
+.classroom-learning-map { display:flex; align-items:center; gap:0; margin:16px 0 2px; padding:10px 0 12px; border-bottom:1px dashed var(--line); }
+.classroom-learning-map span { display:inline-flex; align-items:center; gap:6px; color:var(--muted-foreground); font-size:10px; white-space:nowrap; }
+.classroom-learning-map span:not(:last-child)::after { content:"←"; margin:0 10px; color:var(--line); }
+.classroom-learning-map b { display:grid; place-items:center; width:22px; height:22px; border:1px solid var(--line); border-radius:50%; font-size:9px; font-weight:500; }
+.classroom-learning-map .complete { color:var(--olive); }.classroom-learning-map .complete b { border-color:var(--olive); background:var(--olive-soft); }.classroom-learning-map .current { color:var(--coral); font-weight:800; }.classroom-learning-map .current b { border-color:var(--coral); background:var(--coral-soft); }.classroom-learning-map .upcoming { opacity:.6; }
+@media (max-width:560px) { .classroom-learning-map { overflow-x:auto; padding-bottom:10px; } .classroom-learning-map span:not(:last-child)::after { margin:0 6px; } .classroom-learning-map span { font-size:9px; } }

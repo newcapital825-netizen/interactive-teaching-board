@@ -3,13 +3,14 @@ import { getObjectDefinition } from "./objectRegistry";
 import { hasCapability, type EducationalCapability } from "./educationalObjects";
 
 /* Gate 8 reminder: actions are descriptors over canonical capabilities; Core Board owns no Arabic/Math rules. */
-export type ContextualActionId = "explain" | "analyze" | "practice" | "assess" | "example" | "compare" | "highlight" | "toggle-visibility" | "convert-to-activity" | "visualize";
+export type ContextualActionId = "explain" | "analyze" | "word-map" | "practice" | "assess" | "example" | "compare" | "highlight" | "toggle-visibility" | "convert-to-activity" | "visualize";
 export type ContextualAction = { id: ContextualActionId; label: string; description: string; requiredCapability?: EducationalCapability; available: boolean; reason?: "unsupported-capability" | "unsupported-object" };
 export type ContextualActionContext = { sourceRange?: { start: number; end: number }; subject?: "arabic" | "mathematics" };
 
 const common: Record<ContextualActionId, Omit<ContextualAction, "id" | "available" | "reason">> = {
   explain: { label: "شرح", description: "إضافة شرح أو ملاحظة تعليمية من المصدر." },
-  analyze: { label: "تحليل", description: "فتح أداة التحليل الخاصة بنوع العنصر." },
+  analyze: { label: "تحليل", description: "عرض الفهم المتاح من المحتوى المحدد." },
+  "word-map": { label: "خريطة الكلمة", description: "عرض خريطة كلمة عندما تكون البيانات مثبتة." },
   practice: { label: "تدريب", description: "إنشاء مسار تدريب من العنصر المحدد.", requiredCapability: "interactive" },
   assess: { label: "تقييم", description: "إنشاء سؤال قابل للتقييم.", requiredCapability: "assessable" },
   example: { label: "مثال", description: "إضافة مثال مرتبط بالمصدر." },
@@ -21,7 +22,7 @@ const common: Record<ContextualActionId, Omit<ContextualAction, "id" | "availabl
 };
 
 const map: Record<string, ContextualActionId[]> = {
-  TextObject: ["explain", "analyze", "practice", "assess", "example", "compare", "highlight", "toggle-visibility", "convert-to-activity"],
+  TextObject: ["explain", "analyze", "word-map", "practice", "assess", "example", "compare", "highlight", "toggle-visibility", "convert-to-activity"],
   SentenceObject: ["explain", "analyze", "practice", "assess", "example", "compare", "highlight", "toggle-visibility", "convert-to-activity"],
   EquationObject: ["explain", "analyze", "practice", "assess", "example", "compare", "highlight", "toggle-visibility", "convert-to-activity", "visualize"],
   GraphObject: ["explain", "analyze", "practice", "assess", "compare", "highlight", "toggle-visibility", "convert-to-activity", "visualize"],

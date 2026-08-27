@@ -31,6 +31,8 @@ export type ActivityContent = {
   assessmentState: "unassessed" | "assessed";
 };
 
+export type ReusableResultContent = { title: string; summary: string; sourceObjectId: string; sourceVersion: number; provenanceLabel: string; teacherApproved: boolean; [key: string]: unknown };
+
 export type ConceptGraphContent = { nodes: Array<{ id: string; label: string }>; edges: Array<{ from: string; to: string; label?: string }> };
 export type ObjectRendererKind = "text" | "shape" | "image-placeholder" | "sentence" | "equation" | "graph" | "question" | "activity" | "unknown";
 
@@ -71,6 +73,19 @@ const validateActivity = (content: unknown): ObjectValidationResult => {
   ].filter(Boolean) as { path: string; message: string }[];
   return { valid: issues.length === 0, issues };
 };
+const validateStructuredResult = (content: unknown): ObjectValidationResult => {
+  if (!content || typeof content !== "object" || Array.isArray(content)) return { valid: false, issues: [{ path: "content", message: "result content must be an object" }] };
+  const value = content as Partial<ReusableResultContent>;
+  const issues = [
+    typeof value.title === "string" ? null : { path: "content.title", message: "title is required" },
+    typeof value.summary === "string" ? null : { path: "content.summary", message: "summary is required" },
+    typeof value.sourceObjectId === "string" ? null : { path: "content.sourceObjectId", message: "sourceObjectId is required" },
+    typeof value.sourceVersion === "number" && Number.isFinite(value.sourceVersion) ? null : { path: "content.sourceVersion", message: "sourceVersion is required" },
+    typeof value.provenanceLabel === "string" ? null : { path: "content.provenanceLabel", message: "provenanceLabel is required" },
+    typeof value.teacherApproved === "boolean" ? null : { path: "content.teacherApproved", message: "teacherApproved is required" },
+  ].filter(Boolean) as { path: string; message: string }[];
+  return { valid: issues.length === 0, issues };
+};
 const validateGraph = (content: unknown): ObjectValidationResult => {
   if (typeof content === "string") return ok();
   if (!content || typeof content !== "object" || Array.isArray(content)) return { valid: false, issues: [{ path: "content", message: "graph content must be an object" }] };
@@ -90,6 +105,11 @@ const defaults: ObjectDefinition[] = [
   { type: "GraphObject", label: "Concept graph", renderer: "graph", capabilities: ["selectable", "movable", "resizable", "editable", "duplicable", "groupable", "exportable", "interactive", "presentable"], createContent: graphContent, validateContent: validateGraph, persistence: "json" },
   { type: "QuestionObject", label: "Question", renderer: "question", capabilities: ["selectable", "movable", "resizable", "editable", "duplicable", "groupable", "interactive", "assessable", "presentable"], createContent: (content) => content as QuestionContent, validateContent: validateQuestion, persistence: "json" },
   { type: "ActivityObject", label: "Activity", renderer: "activity", capabilities: ["selectable", "movable", "resizable", "editable", "duplicable", "groupable", "interactive", "assessable", "presentable"], createContent: (content) => content as ActivityContent, validateContent: validateActivity, persistence: "json" },
+  { type: "WordObject", label: "كلمة", renderer: "text", capabilities: ["selectable", "movable", "resizable", "editable", "duplicable", "groupable", "exportable", "interactive", "presentable"], createContent: (content) => content as ReusableResultContent, validateContent: validateStructuredResult, persistence: "json" },
+  { type: "I3rabObject", label: "إعراب", renderer: "text", capabilities: ["selectable", "movable", "resizable", "editable", "duplicable", "groupable", "exportable", "interactive", "presentable"], createContent: (content) => content as ReusableResultContent, validateContent: validateStructuredResult, persistence: "json" },
+  { type: "ExplanationObject", label: "شرح", renderer: "text", capabilities: ["selectable", "movable", "resizable", "editable", "duplicable", "groupable", "exportable", "presentable"], createContent: (content) => content as ReusableResultContent, validateContent: validateStructuredResult, persistence: "json" },
+  { type: "SolutionStepsObject", label: "خطوات الحل", renderer: "text", capabilities: ["selectable", "movable", "resizable", "editable", "duplicable", "groupable", "exportable", "presentable"], createContent: (content) => content as ReusableResultContent, validateContent: validateStructuredResult, persistence: "json" },
+  { type: "PoetryObject", label: "نص شعري", renderer: "text", capabilities: ["selectable", "movable", "resizable", "editable", "duplicable", "groupable", "exportable", "interactive", "presentable"], createContent: (content) => content as ReusableResultContent, validateContent: validateStructuredResult, persistence: "json" },
 ];
 
 const registry = new Map<string, ObjectDefinition>(defaults.map((definition) => [definition.type, definition]));

@@ -43,3 +43,9 @@ The full-page mobile capture at 390×844 shows the context-first teacher workspa
 ## Regression browser verification
 
 The existing Chromium Playwright suite completed with 13/13 passing after the bounded poetry and resource additions. The suite covered Arabic/Mathematics lesson creation, canvas state and undo/redo, classroom activity and teacher override, persistence/export/import/recovery/presentation, context-after-import, legacy document safety, accessibility keyboard surface, and browser performance matrix journeys. The emitted benchmark still reports lens regeneration, import, student preview, assessment, and teacher-override timings as not verified where the product path does not expose a measurable step.
+
+## Unified-input visual verification
+
+تمت إضافة لقطات جديدة من النسخة الحالية بعد المدخل الموحد وشريط intelligence. على سطح المكتب بعرض 1280×720 يظهر المدخل داخل عمود المحتوى في مساحة «ابدأ من هنا»، وتبقى إعدادات الدرس وصفحاته واللوحة الأساسية واضحة في RTL. على الهاتف بعرض 390×844 تلتف أزرار الرأس إلى صفوف، وتنتقل إعدادات الدرس إلى عمود واحد دون قص واضح في الجزء المرئي.
+
+هذه الملاحظة تثبت التخطيط المرئي فقط؛ لا تثبت القلم أو اللمس الحقيقي أو قارئ الشاشة أو أداء جهاز فعلي.

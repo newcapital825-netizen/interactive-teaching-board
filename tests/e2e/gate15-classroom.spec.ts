@@ -300,3 +300,54 @@ test("Product coherence: Arabic writing reaches bounded analysis, I3rab, explana
   await arabicPanel.getByTestId("arabic-analyze-button").click();
   await expect(arabicPanel.getByTestId("arabic-analysis-unsupported")).toContainText("لم تُخترع نتيجة");
 });
+
+
+test("Journey O: unified input recognizes content and keeps intelligence in the same board", async ({ page }) => {
+  await openWorkspace(page);
+
+  await page.getByTestId("unified-content-input").fill("كتبَ الطالبُ الدرسَ.");
+  await page.getByTestId("add-unified-content").click();
+  const sentence = page.getByTestId("canvas-object").filter({ hasText: "كتبَ الطالبُ الدرسَ." }).first();
+  await expect(sentence).toBeVisible();
+  await sentence.click();
+  await expect(page.getByTestId("contextual-actions")).toContainText("جملة");
+  await expect(page.getByTestId("contextual-actions")).toContainText("ثقة مرتفعة");
+  await page.getByTestId("contextual-action-analyze").click();
+  await expect(page.getByTestId("contextual-intelligence-result")).toContainText("تحليل الجملة");
+  await expect(page.getByTestId("contextual-intelligence-result")).toContainText("فاعل");
+  await expect(page.getByTestId("canvas-object").filter({ hasText: "إعراب الجملة" })).toHaveCount(1);
+
+  await page.getByTestId("unified-content-input").fill("2x + 3 = 11");
+  await page.getByTestId("add-unified-content").click();
+  const equation = page.getByTestId("canvas-object").filter({ hasText: "2x + 3 = 11" }).first();
+  await equation.click();
+  await expect(page.getByTestId("contextual-actions")).toContainText("معادلة");
+  await page.getByTestId("contextual-action-analyze").click();
+  await expect(page.getByTestId("contextual-intelligence-result")).toContainText("خطوات الحل");
+  await expect(page.getByTestId("contextual-intelligence-result")).toContainText("x = 4");
+
+  await page.getByTestId("unified-content-input").fill("3x + 1 = 10");
+  await page.getByTestId("add-unified-content").click();
+  const unsupportedEquation = page.getByTestId("canvas-object").filter({ hasText: "3x + 1 = 10" }).first();
+  await unsupportedEquation.click();
+  await page.getByTestId("contextual-action-analyze").click();
+  await expect(page.getByTestId("contextual-intelligence-result")).toContainText("لم أجد معادلة مثبتة");
+  await expect(page.getByTestId("contextual-intelligence-result")).toContainText("يحتاج إلى تحديد");
+
+  await page.getByTestId("unified-content-input").fill("المعلم");
+  await page.getByTestId("add-unified-content").click();
+  const word = page.getByTestId("canvas-object").filter({ hasText: "المعلم" }).last();
+  await word.click();
+  await page.getByTestId("contextual-action-word-map").click();
+  await expect(page.getByTestId("contextual-intelligence-result")).toContainText("خريطة الكلمة");
+  await expect(page.getByTestId("contextual-intelligence-result")).toContainText("ع ل م");
+
+  await page.getByTestId("unified-content-input").fill("وإذا أتتك مذمتي من ناقص");
+  await page.getByTestId("add-unified-content").click();
+  const verse = page.getByTestId("canvas-object").filter({ hasText: "وإذا أتتك مذمتي من ناقص" }).first();
+  await verse.click();
+  await page.getByTestId("contextual-action-analyze").click();
+  await expect(page.getByTestId("contextual-intelligence-result")).toContainText("قراءة شعرية أولية");
+  await expect(page.getByTestId("contextual-intelligence-result")).toContainText("الوزن: غير متحقق");
+  await expect(page.getByTestId("contextual-intelligence-result")).toContainText("مراجعة المعلم");
+});

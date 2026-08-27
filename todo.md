@@ -711,3 +711,13 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] إضافة اختبارات unit وE2E لرحلة العربية: كتابة → تحليل/إعراب → شرح → نشاط، مع توثيق unsupported boundaries.
 - [x] إعداد `docs/pilot/HUMAN_PILOT_RESULTS.md` بحالة Human Validation = NOT VERIFIED وبنموذج تسجيل الجلسات دون اختلاق نتائج.
 - [x] ربط تقرير الإصدار النهائي بحزمة القبول البشري ومراجعة الحالة النهائية قبل التسليم.
+
+## Master Product Transformation Directive — product coherence scope
+
+- [x] توثيق مسارات الكائنات canonical ونقاط الانفصال الحالية بين اللوحة وأدوات المواد.
+- [x] إضافة طبقة bounded للتعرف على المحتوى من النص، مع حالة توضيح آمنة عند انخفاض الثقة.
+- [x] توحيد شريط الإجراءات السياقي داخل اللوحة للكائنات العربية والرياضيات والشعر دون كشف المصطلحات التقنية.
+- [x] ربط نتائج التحليل والشرح والنشاط بالسياق الحالي وبالكائنات القابلة لإعادة الاستخدام، دون إنشاء engines أو registries مكررة.
+- [x] تحسين تجربة الطالب والعرض وخارطة الدرس بما يثبت المسار التعليمي المتدرج.
+- [x] تقوية اختبارات product coherence والتعرف bounded والفشل الآمن والرحلات العربية والرياضيات والشعر والمساعد.
+- [x] تحديث PRODUCT_RELEASE_REPORT.md وإنشاء FINAL_HUMAN_VALIDATION.md وحفظ النسخة على فرع productization-v1 فقط.

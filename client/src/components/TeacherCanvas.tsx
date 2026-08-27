@@ -17,11 +17,12 @@ type Props = { document: BoardDocument; selection: SelectionState; onDocumentCha
 type DragState = { kind: "move" | "resize"; id: string; start: { x: number; y: number }; before: BoardDocument; origin?: { x: number; y: number }; corner?: ResizeCorner };
 type HistoryState = { document: BoardDocument; selection: SelectionState };
 
-const labels: Record<string, string> = { TextObject: "نص", SentenceObject: "جملة", EquationObject: "معادلة", ShapeObject: "شكل", GraphObject: "خريطة مفاهيم", QuestionObject: "سؤال", ActivityObject: "نشاط", GroupObject: "مجموعة", DrawingObject: "رسم" };
+const labels: Record<string, string> = { TextObject: "نص", SentenceObject: "جملة", EquationObject: "معادلة", ShapeObject: "شكل", GraphObject: "خريطة مفاهيم", QuestionObject: "سؤال", ActivityObject: "نشاط", GroupObject: "مجموعة", DrawingObject: "رسم", WordObject: "خريطة كلمة", I3rabObject: "إعراب", ExplanationObject: "شرح", SolutionStepsObject: "خطوات الحل", PoetryObject: "قراءة شعرية" };
 const labelFor = (type: string) => labels[type] ?? "عنصر";
 const contentFor = (item: CoreObject) => {
   if (item.type === "QuestionObject" && item.data && typeof item.data === "object" && "prompt" in item.data) return String((item.data as { prompt: unknown }).prompt);
   if (item.type === "ActivityObject" && item.data && typeof item.data === "object" && "instructions" in item.data) return String((item.data as { instructions: unknown }).instructions);
+  if (item.data && typeof item.data === "object" && "title" in item.data && "summary" in item.data) return `${String((item.data as { title: unknown }).title)}: ${String((item.data as { summary: unknown }).summary)}`;
   return item.content;
 };
 const seedFor = (type: CoreObjectType): unknown => type === "SentenceObject" ? "جملة عربية قابلة للتحليل" : type === "EquationObject" ? "2x + 3 = 11" : type === "ShapeObject" ? "شكل تعليمي" : "ملاحظة تعليمية جديدة";

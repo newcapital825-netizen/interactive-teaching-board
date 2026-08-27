@@ -2,7 +2,7 @@
 
 **Author:** Manus AI  
 **Branch:** `feature/productization-v1`  
-**Validation date:** 27 August 2026  
+**Validation date:** 28 August 2026
 **Status:** **PILOT CANDIDATE — HUMAN VALIDATION REQUIRED**
 
 ## Executive decision
@@ -16,15 +16,15 @@ The current productization slice is suitable for a controlled pilot candidate re
 | Area | Result | Evidence |
 |---|---|---|
 | TypeScript | **PROVEN** | `pnpm check` passed with zero TypeScript errors. |
-| Vitest | **PROVEN** | 3 test files, 10 tests passed. |
+| Vitest | **PROVEN** | 26 test files, 130 tests passed. |
 | Production build | **PROVEN** | `pnpm build` completed successfully; Vite and server bundle both built. |
 | Git diff check | **PROVEN** | `git diff --check` passed. |
-| Playwright desktop Chromium | **PROVEN** | 17/17 passed, including the new Arabic coherence journey. |
-| Playwright mobile Chromium | **PROVEN** | 17/17 passed. |
+| Playwright desktop Chromium | **PROVEN** | 18/18 passed, including unified input, Arabic, Mathematics, word map, poetry, and safe unsupported journeys. |
+| Playwright mobile Chromium | **PROVEN** | 18/18 passed. |
 | Visual verification | **PARTIALLY PROVEN** | Full-page screenshots captured at 1280×720 and 390×844; no obvious RTL layout collapse was observed. This is not a human design or device audit. |
 | Real-device performance | **NOT VERIFIED** | Automated Chromium benchmark journeys passed, but no physical device or production network measurement was available. |
 
-The Playwright suite covers the established canvas, save/restore, export/import, legacy document safety, accessibility pre-pilot surface, keyboard interactions, classroom loop, assistant review persistence, bounded poetry and sources, performance matrices, fail-safe persistence, and the new Arabic flow.
+The Playwright suite covers the established canvas, save/restore, export/import, legacy document safety, accessibility pre-pilot surface, keyboard interactions, classroom loop, assistant review persistence, bounded poetry and sources, performance matrices, fail-safe persistence, the Arabic flow, and the unified-input coherence journey on desktop and mobile. The final run executed 36 test cases: 18 desktop and 18 mobile.
 
 ## Coherent educational journeys
 
@@ -56,11 +56,11 @@ The assistant retains server-side structured responses, explicit intent, evidenc
 
 The new browser journey verifies the teacher-facing Arabic sequence in the rendered DOM rather than only inspecting internal state. It opens the Arabic toolkit, confirms the source text, requests analysis, asserts that the analysis card appears, asserts the selected word's grammatical role and explanation, then replaces the source with an unsupported sentence and asserts the explicit no-fabrication message.
 
-This closes the previously identified product gap in which the canonical Arabic teaching capability existed in the codebase but was not visible in the teacher-first toolkit surface.
+This closes the previously identified product gap in which the canonical Arabic teaching capability existed in the codebase but was not visible in the teacher-first toolkit surface. The current productization pass also adds a single bounded recognition path, a contextual action surface that keeps the source selected, reusable result objects for word map, I3rab, explanation, solution steps, and poetry, and a teacher/student learning map that mirrors the existing classroom lifecycle.
 
 ## Implemented capabilities
 
-The current product includes an RTL teacher workspace with lesson metadata, pages, canonical educational objects, canvas insertion, contextual actions, student preview, presentation mode, save/restore, export/import, legacy migration safety, a classroom activity loop, teacher review and override, bounded Arabic and Mathematics teaching slices, bounded poetry support, external resource registry metadata, and a grounded educational assistant with explicit evidence and uncertainty states.
+The current product includes an RTL teacher workspace with lesson metadata, pages, canonical educational objects, one unified content entry point, bounded content recognition with low-confidence safe states, contextual actions, reusable educational result objects, a visible learning map, student preview, presentation mode, save/restore, export/import, legacy migration safety, a classroom activity loop, teacher review and override, bounded Arabic and Mathematics teaching slices, bounded poetry support, external resource registry metadata, and a grounded educational assistant with explicit evidence and uncertainty states.
 
 Persistence remains context-isolated and local-first for the bounded assistant and lesson pathways. The implementation preserves one canonical object model, registry, capability system, and adapter architecture; this work did not introduce a second domain model or duplicate registry.
 
