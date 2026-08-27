@@ -634,3 +634,15 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] إضافة قدرات عربية ورياضيات وشعر ومصادر وAI ضمن حدود موثوقة وقابلة للإثبات. (أُنجزت أول طبقة AI server-side bounded؛ ما تبقى لم يُنفذ بعد.)
 - [ ] تنفيذ اختبارات آلية ومتصفح وأمان واستجابة، ثم كتابة Product Release Report.
 - [ ] إنشاء commits واضحة والحفاظ على rollback capability.
+
+
+## Productization bounded capabilities completed
+
+- [x] إضافة مساعد تعليمي server-side بعقد JSON صارم ومسار فشل آمن.
+- [x] إضافة حالة provenance وuncertainty ومراجعة المعلم دون ادعاء تحقق خارجي.
+- [x] إضافة قبول ورفض وتصحيح المعلم داخل لوحة المساعد.
+- [x] إضافة سجل روابط مرجعية للعربية والرياضيات مع وسم مراجعة المعلم المطلوبة.
+- [x] إضافة مصدر اختياري يقدمه المعلم ويمرر كسياق غير متحقق.
+- [x] إضافة أداة شعر bounded للقياسات الشكلية فقط مع منع ادعاء الوزن.
+- [x] إضافة اختبارات المساعد والشعر وسجل المراجع، ونجاح check/test/build/diff-check.
+- [x] تنفيذ تحقق بصري Desktop 1280×720 وMobile 390×844 للواجهة الحالية.

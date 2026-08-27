@@ -39,3 +39,7 @@ The prompt submission did not yet produce an assistant message in the captured p
 ## Productization v1.1 visual review
 
 The full-page mobile capture at 390×844 shows the context-first teacher workspace, lesson pages, direct canvas, classroom loop, assistant panel, two external-resource cards, source input, prompt buttons, and the Arabic send field without visible horizontal clipping. Formal accessibility, touch, stylus, and real-device behavior remain unverified.
+
+## Regression browser verification
+
+The existing Chromium Playwright suite completed with 13/13 passing after the bounded poetry and resource additions. The suite covered Arabic/Mathematics lesson creation, canvas state and undo/redo, classroom activity and teacher override, persistence/export/import/recovery/presentation, context-after-import, legacy document safety, accessibility keyboard surface, and browser performance matrix journeys. The emitted benchmark still reports lens regeneration, import, student preview, assessment, and teacher-override timings as not verified where the product path does not expose a measurable step.
