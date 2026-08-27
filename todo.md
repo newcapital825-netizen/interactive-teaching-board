@@ -658,3 +658,4 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] تحصين provenance ضد ادعاءات السياق والمصادر غير الموجودة، وإضافة اختبار regression للسلوك.
 - [x] إعادة تشغيل check وVitest 6/6 وbuild وdiff-check وPlaywright 14/14 بعد التحصين.
 - [x] تشغيل Playwright الكامل على `mobile-chromium` بنتيجة 14/14 وتوثيق حدود المحاكاة.
+- [x] إنشاء `docs/release/PRODUCTIZATION_SCOPE.md` لتثبيت Included/Limited/Not Included وقواعد اعتماد المساعد.
