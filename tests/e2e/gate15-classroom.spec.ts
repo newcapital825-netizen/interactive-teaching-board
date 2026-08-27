@@ -44,6 +44,7 @@ test("Journey A: teacher creates Arabic and Mathematics lesson with provenance a
   await expect(page.getByTestId("contextual-action-convert-to-activity")).toBeEnabled();
   await page.getByTestId("contextual-action-convert-to-activity").click();
   await expect(page.getByTestId("classroom-activity")).toHaveCount(1);
+  await expect(page.getByTestId("learning-map")).toContainText("النشاط");
   await expect(page.getByTestId("classroom-loop-teacher")).toContainText("المصدر:");
   await page.getByTestId("save-lesson-button").click();
   await expect(page.getByRole("status").filter({ hasText: "حُفظ" })).toBeVisible();
@@ -89,6 +90,7 @@ test("Journeys C–F: Arabic activity reaches student attempt, deterministic rev
   await page.getByTestId("student-preview-button").click();
   await expect(page.getByTestId("classroom-loop-student")).toBeVisible();
   await expect(page.getByTestId("classroom-loop-student")).toContainText("مساحة إجابة الطالب");
+  await expect(page.getByTestId("learning-map")).toContainText("المحاولة");
   await page.getByRole("textbox", { name: "الإجابة النهائية" }).fill("الطالبُ، فاعل، مرفوع، الضمة، لأنه فاعل");
   const submitAttempt = page.getByRole("button", { name: "إرسال الإجابة" });
   await submitAttempt.scrollIntoViewIfNeeded();
