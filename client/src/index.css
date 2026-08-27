@@ -615,3 +615,21 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .educational-assistant-warning { display:flex; align-items:center; gap:7px; margin:12px 0 5px; padding:10px; background:var(--coral-soft); color:var(--ink); }
 .educational-assistant-evidence ul { margin:8px 0 0; padding-right:20px; line-height:1.8; }
 @media (max-width:700px) { .educational-assistant-panel { margin:18px 0 24px; padding:16px; } .educational-assistant-heading { display:block; } .educational-assistant-badge { margin-top:12px; } .educational-assistant-evidence-grid { grid-template-columns:1fr; } }
+
+
+/* Productization: teacher authority controls stay visible, reversible, and RTL-friendly. */
+.educational-assistant-review { display:grid; gap:12px; margin-top:14px; padding-top:12px; border-top:1px dashed var(--line); }
+.educational-assistant-review-actions { display:flex; flex-wrap:wrap; gap:7px; }
+.educational-assistant-review-actions button,.educational-assistant-correction button { display:inline-flex; align-items:center; justify-content:center; gap:5px; border:1px solid var(--line); padding:8px 11px; color:var(--olive); background:#fffefa; font:inherit; font-size:10px; cursor:pointer; }
+.educational-assistant-review-actions button:hover,.educational-assistant-review-actions button:focus-visible,.educational-assistant-correction button:hover,.educational-assistant-correction button:focus-visible { border-color:var(--coral); color:var(--coral); outline-offset:2px; }
+.educational-assistant-correction { display:grid; gap:6px; }
+.educational-assistant-correction label { display:flex; align-items:center; gap:5px; color:var(--olive); font-size:10px; }
+.educational-assistant-correction textarea { width:100%; resize:vertical; border:1px solid var(--line); padding:9px; background:#fffefa; color:var(--ink); font:12px 'IBM Plex Sans Arabic',sans-serif; }
+.educational-assistant-correction textarea:focus { border-color:var(--coral); box-shadow:0 0 0 3px rgba(213,107,88,.12); outline:none; }
+.educational-assistant-correction button:disabled { cursor:not-allowed; opacity:.5; }
+@media (max-width:560px) { .educational-assistant-review-actions { display:grid; grid-template-columns:1fr 1fr; } .educational-assistant-review-actions button { width:100%; } }
+
+.educational-assistant-source { display:grid; gap:6px; margin:14px 0 10px; }
+.educational-assistant-source label { color:var(--olive); font-size:10px; }
+.educational-assistant-source input { width:100%; border:1px solid var(--line); padding:9px; background:#fffefa; color:var(--ink); font:12px 'IBM Plex Sans Arabic',sans-serif; }
+.educational-assistant-source input:focus { border-color:var(--coral); box-shadow:0 0 0 3px rgba(213,107,88,.12); outline:none; }

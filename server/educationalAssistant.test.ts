@@ -4,6 +4,16 @@ const { invokeLLM } = vi.hoisted(() => ({ invokeLLM: vi.fn() }));
 vi.mock("./_core/llm", () => ({ invokeLLM }));
 
 import { educationalAssistInput, runEducationalAssistant } from "./educationalAssistant";
+import { reviewLabel } from "../client/src/components/EducationalAssistantPanel";
+
+describe("teacher review labels", () => {
+  it("keeps teacher decisions explicit", () => {
+    expect(reviewLabel("pending")).toBe("بانتظار مراجعة المعلم");
+    expect(reviewLabel("accepted")).toBe("اعتمدها المعلم");
+    expect(reviewLabel("rejected")).toBe("رفضها المعلم");
+    expect(reviewLabel("corrected")).toBe("صححها المعلم");
+  });
+});
 
 describe("educational assistant contract", () => {
   it("accepts a bounded teacher question", () => {

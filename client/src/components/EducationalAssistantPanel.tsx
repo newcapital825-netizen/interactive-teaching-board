@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AlertTriangle, BookOpenCheck, ChevronDown, ShieldCheck } from "lucide-react";
+import { AlertTriangle, BookOpenCheck, Check, ChevronDown, Pencil, ShieldCheck, X } from "lucide-react";
 import { AIChatBox, type Message } from "@/components/AIChatBox";
 import { trpc } from "@/lib/trpc";
 
@@ -10,6 +10,17 @@ type EducationalAssistantPanelProps = {
   selectedContent?: string;
 };
 
+export type TeacherReviewState = "pending" | "accepted" | "rejected" | "corrected";
+
+export function reviewLabel(state: TeacherReviewState): string {
+  return {
+    pending: "بانتظار مراجعة المعلم",
+    accepted: "اعتمدها المعلم",
+    rejected: "رفضها المعلم",
+    corrected: "صححها المعلم",
+  }[state];
+}
+
 export default function EducationalAssistantPanel({ subject, level, lessonContext, selectedContent }: EducationalAssistantPanelProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [lastEvidence, setLastEvidence] = useState<{
@@ -19,21 +30,35 @@ export default function EducationalAssistantPanel({ subject, level, lessonContex
     limitations: string[];
     teacherReviewRequired: boolean;
   } | null>(null);
+  const [reviewState, setReviewState] = useState<TeacherReviewState>("pending");
+  const [correction, setCorrection] = useState("");
+  const [providedSource, setProvidedSource] = useState("");
   const assist = trpc.educational.assist.useMutation({
     onSuccess: (result, variables) => {
       setMessages((current) => [...current, { role: "user", content: variables.question }, { role: "assistant", content: `${result.answer}\n\n**لماذا؟** ${result.why}\n\n**شرح تعليمي:** ${result.explanation}` }]);
       setLastEvidence(result);
+      setReviewState("pending");
+      setCorrection("");
     },
     onError: () => {
       setMessages((current) => [...current, { role: "assistant", content: "تعذر تشغيل المساعد الآن. لم تُعرض إجابة غير متحققة." }]);
       setLastEvidence(null);
+      setReviewState("pending");
     },
   });
 
   function ask(question: string) {
     const trimmed = question.trim();
     if (!trimmed || assist.isPending) return;
-    assist.mutate({ question: trimmed, subject, level, lessonContext, selectedContent });
+    assist.mutate({ question: trimmed, subject, level, lessonContext, selectedContent, providedSource: providedSource.trim() || undefined });
+  }
+
+  function applyCorrection() {
+    const trimmed = correction.trim();
+    if (!trimmed) return;
+    setMessages((current) => [...current, { role: "assistant", content: `تصحيح المعلم:\n${trimmed}` }]);
+    setReviewState("corrected");
+    setCorrection("");
   }
 
   return (
@@ -45,6 +70,10 @@ export default function EducationalAssistantPanel({ subject, level, lessonContex
           <p>يعمل المساعد ضمن سياق الدرس، ويعرض حدود التحقق بدل اختلاق مصدر.</p>
         </div>
         <span className="educational-assistant-badge"><ShieldCheck size={14} /> المعلم صاحب القرار</span>
+      </div>
+      <div className="educational-assistant-source">
+        <label htmlFor="assistant-source">مصدر يقدمه المعلم (اختياري)</label>
+        <input id="assistant-source" value={providedSource} onChange={(event) => setProvidedSource(event.target.value)} placeholder="عنوان أو مرجع للمراجعة، لا يتم التحقق منه تلقائيًا" />
       </div>
       <AIChatBox
         messages={messages}
@@ -63,9 +92,21 @@ export default function EducationalAssistantPanel({ subject, level, lessonContex
             <span><strong>الثقة:</strong> {lastEvidence.confidence}</span>
             <span><strong>الحالة:</strong> {lastEvidence.provenanceStatus}</span>
             <span><strong>المصادر:</strong> {lastEvidence.sources.map((source) => source.label).join("، ")}</span>
+            <span><strong>قرار المعلم:</strong> {reviewLabel(reviewState)}</span>
           </div>
           {lastEvidence.teacherReviewRequired && <p className="educational-assistant-warning"><AlertTriangle size={15} /> تحتاج هذه الإجابة إلى مراجعة المعلم قبل اعتمادها.</p>}
           {lastEvidence.limitations.length > 0 && <ul>{lastEvidence.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>}
+          <div className="educational-assistant-review" aria-label="مراجعة إجابة المساعد">
+            <div className="educational-assistant-review-actions">
+              <button type="button" onClick={() => setReviewState("accepted")} aria-label="اعتماد إجابة المساعد"><Check size={14} /> اعتماد</button>
+              <button type="button" onClick={() => setReviewState("rejected")} aria-label="رفض إجابة المساعد"><X size={14} /> رفض</button>
+            </div>
+            <div className="educational-assistant-correction">
+              <label htmlFor="assistant-correction"><Pencil size={14} /> تصحيح المعلم</label>
+              <textarea id="assistant-correction" value={correction} onChange={(event) => setCorrection(event.target.value)} placeholder="اكتب التصحيح قبل اعتماد الشرح…" rows={2} />
+              <button type="button" onClick={applyCorrection} disabled={!correction.trim()} aria-label="حفظ تصحيح المعلم">حفظ التصحيح</button>
+            </div>
+          </div>
         </details>
       )}
     </section>
