@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AlertTriangle, BookOpenCheck, Check, ChevronDown, Pencil, ShieldCheck, X } from "lucide-react";
 import { AIChatBox, type Message } from "@/components/AIChatBox";
 import { trpc } from "@/lib/trpc";
 import { resourcesForSubject, sourceTierLabel } from "@/lib/teachingResources";
 import { reviewLabel, type TeacherReviewState } from "@/lib/teacherReview";
+import { readAssistantReviewSnapshot, writeAssistantReviewSnapshot } from "@/lib/assistantReviewStore";
+import type { EducationalAssistOutput } from "../../../server/educationalAssistant";
 
 type EducationalAssistantPanelProps = {
   subject: string;
@@ -13,20 +15,14 @@ type EducationalAssistantPanelProps = {
 };
 
 export default function EducationalAssistantPanel({ subject, level, lessonContext, selectedContent }: EducationalAssistantPanelProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [lastEvidence, setLastEvidence] = useState<{
-    confidence: string;
-    provenanceStatus: string;
-    sources: Array<{ label: string; kind: string; note: string }>;
-    limitations: string[];
-    teacherReviewRequired: boolean;
-    evidenceClass: "verified_curriculum_fact" | "trusted_external_fact" | "structured_engine_result" | "ai_inference" | "uncertain_claim";
-    verificationState: "verified" | "high_confidence" | "medium_confidence" | "low_confidence" | "unverified" | "conflicting_sources" | "requires_teacher_review";
-  } | null>(null);
-  const [reviewState, setReviewState] = useState<TeacherReviewState>("pending");
-  const [correction, setCorrection] = useState("");
-  const [providedSource, setProvidedSource] = useState("");
-  const [intent, setIntent] = useState<"explain" | "analyze" | "question" | "activity" | "clarify">("explain");
+  const [persisted] = useState(() => readAssistantReviewSnapshot("midad-assistant-review-v2"));
+  const [messages, setMessages] = useState<Message[]>(persisted?.messages ?? []);
+  const [lastEvidence, setLastEvidence] = useState<EducationalAssistOutput | null>(persisted?.lastEvidence ?? null);
+  const [reviewState, setReviewState] = useState<TeacherReviewState>(persisted?.reviewState ?? "pending");
+  const [correction, setCorrection] = useState(persisted?.correction ?? "");
+  const [providedSource, setProvidedSource] = useState(persisted?.providedSource ?? "");
+  const [intent, setIntent] = useState<"explain" | "analyze" | "question" | "activity" | "clarify">(persisted?.intent ?? "explain");
+  useEffect(() => { writeAssistantReviewSnapshot("midad-assistant-review-v2", { messages, lastEvidence, reviewState, correction, providedSource, intent }); }, [messages, lastEvidence, reviewState, correction, providedSource, intent]);
   const resources = resourcesForSubject(subject);
   const assist = trpc.educational.assist.useMutation({
     onSuccess: (result, variables) => {
