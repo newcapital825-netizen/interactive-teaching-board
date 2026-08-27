@@ -26,6 +26,17 @@ describe("Gate 4C-B Mathematics step-by-step vertical slice", () => {
     expect(steps.every((step) => step.sourceProblemId === problem.id && step.provenance.sourceObjectId === problem.id)).toBe(true);
   });
 
+  it("supports the bounded classroom equation 2x + 5 = 15 with verified steps", () => {
+    const source = createMathSource("2x + 5 = 15");
+    const problem = createMathProblem(source, "2026-01-01T00:00:00.000Z");
+    const steps = createSolutionSteps(problem);
+    expect(problem.expectedAnswer).toBe("x = 5");
+    expect(steps.map((step) => step.expressionAfter)).toEqual(["2x = 10", "x = 5"]);
+    expect(assessMathStep(problem, steps[0], problem.provenance, 5).evaluation).toBe("correct");
+    expect(assessMathFinalAnswer(problem, "x = 5").correct).toBe(true);
+    expect(verifyMathAnswer(problem, "2(5) + 5 = 15").valid).toBe(true);
+  });
+
   it("accepts canonical and equivalent alternative paths without fuzzy matching", () => {
     const problem = createMathProblem(createMathSource());
     const canonical = assessMathStep(problem, createSolutionSteps(problem)[0], problem.provenance, 5);

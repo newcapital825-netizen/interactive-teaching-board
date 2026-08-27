@@ -136,7 +136,8 @@ export const assessAttempt = (activity: ClassroomActivity, attempt: ClassroomAtt
     const mathSession = activity.mathStepSession;
     const stepAssessments = mathSession ? attempt.mathSteps.map((step) => assessMathStep(mathSession.problem, step, provenance, mathSession.disclosureLevel, at)) : [];
     const finalAnswer = assessMathFinalAnswer(mathSession?.problem ?? (() => { throw new Error("Math activity is missing its canonical problem"); })(), attempt.response, provenance, at);
-    const verificationExpression = finalAnswer.correct && /(?:^|\s|=)4(?:$|\s)/.test(attempt.response.replace(/x/gi, "")) ? "2(4) + 3 = 11" : attempt.response;
+    const expectedValue = mathSession?.problem.expectedAnswer.match(/-?\d+(?:\.\d+)?/)?.[0];
+    const verificationExpression = finalAnswer.correct && expectedValue ? mathSession!.problem.equation.replace(/x/gi, `(${expectedValue})`) : attempt.response;
     const verification = mathSession ? verifyMathAnswer(mathSession.problem, verificationExpression, provenance, at) : undefined;
     const nextAttempt = { ...attempt, status: "assessed" as const, mathStepAssessments: stepAssessments, mathFinalAnswer: finalAnswer, mathVerification: verification, updatedAt: at };
     const nextActivity = transitionActivity({ ...activity, attempts: activity.attempts.map((item) => item.attemptId === attempt.attemptId ? nextAttempt : item) }, "assessed", at);

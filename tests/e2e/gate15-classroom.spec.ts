@@ -107,13 +107,18 @@ test("Journeys C–F: Arabic activity reaches student attempt, deterministic rev
   await reviewedActivity.getByRole("textbox", { name: "ملاحظة المعلم" }).fill("تأكيد المسار العربي");
   await reviewedActivity.getByRole("button", { name: "حفظ قرار المعلم" }).click();
   await expect(page.getByTestId("classroom-loop-teacher")).toContainText("تأكيد المسار العربي");
+  await expect(reviewedActivity.getByRole("button", { name: "إعادة المحاولة" })).toBeVisible();
+  await reviewedActivity.getByRole("button", { name: "إعادة المحاولة" }).click();
+  await expect(reviewedActivity).toContainText("نشط للطالب");
+  await expect(reviewedActivity).toContainText("المحاولات: 2");
 });
 
 test("Journey D/G/H/I/J/K: Mathematics, persistence, export/import, recovery guard, and presentation", async ({ page }) => {
   await openWorkspace(page);
-  await page.getByTestId("add-equation-object").click();
-  const equation = page.getByTestId("canvas-object").filter({ hasText: "2x + 3 = 11" }).first();
-  await expect(equation).toContainText("2x + 3 = 11");
+  await page.getByTestId("unified-content-input").fill("2x + 5 = 15");
+  await page.getByTestId("add-unified-content").click();
+  const equation = page.getByTestId("canvas-object").filter({ hasText: "2x + 5 = 15" }).first();
+  await expect(equation).toContainText("2x + 5 = 15");
   await equation.click();
   await page.getByTestId("contextual-action-convert-to-activity").click();
   const activity = page.getByTestId("classroom-activity").first();
@@ -143,7 +148,7 @@ test("Journey D/G/H/I/J/K: Mathematics, persistence, export/import, recovery gua
   await expect(page.getByRole("status").filter({ hasText: "استُورد" })).toBeVisible();
   await page.getByRole("button", { name: "عرض الدرس" }).click();
   await expect(page.locator("main.presentation-mode")).toBeVisible();
-  await expect(page.locator("main.presentation-mode")).toContainText("2x + 3 = 11");
+  await expect(page.locator("main.presentation-mode")).toContainText("2x + 5 = 15");
   const exitPresentation = page.getByRole("button", { name: "خروج" });
   await exitPresentation.focus();
   await exitPresentation.press("Enter");
@@ -197,7 +202,7 @@ test("Journey N: accessibility pre-pilot surface and keyboard controls", async (
   await expect(page.getByRole("radiogroup", { name: "المادة" })).toBeVisible();
   await expect(page.getByRole("radiogroup", { name: "الفئة" })).toBeVisible();
   await expect(page.getByRole("combobox", { name: "الصف / المستوى" })).toBeVisible();
-  await expect(page.locator('[aria-live="polite"]')).toHaveCount(3);
+  await expect(page.locator('[aria-live="polite"]')).toHaveCount(2);
 
   const subject = page.getByRole("button", { name: "الرياضيات", exact: true });
   await subject.focus();

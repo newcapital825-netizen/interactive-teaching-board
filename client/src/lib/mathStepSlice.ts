@@ -39,7 +39,7 @@ export type MathVerification = {
   id: string;
   problemId: string;
   expression: string;
-  expectedExpression: "2(4) + 3 = 11";
+  expectedExpression: "2(4) + 3 = 11" | "2(5) + 5 = 15";
   valid: boolean;
   diagnostic: MathStepDiagnostic;
   provenance: Provenance;
@@ -91,25 +91,29 @@ export const DETERMINISTIC_MATH_TIME = "2026-01-01T00:00:00.000Z";
 const now = () => DETERMINISTIC_MATH_TIME;
 const normalize = (value: string) => value.trim().toLocaleLowerCase().replace(/[\s،؛,.]/g, "");
 const semanticMeaning = (value: string) => {
-  const normalized = normalize(value).replace(/[()=+\-*/]/g, "");
-  if (normalize(value).includes("subtract3") || normalize(value).includes("move3") || normalized === "subtract3frombothsides") return "subtract-3-both-sides";
-  if (normalize(value).includes("divide") || normalize(value).includes("قسمة")) return "divide-2-both-sides";
-  return normalize(value);
+  const normalizedValue = normalize(value);
+  const normalized = normalizedValue.replace(/[()=+\-*/]/g, "");
+  if (normalizedValue.includes("subtract3") || normalizedValue.includes("move3") || normalized === "subtract3frombothsides") return "subtract-3-both-sides";
+  if (normalizedValue.includes("subtract5") || normalizedValue.includes("move5") || normalized === "subtract5frombothsides") return "subtract-5-both-sides";
+  if (normalizedValue.includes("divide") || normalizedValue.includes("قسمة")) return "divide-2-both-sides";
+  return normalizedValue;
 };
 const sameMeaning = (left: string, right: string) => semanticMeaning(left) === semanticMeaning(right);
-const isCanonicalProblem = (problem: MathProblemObject) => problem.equation === "2x + 3 = 11" && problem.expectedAnswer === "x = 4";
-const isCanonicalAnswer = (answer: string) => { const value = normalize(answer); return value === "x=4" || value === "4=x"; };
+const isCanonicalProblem = (problem: MathProblemObject) => (problem.equation === "2x + 3 = 11" && problem.expectedAnswer === "x = 4") || (problem.equation === "2x + 5 = 15" && problem.expectedAnswer === "x = 5");
+const isCanonicalAnswer = (answer: string) => { const value = normalize(answer); return value === "x=4" || value === "4=x" || value === "x=5" || value === "5=x"; };
 const validProvenance = (provenance: Provenance, expectedSourceId: string, expectedVersion: number) => Boolean(provenance && provenance.sourceObjectId === expectedSourceId && provenance.sourceVersion === expectedVersion && provenance.derivationType && provenance.sourceRange && provenance.sourceRange.start <= provenance.sourceRange.end);
 const stepId = (problemId: string, number: number, suffix = "canonical") => `${problemId}_step_${number}_${suffix}`;
 const provenanceFor = (sourceObjectId: string, sourceVersion: number, derivationType: string): Provenance => ({ sourceObjectId, sourceRange: { start: 0, end: 10 }, sourceVersion, derivationType, teacherApproved: false });
 
 export const createMathProblem = (sourceObject: EducationalObject<"EquationObject", string>, at = now()): MathProblemObject => {
-  if (sourceObject.content !== "2x + 3 = 11") throw new Error("Gate 4C-B supports only the canonical equation 2x + 3 = 11");
+  const supported = sourceObject.content === "2x + 3 = 11" || sourceObject.content === "2x + 5 = 15";
+  if (!supported) throw new Error("تدعم هذه الشريحة المعادلتين المثبتتين 2x + 3 = 11 و2x + 5 = 15 فقط");
+  const isFiveCase = sourceObject.content === "2x + 5 = 15";
   return {
     id: `${sourceObject.id}_math-problem`,
     sourceObject,
-    equation: "2x + 3 = 11",
-    expectedAnswer: "x = 4",
+    equation: isFiveCase ? "2x + 5 = 15" : "2x + 3 = 11",
+    expectedAnswer: isFiveCase ? "x = 5" : "x = 4",
     learningObjective: "حل معادلة خطية من خطوتين مع تبرير كل تحويل والتحقق بالتعويض",
     provenance: provenanceFor(sourceObject.id, sourceObject.version, "deterministic-math-problem"),
     createdAt: at,
@@ -117,15 +121,29 @@ export const createMathProblem = (sourceObject: EducationalObject<"EquationObjec
   };
 };
 
-const canonicalSteps = (problem: MathProblemObject): SolutionStepObject[] => [
-  { id: stepId(problem.id, 1), sourceProblemId: problem.id, stepNumber: 1, expressionBefore: "2x + 3 = 11", operation: "subtract 3 from both sides", expressionAfter: "2x = 8", mathematicalJustification: "Subtracting the same quantity from both sides preserves equality.", validityState: "valid", provenance: provenanceFor(problem.id, problem.sourceObject.version, "deterministic-solution-step") },
-  { id: stepId(problem.id, 2), sourceProblemId: problem.id, stepNumber: 2, expressionBefore: "2x = 8", operation: "divide both sides by 2", expressionAfter: "x = 4", mathematicalJustification: "Dividing both sides by the same non-zero quantity preserves equality.", validityState: "valid", provenance: provenanceFor(problem.id, problem.sourceObject.version, "deterministic-solution-step") },
-];
+const canonicalSteps = (problem: MathProblemObject): SolutionStepObject[] => {
+  const fiveCase = problem.equation === "2x + 5 = 15";
+  const constant = fiveCase ? 5 : 3;
+  const rightSide = fiveCase ? 15 : 11;
+  const intermediate = fiveCase ? 10 : 8;
+  const answer = fiveCase ? 5 : 4;
+  return [
+    { id: stepId(problem.id, 1), sourceProblemId: problem.id, stepNumber: 1, expressionBefore: problem.equation, operation: `subtract ${constant} from both sides`, expressionAfter: `2x = ${intermediate}`, mathematicalJustification: "Subtracting the same quantity from both sides preserves equality.", validityState: "valid", provenance: provenanceFor(problem.id, problem.sourceObject.version, "deterministic-solution-step") },
+    { id: stepId(problem.id, 2), sourceProblemId: problem.id, stepNumber: 2, expressionBefore: `2x = ${intermediate}`, operation: "divide both sides by 2", expressionAfter: `x = ${answer}`, mathematicalJustification: "Dividing both sides by the same non-zero quantity preserves equality.", validityState: "valid", provenance: provenanceFor(problem.id, problem.sourceObject.version, "deterministic-solution-step") },
+  ];
+};
 
-const alternativeSteps = (problem: MathProblemObject): SolutionStepObject[] => [
-  { id: stepId(problem.id, 1, "alternative"), sourceProblemId: problem.id, stepNumber: 1, expressionBefore: "2x + 3 = 11", operation: "move 3 to the other side", expressionAfter: "2x = 11 - 3", mathematicalJustification: "Moving a term is shorthand for subtracting 3 from both sides.", validityState: "valid-alternative", provenance: provenanceFor(problem.id, problem.sourceObject.version, "deterministic-alternative-step") },
-  { id: stepId(problem.id, 2, "alternative"), sourceProblemId: problem.id, stepNumber: 2, expressionBefore: "2x = 11 - 3", operation: "divide both sides by 2", expressionAfter: "x = 4", mathematicalJustification: "Dividing both sides by the same non-zero quantity preserves equality.", validityState: "valid-alternative", provenance: provenanceFor(problem.id, problem.sourceObject.version, "deterministic-alternative-step") },
-];
+const alternativeSteps = (problem: MathProblemObject): SolutionStepObject[] => {
+  const fiveCase = problem.equation === "2x + 5 = 15";
+  const constant = fiveCase ? 5 : 3;
+  const rightSide = fiveCase ? 15 : 11;
+  const intermediate = fiveCase ? 10 : 8;
+  const answer = fiveCase ? 5 : 4;
+  return [
+    { id: stepId(problem.id, 1, "alternative"), sourceProblemId: problem.id, stepNumber: 1, expressionBefore: problem.equation, operation: `move ${constant} to the other side`, expressionAfter: `2x = ${rightSide} - ${constant}`, mathematicalJustification: `Moving a term is shorthand for subtracting ${constant} from both sides.`, validityState: "valid-alternative", provenance: provenanceFor(problem.id, problem.sourceObject.version, "deterministic-alternative-step") },
+    { id: stepId(problem.id, 2, "alternative"), sourceProblemId: problem.id, stepNumber: 2, expressionBefore: `2x = ${rightSide} - ${constant}`, operation: "divide both sides by 2", expressionAfter: `x = ${answer}`, mathematicalJustification: "Dividing both sides by the same non-zero quantity preserves equality.", validityState: "valid-alternative", provenance: provenanceFor(problem.id, problem.sourceObject.version, "deterministic-alternative-step") },
+  ];
+};
 
 export type MathStepSession = { problem: MathProblemObject; steps: SolutionStepObject[]; currentStep: 1 | 2; assessments: MathStepAssessment[]; verification: MathVerification | null; disclosureLevel: MathDisclosureLevel; mode: "teacher" | "student" };
 
@@ -137,13 +155,13 @@ export const createMathStepSession = (sourceObject: EducationalObject<"EquationO
 export const createSolutionSteps = (problem: MathProblemObject): SolutionStepObject[] => canonicalSteps(problem);
 export const createAlternativeSolutionSteps = (problem: MathProblemObject): SolutionStepObject[] => alternativeSteps(problem);
 
-const feedbackFor = (state: MathValidityState, diagnostic: MathStepDiagnostic, level: MathDisclosureLevel, corrected?: SolutionStepObject, assessmentId = "pending", at = now()): MathStepFeedback => {
+const feedbackFor = (state: MathValidityState, diagnostic: MathStepDiagnostic, level: MathDisclosureLevel, corrected?: SolutionStepObject, assessmentId = "pending", at = now(), equation = "2x + 3 = 11"): MathStepFeedback => {
   if (level === 1) return { id: `${assessmentId}_feedback`, assessmentId, state: state === "valid" ? "correct" : state === "valid-alternative" ? "valid-alternative" : state === "incomplete" ? "incomplete" : "incorrect", title: state === "valid" || state === "valid-alternative" ? "الخطوة صالحة" : "الخطوة تحتاج مراجعة", explanation: "نحدد صلاحية التحويل قبل كشف الحل.", retryAllowed: state !== "valid" && state !== "valid-alternative", teacherNote: "تغذية راجعة رياضية deterministic ضمن Gate 4C-B.", createdAt: at, level };
   if (state === "valid-alternative") return { id: `${assessmentId}_feedback`, assessmentId, state: "valid-alternative", title: "طريقة بديلة صحيحة", explanation: "هذه صيغة مختصرة لتحويل مكافئ يحافظ على مساواة الطرفين.", hint: level >= 3 ? "فكّر في العملية المكافئة التي تمثلها عبارة نقل الحد." : undefined, nextStep: "تابع إلى قسمة الطرفين على 2.", retryAllowed: false, teacherNote: "تغذية راجعة رياضية deterministic ضمن Gate 4C-B.", createdAt: at, level };
   if (state === "valid") return { id: `${assessmentId}_feedback`, assessmentId, state: "correct", title: "خطوة صحيحة", explanation: "العملية طُبقت على الطرفين مع تبرير يحافظ على التكافؤ.", nextStep: "اكتب الخطوة التالية أو انتقل إلى التحقق.", retryAllowed: false, teacherNote: "تغذية راجعة رياضية deterministic ضمن Gate 4C-B.", createdAt: at, level };
   const messages: Record<MathStepDiagnostic, { title: string; explanation: string; hint: string }> = {
     "operation-error": { title: "راجع العملية", explanation: "العملية المكتوبة لا تطابق التحويل المطلوب في هذه المرحلة.", hint: "اسأل: ما العملية التي تطبق على الطرفين معًا؟" },
-    "arithmetic-error": { title: "خطأ حسابي", explanation: "فكرة العملية صحيحة، لكن نتيجة الحساب بعد تنفيذها غير صحيحة.", hint: "احسب 11 − 3 مرة أخرى." },
+    "arithmetic-error": { title: "خطأ حسابي", explanation: "فكرة العملية صحيحة، لكن نتيجة الحساب بعد تنفيذها غير صحيحة.", hint: equation === "2x + 5 = 15" ? "احسب 15 − 5 مرة أخرى." : "احسب 11 − 3 مرة أخرى." },
     "sign-error": { title: "راجع الإشارة", explanation: "تغيّرت إشارة حد أو ناتج دون تحويل مكافئ يحافظ على المعادلة.", hint: "طبّق العملية نفسها على الطرفين ولا تغيّر الإشارة منفردًا." },
     "transformation-error": { title: "تحويل غير مكافئ", explanation: "التعبير الجديد لا ينتج عن عملية قانونية على طرفي المعادلة.", hint: "قارن الطرفين قبل وبعد التحويل." },
     "reasoning-error": { title: "التبرير يحتاج مراجعة", explanation: "التعبيرات صحيحة، لكن السبب الرياضي لا يثبت لماذا يحافظ التحويل على المساواة.", hint: "اربط العملية بتطبيقها على الطرفين معًا." },
@@ -170,7 +188,8 @@ const classifyStep = (problem: MathProblemObject, submitted: SolutionStepObject)
   if (sameMeaning(submitted.expressionBefore, canonical.expressionBefore) && sameMeaning(submitted.expressionAfter, canonical.expressionAfter) && sameMeaning(submitted.operation, canonical.operation)) return { state: "invalid", diagnostic: "reasoning-error", score: 0.5, corrected: canonical };
   const after = normalize(submitted.expressionAfter);
   const operation = normalize(submitted.operation);
-  if (submitted.stepNumber === 1 && (after === "2x=9" || after === "2x=10")) return { state: "invalid", diagnostic: "arithmetic-error", score: 0, corrected: canonical };
+  const expectedIntermediate = normalize(canonical.expressionAfter);
+  if (submitted.stepNumber === 1 && (after === "2x=9" || (after === "2x=10" && expectedIntermediate !== "2x=10") || (after === "2x=8" && expectedIntermediate !== "2x=8"))) return { state: "invalid", diagnostic: "arithmetic-error", score: 0, corrected: canonical };
   if (after.includes("-2x") || after.includes("-8")) return { state: "invalid", diagnostic: "sign-error", score: 0, corrected: canonical };
   if (operation.includes("add") || operation.includes("multiply") || after === "x=8") return { state: "invalid", diagnostic: "operation-error", score: 0, corrected: canonical };
   if (after === "2x=4" || after === "x=8/2") return { state: "invalid", diagnostic: "transformation-error", score: 0, corrected: canonical };
@@ -182,7 +201,7 @@ export const assessMathStep = (problem: MathProblemObject, submitted: SolutionSt
   const result = provenanceValid && isCanonicalProblem(problem) ? classifyStep(problem, submitted) : { state: "unsupported" as const, diagnostic: "unsupported-reasoning" as const, score: 0, corrected: createSolutionSteps({ ...problem, equation: "2x + 3 = 11", expectedAnswer: "x = 4" })[0] };
   const evaluation: FeedbackState = result.state === "valid" ? "correct" : result.state === "valid-alternative" ? "valid-alternative" : result.state === "incomplete" ? "incomplete" : "incorrect";
   const assessmentId = `${submitted.id}_assessment`;
-  const feedback = feedbackFor(result.state, result.diagnostic, level, result.corrected, assessmentId, at);
+  const feedback = feedbackFor(result.state, result.diagnostic, level, result.corrected, assessmentId, at, problem.equation);
   return { id: assessmentId, activityId: `${problem.id}_step-activity`, attemptId: `${assessmentId}_attempt`, answer: JSON.stringify(submitted), createdAt: at, problemId: problem.id, stepNumber: submitted.stepNumber, submitted: { ...submitted, validityState: result.state }, evaluation, effectiveEvaluation: evaluation, validityState: result.state, score: result.score, maxScore: 1, feedbackId: feedback.id, systemFeedbackId: feedback.id, diagnostic: result.diagnostic, reviewState: result.state === "unsupported" ? "unsupported" : "supported", events: [{ id: `${assessmentId}_system-assessment`, eventType: "system-assessment", assessmentId, state: evaluation, createdAt: at }], feedback, provenance: { ...provenance, derivationType: "deterministic-math-step-assessment" }   };
 };
 
@@ -190,7 +209,7 @@ export type MathFinalAnswerAssessment = { answer: string; correct: boolean; eval
 
 export const assessMathFinalAnswer = (problem: MathProblemObject, answer: string, provenance = problem.provenance, at = DETERMINISTIC_MATH_TIME): MathFinalAnswerAssessment => {
   if (!isCanonicalProblem(problem)) return { answer, correct: false, evaluation: "unsupported", diagnostic: "unsupported-reasoning", provenance: { ...provenance, derivationType: "deterministic-math-final-answer" }, createdAt: at };
-  const correct = isCanonicalAnswer(answer);
+  const correct = (problem.expectedAnswer === "x = 5" && (normalize(answer) === "x=5" || normalize(answer) === "5=x")) || (problem.expectedAnswer === "x = 4" && (normalize(answer) === "x=4" || normalize(answer) === "4=x"));
   return { answer, correct, evaluation: correct ? "correct" : "incorrect", diagnostic: correct ? "correct-step" : "answer-error", provenance: { ...provenance, derivationType: "deterministic-math-final-answer" }, createdAt: at };
 };
 
@@ -221,8 +240,11 @@ export const deserializeMathStepSession = (raw: unknown): MathStepSession | null
 
 export const verifyMathAnswer = (problem: MathProblemObject, expression: string, provenance = problem.provenance, at = DETERMINISTIC_MATH_TIME): MathVerification => {
   if (!isCanonicalProblem(problem)) return { id: `${problem.id}_verification`, problemId: problem.id, expression, expectedExpression: "2(4) + 3 = 11", valid: false, diagnostic: "unsupported-reasoning", provenance: { ...provenance, derivationType: "deterministic-substitution-verification" } };
-  const valid = normalize(expression) === normalize("2(4) + 3 = 11") || normalize(expression) === normalize("2 * 4 + 3 = 11");
-  return { id: `${problem.id}_verification`, problemId: problem.id, expression, expectedExpression: "2(4) + 3 = 11", valid, diagnostic: valid ? "correct-step" : "verification-failure", provenance: { ...provenance, derivationType: "deterministic-substitution-verification" } };
+  const fiveCase = problem.equation === "2x + 5 = 15";
+  const expectedExpression = fiveCase ? "2(5) + 5 = 15" : "2(4) + 3 = 11";
+  const alternativeExpression = fiveCase ? "2 * 5 + 5 = 15" : "2 * 4 + 3 = 11";
+  const valid = normalize(expression) === normalize(expectedExpression) || normalize(expression) === normalize(alternativeExpression);
+  return { id: `${problem.id}_verification`, problemId: problem.id, expression, expectedExpression, valid, diagnostic: valid ? "correct-step" : "verification-failure", provenance: { ...provenance, derivationType: "deterministic-substitution-verification" } };
 };
 
 export const regenerateMathVisualizationLens = (problem: MathProblemObject) => ({
@@ -266,6 +288,6 @@ export const createMathGoldenDataset = (sourceObject: EducationalObject<"Equatio
 export const deserializeMathProblem = (raw: unknown): MathProblemObject | null => {
   if (!raw || typeof raw !== "object") return null;
   const value = raw as Partial<MathProblemObject>;
-  if (typeof value.id !== "string" || value.equation !== "2x + 3 = 11" || value.expectedAnswer !== "x = 4" || !value.sourceObject || !value.provenance || value.provenance.sourceObjectId !== value.sourceObject.id || value.provenance.sourceVersion !== value.sourceObject.version || !value.provenance.derivationType || !value.provenance.sourceRange) return null;
+  if (typeof value.id !== "string" || !((value.equation === "2x + 3 = 11" && value.expectedAnswer === "x = 4") || (value.equation === "2x + 5 = 15" && value.expectedAnswer === "x = 5")) || !value.sourceObject || !value.provenance || value.provenance.sourceObjectId !== value.sourceObject.id || value.provenance.sourceVersion !== value.sourceObject.version || !value.provenance.derivationType || !value.provenance.sourceRange) return null;
   return value as MathProblemObject;
 };

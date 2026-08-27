@@ -16,7 +16,7 @@ The current productization slice is suitable for a controlled pilot candidate re
 | Area | Result | Evidence |
 |---|---|---|
 | TypeScript | **PROVEN** | `pnpm check` passed with zero TypeScript errors. |
-| Vitest | **PROVEN** | 26 test files, 131 tests passed, including the conflicting-sources teacher-review hardening contract. |
+| Vitest | **PROVEN** | 26 test files, 132 tests passed, including the conflicting-sources teacher-review hardening contract and the bounded `2x + 5 = 15` activity contract. |
 | Production build | **PROVEN** | `pnpm build` completed successfully; Vite and server bundle both built. |
 | Git diff check | **PROVEN** | `git diff --check` passed. |
 | Playwright desktop Chromium | **PROVEN** | 18/18 passed, including unified input, Arabic, Mathematics, word map, poetry, and safe unsupported journeys. |
@@ -36,7 +36,7 @@ The Arabic toolkit now uses the canonical `GrammarLens` and bounded `I3rab` voca
 
 ### Mathematics
 
-The existing bounded Mathematics journey supports equation entry, deterministic visualization, step-oriented assessment, alternative answer handling, teacher review, persistence, and presentation through the canonical product pathways.
+The bounded Mathematics journey supports equation entry for the two verified classroom equations (`2x + 3 = 11` and `2x + 5 = 15`), deterministic visualization, step-oriented assessment, substitution verification derived from the actual equation, alternative answer handling, teacher review, persistence, retry, and presentation through the canonical product pathways.
 
 **Classification:** **PROVEN for the existing bounded examples; PARTIALLY PROVEN for general mathematics.** It is not a general symbolic mathematics engine.
 
@@ -54,9 +54,9 @@ The assistant retains server-side structured responses, explicit intent, evidenc
 
 ## Product coherence evidence
 
-The new browser journey verifies the teacher-facing Arabic sequence in the rendered DOM rather than only inspecting internal state. It opens the Arabic toolkit, confirms the source text, requests analysis, asserts that the analysis card appears, asserts the selected word's grammatical role and explanation, then replaces the source with an unsupported sentence and asserts the explicit no-fabrication message.
+The browser suite verifies the teacher-facing Arabic sequence, the unified input path, the bounded mathematics equation, the classroom lifecycle, and the final rendered DOM rather than only inspecting internal state. It asserts the canonical activity source, student attempt, deterministic assessment, teacher review, retry, context persistence, and presentation. The teacher preview now uses the ClassroomLoopPanel as the single response/feedback/retry path, while the technical Gate4B workspace is no longer exposed as a second teacher-facing board.
 
-This closes the previously identified product gap in which the canonical Arabic teaching capability existed in the codebase but was not visible in the teacher-first toolkit surface. The current productization pass also adds a single bounded recognition path, a contextual action surface that keeps the source selected, reusable result objects for word map, I3rab, explanation, solution steps, and poetry, a teacher/student learning map that mirrors the existing classroom lifecycle, and a fail-closed rule that forces teacher review for conflicting or low-confidence assistant evidence.
+This closes the previously identified product gap in which the canonical Arabic teaching capability existed in the codebase but was not visible in the teacher-first toolkit surface. The current productization pass also adds a single bounded recognition path, a contextual action surface that keeps the source selected, reusable result objects for word map, I3rab, explanation, solution steps, and poetry, a teacher/student learning map that mirrors the existing classroom lifecycle, equation-aware activity feedback and retry, human-readable source labels, and a fail-closed rule that forces teacher review for conflicting or low-confidence assistant evidence.
 
 ## Implemented capabilities
 
@@ -70,7 +70,7 @@ Persistence remains context-isolated and local-first for the bounded assistant a
 |---|---|
 | Arabic analysis | Controlled sentence examples only; unsupported text is not analyzed. |
 | I3rab | Word-level bounded examples with explicit role, case, marker, and reason. |
-| Mathematics | Existing deterministic equation slice; not general symbolic algebra. |
+| Mathematics | Two deterministic classroom equations with verified steps and substitution; not general symbolic algebra. |
 | Poetry meter | No claim outside reliably supported cases. |
 | AI sources | Source hierarchy and provenance are surfaced; live conflict resolution is not fully proven. |
 | Accessibility | Automated keyboard/RTL surface checks exist; full WCAG and screen-reader audit is not verified. |

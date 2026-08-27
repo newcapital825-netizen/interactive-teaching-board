@@ -10,7 +10,7 @@ import {
   nowIso,
 } from "./educationalObjects";
 import { createRegisteredEducationalObject } from "./objectRegistry";
-import { createMathStepSession, deserializeMathStepSession, DETERMINISTIC_MATH_TIME, type MathStepSession } from "./mathStepSlice";
+import { createMathProblem, createMathStepSession, createSolutionSteps, deserializeMathStepSession, DETERMINISTIC_MATH_TIME, type MathStepSession } from "./mathStepSlice";
 
 export type Subject = "arabic" | "mathematics";
 export type FeedbackState = "correct" | "valid-alternative" | "partially-correct" | "incorrect" | "incomplete";
@@ -272,11 +272,22 @@ export const createGrammarLens = (source: EducationalObject<"SentenceObject", st
   words: wordsForSentence(source.content), selectedWordId: null, disclosureLevel: 1, mode: "student", createdAt: at, updatedAt: at,
 });
 
-export const createMathVisualizationLens = (source: EducationalObject<"EquationObject", string>, at = nowIso()): MathVisualizationLens => ({
-  id: id("math-lens"), type: "MathVisualizationLens", lensType: "MathVisualization", subject: "mathematics", sourceObjectId: source.id, sourceRange: { start: 0, end: source.content.length }, sourceVersion: source.version,
-  provenance: { sourceObjectId: source.id, sourceRange: { start: 0, end: source.content.length }, sourceVersion: source.version, derivationType: "deterministic-equation-visualization", teacherApproved: false }, revealAnswer: false, editable: false,
-  equation: source.content, operationSteps: [{ label: "اطرح 3 من الطرفين", equation: "2x = 8" }, { label: "اقسم الطرفين على 2", equation: "x = 4" }], points: [{ x: 4, y: 0, label: "الحل x = 4" }], solutionX: 4, createdAt: at, updatedAt: at,
-});
+export const createMathVisualizationLens = (source: EducationalObject<"EquationObject", string>, at = nowIso()): MathVisualizationLens => {
+  const supported = source.content === "2x + 3 = 11" || source.content === "2x + 5 = 15";
+  if (!supported) return {
+    id: id("math-lens"), type: "MathVisualizationLens", lensType: "MathVisualization", subject: "mathematics", sourceObjectId: source.id, sourceRange: { start: 0, end: source.content.length }, sourceVersion: source.version,
+    provenance: { sourceObjectId: source.id, sourceRange: { start: 0, end: source.content.length }, sourceVersion: source.version, derivationType: "deterministic-equation-visualization", teacherApproved: false }, revealAnswer: false, editable: false,
+    equation: source.content, operationSteps: [], points: [], solutionX: 0, createdAt: at, updatedAt: at,
+  };
+  const problem = createMathProblem(source, at);
+  const steps = createSolutionSteps(problem);
+  const solutionX = Number(problem.expectedAnswer.replace(/[^0-9.-]/g, ""));
+  return {
+    id: id("math-lens"), type: "MathVisualizationLens", lensType: "MathVisualization", subject: "mathematics", sourceObjectId: source.id, sourceRange: { start: 0, end: source.content.length }, sourceVersion: source.version,
+    provenance: { sourceObjectId: source.id, sourceRange: { start: 0, end: source.content.length }, sourceVersion: source.version, derivationType: "deterministic-equation-visualization", teacherApproved: false }, revealAnswer: false, editable: false,
+    equation: source.content, operationSteps: steps.map((step) => ({ label: step.operation, equation: step.expressionAfter })), points: [{ x: solutionX, y: 0, label: `الحل ${problem.expectedAnswer}` }], solutionX, createdAt: at, updatedAt: at,
+  };
+};
 
 const i3rabForWord = (word: ArabicWord): I3rabExpected => {
   const [casePart, markerPart] = word.caseMark.split(" · ");
@@ -306,9 +317,11 @@ export const readI3rabResponse = (activity: ActivityDefinition): I3rabResponse =
 
 export const createActivity = (subject: Subject, source: EducationalObject, lens: GrammarLens | MathVisualizationLens, at = nowIso()): ActivityDefinition => subject === "arabic" ? {
   id: id("activity"), subject, prompt: "أعرب الكلمة المحددة.", interactionKind: "classify", sourceObjectId: source.id, lensId: lens.id, expectedAnswer: "word_2", acceptedAnswers: ["word_2", "الطالبُ", "الطالب"], answer: JSON.stringify({ wordId: "word_2" }), attemptCount: 0, completionState: "incomplete", assessmentId: null, feedbackId: null, i3rab: i3rabChallenge((lens as GrammarLens).words), createdAt: at, updatedAt: at,
-} : {
-  id: id("activity"), subject, prompt: "حل المعادلة: 2x + 3 = 11", interactionKind: "solve", sourceObjectId: source.id, lensId: lens.id, expectedAnswer: "4", acceptedAnswers: ["4"], answer: "", attemptCount: 0, completionState: "incomplete", assessmentId: null, feedbackId: null, createdAt: at, updatedAt: at,
-};
+} : (() => {
+  const equation = source.content;
+  const config = equation === "2x + 5 = 15" ? { answer: "5", prompt: "حل المعادلة: 2x + 5 = 15" } : { answer: "4", prompt: "حل المعادلة: 2x + 3 = 11" };
+  return { id: id("activity"), subject, prompt: config.prompt, interactionKind: "solve", sourceObjectId: source.id, lensId: lens.id, expectedAnswer: config.answer, acceptedAnswers: [config.answer], answer: "", attemptCount: 0, completionState: "incomplete", assessmentId: null, feedbackId: null, createdAt: at, updatedAt: at };
+})();
 
 export const evaluateAnswer = (activity: ActivityDefinition, answer: string): { state: FeedbackState; score: number; diagnostic?: AssessmentDiagnostic; reviewState?: ArabicReviewState } => {
   if (activity.subject === "arabic" && activity.i3rab) {
@@ -347,8 +360,13 @@ export const evaluateAnswer = (activity: ActivityDefinition, answer: string): { 
   const submitted = normalize(answer);
   if (!submitted) return { state: "incomplete", score: 0, diagnostic: "incomplete" };
   if (activity.acceptedAnswers.some((candidate) => normalize(candidate) === submitted)) return { state: "correct", score: 1 };
-  if (activity.subject === "mathematics" && (submitted === "x=4" || submitted === "x=4".replace("=", " = "))) return { state: "valid-alternative", score: 1, diagnostic: "alternative-solution" };
-  if (activity.subject === "mathematics" && (submitted === "8" || submitted.includes("2"))) return { state: "partially-correct", score: 0.5, diagnostic: "step-error" };
+  if (activity.subject === "mathematics") {
+    const expected = normalize(activity.expectedAnswer);
+    const equivalent = `x=${expected}`;
+    const intermediate = expected === "5" ? "10" : "8";
+    if (submitted === equivalent || submitted === `${expected}=x`) return { state: "valid-alternative", score: 1, diagnostic: "alternative-solution" };
+    if (submitted === intermediate || submitted.includes("2")) return { state: "partially-correct", score: 0.5, diagnostic: "step-error" };
+  }
   return { state: "incorrect", score: 0, diagnostic: "answer-error" };
 };
 
@@ -356,11 +374,14 @@ export const createFeedback = (assessment: Assessment, activity: ActivityDefinit
   const state = assessment.effectiveEvaluation ?? assessment.evaluation;
   const common = { id: id("feedback"), assessmentId: assessment.id, state, reviewState: assessment.reviewState, retryAllowed: !["correct", "valid-alternative"].includes(state), teacherNote: activity.subject === "arabic" ? "تذكير للمعلم: الفاعل هو من قام بالفعل." : "تذكير للمعلم: حافظ على تكافؤ الطرفين في كل خطوة.", createdAt: nowIso() };
   if (assessment.reviewState !== "supported") return { ...common, title: "تحتاج مراجعة المعلم", explanation: "هذه الصيغة خارج الحالات المثبتة في مجموعة الأمثلة الحالية، لذلك لم تُقبل تلقائيًا كإجابة صحيحة.", hint: "ارجع إلى النص وحدد الحقل الذي يحتاج دليلًا.", nextStep: "افحص الإجابة ثم قرر قبولها أو تعديلها يدويًا." };
-  if (state === "correct") return { ...common, title: "إجابة صحيحة", explanation: activity.subject === "arabic" ? "أحسنت؛ الطالبُ هو الفاعل لأنه قام بالقراءة." : "أحسنت؛ بعد طرح 3 ثم القسمة على 2، يكون x = 4." };
-  if (state === "valid-alternative") return { ...common, title: "إجابة صحيحة بصيغة مقبولة", explanation: activity.subject === "arabic" ? "استخدمت صيغة مقبولة للعلامة الإعرابية ضمن هذا المثال المحدد." : "أثبتت الصيغة x = 4 القيمة نفسها؛ نحتفظ بها كطريقة تعبير صحيحة.", hint: activity.subject === "arabic" ? "قارن العلامة بالصيغة المعروضة في العدسة." : "يمكنك الآن التحقق بالتعويض.", nextStep: activity.subject === "arabic" ? "راجع سبب الرفع ثم اعتمد الصيغة المناسبة." : "تحقق من الحل بالتعويض في المعادلة." };
-  if (state === "incomplete") return { ...common, title: "لم تُرسل إجابة بعد", explanation: activity.subject === "arabic" ? "اختر كلمة من الجملة لتحديد الفاعل." : "اكتب قيمة x أو صيغة حل واضحة قبل الإرسال.", hint: activity.subject === "arabic" ? "ابدأ بالسؤال: من قام بالفعل؟" : "ابدأ بطرح 3 من الطرفين.", nextStep: "أكمل الحقل أو الاختيار ثم أرسل المحاولة." };
-  if (state === "partially-correct") return { ...common, title: "إجابة جزئية", explanation: activity.subject === "arabic" ? "بدأت من اتجاه صحيح، لكن اختر الكلمة التي تؤدي الفعل لا وصف الفعل أو المفعول به." : "الخطوة الوسطى قريبة؛ بعد طرح 3 يصبح الطرف الأيسر 2x والطرف الأيمن 8.", hint: activity.subject === "arabic" ? "اسأل: من قام بالفعل؟" : "نفّذ العملية نفسها على الطرفين.", nextStep: activity.subject === "arabic" ? "اربط السؤال بمن قام بالفعل." : "راجع الخطوة الأولى قبل متابعة الحل." };
-  return { ...common, title: "لنحاول مرة أخرى", explanation: activity.subject === "arabic" ? "الإجابة ليست الفاعل. اقرأ الجملة واسأل: من قام بالفعل؟" : "ابدأ بطرح 3 من الطرفين، ثم اقسم الناتج على 2.", hint: activity.subject === "arabic" ? "الكلمة الثانية هي المرشح الصحيح." : "بعد طرح 3: 2x = 8.", nextStep: activity.subject === "arabic" ? "أعد قراءة الجملة وحدد صاحب الفعل." : "نفّذ طرح 3 على الطرفين أولًا." };
+  const mathSubtraction = activity.expectedAnswer === "5" ? "5" : "3";
+  const mathIntermediate = activity.expectedAnswer === "5" ? "10" : "8";
+  const mathAnswer = activity.expectedAnswer;
+  if (state === "correct") return { ...common, title: "إجابة صحيحة", explanation: activity.subject === "arabic" ? "أحسنت؛ الطالبُ هو الفاعل لأنه قام بالقراءة." : `أحسنت؛ بعد طرح ${mathSubtraction} ثم القسمة على 2، يكون x = ${mathAnswer}.` };
+  if (state === "valid-alternative") return { ...common, title: "إجابة صحيحة بصيغة مقبولة", explanation: activity.subject === "arabic" ? "استخدمت صيغة مقبولة للعلامة الإعرابية ضمن هذا المثال المحدد." : `أثبتت الصيغة x = ${mathAnswer} القيمة نفسها؛ نحتفظ بها كطريقة تعبير صحيحة.`, hint: activity.subject === "arabic" ? "قارن العلامة بالصيغة المعروضة في العدسة." : "يمكنك الآن التحقق بالتعويض.", nextStep: activity.subject === "arabic" ? "راجع سبب الرفع ثم اعتمد الصيغة المناسبة." : "تحقق من الحل بالتعويض في المعادلة." };
+  if (state === "incomplete") return { ...common, title: "لم تُرسل إجابة بعد", explanation: activity.subject === "arabic" ? "اختر كلمة من الجملة لتحديد الفاعل." : "اكتب قيمة x أو صيغة حل واضحة قبل الإرسال.", hint: activity.subject === "arabic" ? "ابدأ بالسؤال: من قام بالفعل؟" : `ابدأ بطرح ${mathSubtraction} من الطرفين.`, nextStep: "أكمل الحقل أو الاختيار ثم أرسل المحاولة." };
+  if (state === "partially-correct") return { ...common, title: "إجابة جزئية", explanation: activity.subject === "arabic" ? "بدأت من اتجاه صحيح، لكن اختر الكلمة التي تؤدي الفعل لا وصف الفعل أو المفعول به." : `الخطوة الوسطى قريبة؛ بعد طرح ${mathSubtraction} يصبح الطرف الأيسر 2x والطرف الأيمن ${mathIntermediate}.`, hint: activity.subject === "arabic" ? "اسأل: من قام بالفعل؟" : "نفّذ العملية نفسها على الطرفين.", nextStep: activity.subject === "arabic" ? "اربط السؤال بمن قام بالفعل." : "راجع الخطوة الأولى قبل متابعة الحل." };
+  return { ...common, title: "لنحاول مرة أخرى", explanation: activity.subject === "arabic" ? "الإجابة ليست الفاعل. اقرأ الجملة واسأل: من قام بالفعل؟" : `ابدأ بطرح ${mathSubtraction} من الطرفين، ثم اقسم الناتج على 2.`, hint: activity.subject === "arabic" ? "الكلمة الثانية هي المرشح الصحيح." : `بعد طرح ${mathSubtraction}: 2x = ${mathIntermediate}.`, nextStep: activity.subject === "arabic" ? "أعد قراءة الجملة وحدد صاحب الفعل." : `نفّذ طرح ${mathSubtraction} على الطرفين أولًا.` };
 };
 
 export const assessActivity = (activity: ActivityDefinition, answer: string, provenance: Provenance, at = nowIso()): { activity: ActivityDefinition; assessment: Assessment; feedback: Feedback } => {

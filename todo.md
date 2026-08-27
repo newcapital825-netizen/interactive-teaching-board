@@ -731,3 +731,19 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] عرض رحلة الرياضيات `2x + 5 = 15` والتحويل إلى نشاط كما يظهر في الواجهة.
 - [x] عرض Student View وPresentation Mode وتسجيل الفهم المرئي وتسلسل الشرح.
 - [x] إعداد نتيجة العرض الحي فقط: ما عمل، ما لم يعمل، ما كان يدويًا، وما يحتاج محركًا/AI/UX، دون تعديل كود أو إعلان Pilot Ready.
+
+## Product Coherence V2 — educational loop completion
+
+- [x] تحويل Inspector إلى لغة تعليمية بشرية بالكامل وإخفاء JSON/مصطلحات البنية الداخلية عن المعلم والطالب.
+- [x] ربط النشاط بمصدره الموضوعي مع حالة تقييم صريحة: صحيح/غير صحيح/يحتاج مراجعة/لم يُقيّم بعد.
+- [x] إظهار feedback تعليمي وإتاحة retry حقيقي وحفظ lineage بين الإجابة والتقييم والمراجعة.
+- [x] توسيع math bounded فقط إلى الصيغتين المدعومتين `2x + 3 = 11` و`2x + 5 = 15` مع خطوات تحقق ظاهرة، وإبقاء الصيغ الأخرى في حالة آمنة.
+- [x] إضافة اختبارات unit وPlaywright للحلقة الكاملة والنشاط المرتبط بالمصدر وfeedback/retry وStudent View دون ادعاءات غير مثبتة.
+- [x] تحديث PRODUCT_RELEASE_REPORT.md وFINAL_HUMAN_VALIDATION.md بالنتائج الفعلية وحفظ checkpoint دون تعديل main أو فتح PR/merge.
+- [x] إصلاح تلميح الخطأ الحسابي بعد توسيع math bounded بحيث يبقى تلميح 11 للمعادلة القديمة وتظهر قيمة الطرف الصحيحة للحالة الجديدة.
+- [x] إزالة نموذج الإجابة المكرر من TeacherProductShell Student View وجعل ClassroomLoopPanel هو مسار الإجابة والتقييم والـfeedback والـretry الوحيد.
+- [x] إصلاح توافق createMathVisualizationLens مع fixture الرياضي القديم في اختبارات Gate 4B مع إبقاء دعم 2x + 5 = 15 مثبتًا.
+- [x] جعل verification في ClassroomLoop مشتقًا من المشكلة الرياضية الفعلية بدل التعبير hard-coded القديم.
+- [x] إزالة كشف Gate4BWorkspace المكرر من مساحة المعلم، والإبقاء على TeacherProductShell + ClassroomLoop كلوحة واحدة للمستخدم.
+- [x] إزالة بقايا `studentFeedback` من Student View بعد توحيد مسار الإجابة مع ClassroomLoopPanel وإغلاق فحص TypeScript.
+- [x] تحديث assertion الوصول في Journey N لتثبت وجود مناطق aria-live المطلوبة بدل الاعتماد على عدد قديم هش بعد توحيد Student View.
