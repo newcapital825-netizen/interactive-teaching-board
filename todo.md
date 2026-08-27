@@ -607,3 +607,20 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] إضافة اختبارات save/restore وexport/import وbackward compatibility وmalformed metadata.
 - [ ] تشغيل check/test/build/diff-check وPlaywright والتحقق البصري Desktop/Mobile.
 - [ ] كتابة التقرير النهائي والتوقف دون Gate أو PR أو merge أو deploy.
+
+
+## FINAL PRE-PILOT VERIFICATION — no new gate
+
+- [ ] إضافة context-after-import assertions مرئية عبر Playwright.
+- [ ] إضافة legacy document browser fixture واختبار render آمن بلا قيم مخترعة.
+- [ ] تنفيذ accessibility pre-pilot audit الآلي وتصنيف screen-reader/WCAG غير المتاح كـNOT VERIFIED.
+- [ ] تشغيل check/test/build/diff-check وPlaywright والتحقق البصري Desktop/Mobile.
+- [ ] كتابة `FINAL PRE-PILOT VERIFICATION REPORT` وإصدار PILOT READY أو PILOT CANDIDATE، ثم التوقف.
+
+
+## Save and upload current state
+
+- [ ] فحص branch/HEAD/remotes/status والملفات المعدلة.
+- [ ] إنشاء commit محلي واضح لكل تغييرات Final Pre-Pilot Verification الحالية.
+- [ ] رفع الفرع الحالي فقط إلى مستودع GitHub المعتمد والتحقق من SHA والرابط.
+- [ ] عدم تعديل main أو force push أو rebase أو reset أو PR أو merge.

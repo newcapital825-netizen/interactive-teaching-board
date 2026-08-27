@@ -148,6 +148,81 @@ test("Journey D/G/H/I/J/K: Mathematics, persistence, export/import, recovery gua
   await expect(page.getByTestId("teacher-workspace")).toBeVisible();
 });
 
+test("Journey L: lesson context survives export/import in the rendered UI", async ({ page }) => {
+  await openWorkspace(page);
+  await page.getByRole("textbox", { name: "عنوان الدرس" }).fill("المفعول به");
+  await page.getByRole("button", { name: "الرياضيات", exact: true }).click();
+  await page.getByRole("button", { name: "ثانوي", exact: true }).click();
+  await page.getByRole("combobox", { name: "الصف / المستوى" }).selectOption({ label: "الصف الأول الثانوي" });
+  await expect(page.getByRole("textbox", { name: "عنوان الدرس" })).toHaveValue("المفعول به");
+  await expect(page.getByRole("button", { name: "الرياضيات", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: "ثانوي", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("combobox", { name: "الصف \/ المستوى" })).toHaveValue("الصف الأول الثانوي");
+  await page.getByTestId("save-lesson-button").click();
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "تصدير" }).click();
+  const download = await downloadPromise;
+  const path = await download.path();
+  expect(path).toBeTruthy();
+  await page.getByRole("button", { name: "الرياضيات", exact: true }).click();
+  await page.getByRole("button", { name: "العربية", exact: true }).click();
+  await page.locator('input[type="file"]').setInputFiles(path!);
+  await expect(page.getByRole("status").filter({ hasText: "استُورد" })).toBeVisible();
+  await expect(page.getByRole("textbox", { name: "عنوان الدرس" })).toHaveValue("المفعول به");
+  await expect(page.getByRole("button", { name: "الرياضيات", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: "ثانوي", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("combobox", { name: "الصف \/ المستوى" })).toHaveValue("الصف الأول الثانوي");
+});
+
+test("Journey M: legacy document renders safely without invented context", async ({ page }) => {
+  await openWorkspace(page);
+  const legacy = { format: "medad-lesson", formatVersion: 1, document: { id: "legacy-board", title: "درس قديم", version: 1, pages: [{ id: "legacy-page", name: "صفحة قديمة", objects: [{ id: "legacy-text", type: "TextObject", content: "محتوى قديم", position: { x: 20, y: 20 }, dimensions: { width: 160, height: 60 } }] }], activePageId: "legacy-page" } };
+  await page.locator('input[type="file"]').setInputFiles({ name: "legacy.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(legacy)) });
+  await expect(page.getByRole("status").filter({ hasText: "استُورد" })).toBeVisible();
+  await expect(page.getByRole("textbox", { name: "عنوان الدرس" })).toHaveValue("درس قديم");
+  await expect(page.getByRole("button", { name: "العربية", exact: true })).toHaveAttribute("aria-pressed", "false");
+  await expect(page.getByRole("button", { name: "الرياضيات", exact: true })).toHaveAttribute("aria-pressed", "false");
+  await expect(page.getByRole("button", { name: "ابتدائي", exact: true })).toHaveAttribute("aria-pressed", "false");
+  await expect(page.getByRole("button", { name: "إعدادي", exact: true })).toHaveAttribute("aria-pressed", "false");
+  await expect(page.getByRole("combobox", { name: "الصف \/ المستوى" })).toHaveValue("");
+  await expect(page.getByTestId("canvas-object").filter({ hasText: "محتوى قديم" })).toHaveCount(1);
+});
+
+test("Journey N: accessibility pre-pilot surface and keyboard controls", async ({ page }) => {
+  await openWorkspace(page);
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await expect(page.getByRole("textbox", { name: "عنوان الدرس" })).toBeVisible();
+  await expect(page.getByRole("radiogroup", { name: "المادة" })).toBeVisible();
+  await expect(page.getByRole("radiogroup", { name: "الفئة" })).toBeVisible();
+  await expect(page.getByRole("combobox", { name: "الصف / المستوى" })).toBeVisible();
+  await expect(page.locator('[aria-live="polite"]')).toHaveCount(3);
+
+  const subject = page.getByRole("button", { name: "الرياضيات", exact: true });
+  await subject.focus();
+  await expect.poll(() => subject.evaluate((element) => element.matches(":focus-visible"))).toBe(true);
+  await subject.press("Space");
+  await expect(subject).toHaveAttribute("aria-pressed", "true");
+
+  const category = page.getByRole("button", { name: "ثانوي", exact: true });
+  await category.focus();
+  await category.press("Enter");
+  await expect(category).toHaveAttribute("aria-pressed", "true");
+
+  const level = page.getByRole("combobox", { name: "الصف / المستوى" });
+  await level.focus();
+  await level.press("ArrowDown");
+  await expect(level).toHaveValue("الصف الثاني الثانوي");
+  await page.keyboard.press("Escape");
+  await expect(page.getByTestId("teacher-workspace")).toBeVisible();
+
+  await page.getByTestId("student-preview-button").focus();
+  await page.getByTestId("student-preview-button").press("Enter");
+  await expect(page.getByRole("main")).toContainText("معاينة الطالب");
+  await page.getByRole("button", { name: "العودة إلى المعلم" }).focus();
+  await page.getByRole("button", { name: "العودة إلى المعلم" }).press("Enter");
+  await expect(page.getByTestId("teacher-workspace")).toBeVisible();
+});
+
 test("Journey J: keyboard selection, Escape, and text-editing isolation", async ({ page }) => {
   await openWorkspace(page);
   await page.getByTestId("add-text-object").click();
