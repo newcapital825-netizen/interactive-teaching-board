@@ -134,6 +134,13 @@ test("Journey D/G/H/I/J/K: Mathematics, persistence, export/import, recovery gua
   const backToTeacher = page.getByRole("button", { name: "العودة إلى المعلم" });
   await backToTeacher.focus();
   await backToTeacher.press("Enter");
+  const mathActivity = page.getByTestId("classroom-activity").first();
+  await mathActivity.click();
+  await page.getByRole("button", { name: "تقييم حتمي" }).click();
+  await expect(mathActivity).toContainText("التشخيص: incomplete-step");
+  await expect(mathActivity).toContainText("نحدد صلاحية التحويل قبل كشف الحل");
+  await page.getByRole("button", { name: "فتح للمراجعة" }).click();
+  await expect(mathActivity).toContainText("التشخيص: incomplete-step");
   await page.getByTestId("save-lesson-button").click();
   await expect(page.getByRole("status").filter({ hasText: "حُفظ" })).toBeVisible();
   await page.reload();

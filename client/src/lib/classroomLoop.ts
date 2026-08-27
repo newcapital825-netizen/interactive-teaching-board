@@ -110,9 +110,12 @@ export const createClassroomActivity = (journey: JourneyState, at = now()): Clas
   id: `${journey.activity.id}_classroom`, subject: journey.subject, sourceObjectId: journey.source.id, sourceVersion: journey.source.version, activity: safeClone(journey.activity), ...(journey.mathStepSession ? { mathStepSession: safeClone(journey.mathStepSession) } : {}), lifecycle: "draft", attempts: [], activeAttemptId: null, createdAt: at, updatedAt: at,
 });
 
+const blankMathStep = (step: SolutionStepObject): SolutionStepObject => ({ ...step, expressionBefore: "", operation: "", expressionAfter: "", mathematicalJustification: "", validityState: "incomplete" });
+
 export const createAttempt = (activity: ClassroomActivity, student: StudentIdentity, at = now()): ClassroomAttempt => {
   if (activity.lifecycle !== "ready" && activity.lifecycle !== "student-active") throw new Error("Activity must be ready before starting a student attempt");
-  return { activityId: activity.id, attemptId: id("attempt", activity.id), student: { ...student }, response: "", mathSteps: [], status: "active", mathStepAssessments: [], provenance: { sourceObjectId: activity.sourceObjectId, sourceVersion: activity.sourceVersion, derivationType: "classroom-attempt", teacherApproved: false }, createdAt: at, updatedAt: at };
+  const mathSteps = activity.mathStepSession?.steps.map(blankMathStep) ?? [];
+  return { activityId: activity.id, attemptId: id("attempt", activity.id), student: { ...student }, response: "", mathSteps, status: "active", mathStepAssessments: [], provenance: { sourceObjectId: activity.sourceObjectId, sourceVersion: activity.sourceVersion, derivationType: "classroom-attempt", teacherApproved: false }, createdAt: at, updatedAt: at };
 };
 
 export const updateAttemptResponse = (attempt: ClassroomAttempt, response: string, at = now()): ClassroomAttempt => {
@@ -139,7 +142,8 @@ export const assessAttempt = (activity: ClassroomActivity, attempt: ClassroomAtt
     const expectedValue = mathSession?.problem.expectedAnswer.match(/-?\d+(?:\.\d+)?/)?.[0];
     const verificationExpression = finalAnswer.correct && expectedValue ? mathSession!.problem.equation.replace(/x/gi, `(${expectedValue})`) : attempt.response;
     const verification = mathSession ? verifyMathAnswer(mathSession.problem, verificationExpression, provenance, at) : undefined;
-    const nextAttempt = { ...attempt, status: "assessed" as const, mathStepAssessments: stepAssessments, mathFinalAnswer: finalAnswer, mathVerification: verification, updatedAt: at };
+    const mathFeedback = stepAssessments[0]?.feedback;
+    const nextAttempt = { ...attempt, status: "assessed" as const, mathStepAssessments: stepAssessments, mathFinalAnswer: finalAnswer, mathVerification: verification, ...(mathFeedback ? { feedback: mathFeedback, feedbackId: mathFeedback.id } : {}), updatedAt: at };
     const nextActivity = transitionActivity({ ...activity, attempts: activity.attempts.map((item) => item.attemptId === attempt.attemptId ? nextAttempt : item) }, "assessed", at);
     return { activity: nextActivity, attempt: nextAttempt };
   }

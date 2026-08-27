@@ -747,3 +747,7 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] إزالة كشف Gate4BWorkspace المكرر من مساحة المعلم، والإبقاء على TeacherProductShell + ClassroomLoop كلوحة واحدة للمستخدم.
 - [x] إزالة بقايا `studentFeedback` من Student View بعد توحيد مسار الإجابة مع ClassroomLoopPanel وإغلاق فحص TypeScript.
 - [x] تحديث assertion الوصول في Journey N لتثبت وجود مناطق aria-live المطلوبة بدل الاعتماد على عدد قديم هش بعد توحيد Student View.
+- [x] تهيئة محاولات الرياضيات بخطوات فارغة مرتبطة بالمشكلة canonical حتى تُقيّم كـincomplete لا unsupported عند عدم إدخال خطوات.
+- [x] استكمال provenance الخاص بمحاولات ClassroomLoop بـsourceRange صالح حتى يمر تقييم mathStepSlice ولا يُصنّف الإدخال غير المعبأ unsupported.
+- [x] مواءمة assertion الرياضي في Journey D مع feedback المبسط الظاهر عند disclosureLevel 1، مع استمرار إثبات تشخيص incomplete-step.
+- [x] جعل مثال الإجابة الرياضية في Student View مشتقًا من المعادلة الحالية بدل placeholder ثابت `x = 4`.
