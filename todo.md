@@ -709,3 +709,5 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] مواصلة التحقق المتكامل على الفرع المستعاد، مع إبقاء `main` دون تعديل.
 - [x] ربط ArabicToolkitPanel بالـcanonical Grammar Lens وI3rab الموجودين، مع عرض التحليل والشرح فقط للحالات المثبتة وعدم اختلاق نتائج للنصوص غير المدعومة.
 - [x] إضافة اختبارات unit وE2E لرحلة العربية: كتابة → تحليل/إعراب → شرح → نشاط، مع توثيق unsupported boundaries.
+- [x] إعداد `docs/pilot/HUMAN_PILOT_RESULTS.md` بحالة Human Validation = NOT VERIFIED وبنموذج تسجيل الجلسات دون اختلاق نتائج.
+- [x] ربط تقرير الإصدار النهائي بحزمة القبول البشري ومراجعة الحالة النهائية قبل التسليم.
