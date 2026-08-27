@@ -13,11 +13,12 @@ describe("Gate 10 safe local data", () => {
   it("round-trips a lesson envelope without semantic loss", () => {
     const page = createPage("نشاط");
     const equation = createObject("EquationObject", "2x + 3 = 11", 100, 120);
-    const enriched = { ...document, title: "درس المعادلات", pages: [...document.pages, { ...page, objects: [equation] }] };
+    const enriched = { ...document, title: "درس المعادلات", context: { subject: "الرياضيات", category: "ثانوي", level: "الصف الأول الثانوي" }, pages: [...document.pages, { ...page, objects: [equation] }] };
     const imported = importLesson(exportLesson(enriched));
     expect(imported).not.toBeNull();
     expect(imported?.id).toBe(enriched.id);
     expect(imported?.title).toBe(enriched.title);
+    expect(imported?.context).toEqual(enriched.context);
     expect(imported?.pages[1].objects[0].id).toBe(equation.id);
     expect(imported?.pages[1].objects[0].style).toEqual(equation.style);
     expect(imported?.pages[1].objects[0].zIndex).toBe(equation.zIndex);
@@ -39,6 +40,13 @@ describe("Gate 10 safe local data", () => {
     expect(migrated?.schemaVersion).toBe(2);
     expect(migrated?.pages[0].objects[0].id).toBe("legacy-text");
     expect(migrated?.pages[0].objects[0].metadata.locked).toBe(false);
+    expect(migrated?.context).toBeUndefined();
+  });
+
+  it("sanitizes malformed context without inventing unsupported values", () => {
+    const payload = JSON.parse(exportLesson({ ...document, context: { subject: 42 as unknown as string, category: { nested: true } as unknown as string, level: "  ثانوي  " } })) as { document: BoardDocument };
+    const imported = importLesson(JSON.stringify(payload));
+    expect(imported?.context).toEqual({ level: "ثانوي" });
   });
 
   it("preserves recovery snapshots separately from the normal saved state", () => {

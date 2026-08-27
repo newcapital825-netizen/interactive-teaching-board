@@ -589,3 +589,21 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] إعادة تنظيم الرأس ومساحة العمل حول Canvas مع Inspector سياقي وحالات فارغة مفهومة.
 - [ ] تحسين Teacher/Student/Presentation separation وRTL وkeyboard وresponsive behavior.
 - [ ] تشغيل الفحوص والـbrowser evidence وتوثيق الفجوات، دون Gate أو engine أو architecture جديدة.
+
+
+## Strict Visual Acceptance Review — bounded UX only
+
+- [ ] فحص العرض الفعلي قبل التغيير على 1280×720 و390×844.
+- [ ] مطابقة hierarchy العنوان ← المادة ← الفئة ← المستوى ← workspace، وتحديد الفجوات فقط.
+- [ ] تطبيق أقل إصلاح مرئي لازم، دون تغيير canonical semantics أو Gate أو architecture.
+- [ ] إعادة تشغيل check/test/build/diff-check وPlaywright.
+- [ ] توثيق before/after ومتطلبات Desktop/Mobile والقيود ثم التوقف.
+
+
+## Lesson Context Persistence Fix — bounded only
+
+- [ ] مراجعة BoardDocument وlessonTransfer وsafe parser وTeacherProductShell metadata.
+- [ ] تحديد أقل تعديل canonical لحفظ العنوان والمادة والفئة والمستوى.
+- [ ] إضافة اختبارات save/restore وexport/import وbackward compatibility وmalformed metadata.
+- [ ] تشغيل check/test/build/diff-check وPlaywright والتحقق البصري Desktop/Mobile.
+- [ ] كتابة التقرير النهائي والتوقف دون Gate أو PR أو merge أو deploy.

@@ -14,6 +14,14 @@ const boolOr = (value: unknown, fallback: boolean) => typeof value === "boolean"
 const safeContentString = (value: unknown) => typeof value === "string" ? value : JSON.stringify(value) ?? "";
 const legacyCapabilities = (type: string): readonly EducationalCapability[] => getObjectDefinition(type)?.capabilities ?? ["selectable", "movable", "presentable"];
 const safeMetadata = (metadata: Record<string, unknown>) => Object.fromEntries(Object.entries(metadata).filter(([key]) => !["__proto__", "constructor", "prototype"].includes(key)));
+const safeLessonContext = (value: unknown): BoardDocument["context"] => {
+  if (!isRecord(value)) return undefined;
+  const context: Record<string, string> = {};
+  for (const [key, nested] of Object.entries(value)) {
+    if (["subject", "category", "level"].includes(key) && typeof nested === "string" && nested.trim().length > 0) context[key] = nested.trim();
+  }
+  return Object.keys(context).length ? context as BoardDocument["context"] : undefined;
+};
 
 export const migrateCoreObject = (raw: unknown, path = "object"): CoreObject | null => {
   if (!isRecord(raw)) return null;
@@ -85,6 +93,7 @@ export const migrateBoardDocument = (raw: unknown): BoardDocument | null => {
   const requestedActive = stringOr(raw.activePageId, pages[0].id);
   const classroom = raw.classroom === undefined ? undefined : deserializeClassroomLesson(JSON.stringify(raw.classroom));
   if (raw.classroom !== undefined && !classroom) return null;
+  const context = safeLessonContext(raw.context);
   return {
     id: stringOr(raw.id, "migrated_board"),
     title: stringOr(raw.title, "درس تفاعلي جديد"),
@@ -93,6 +102,7 @@ export const migrateBoardDocument = (raw: unknown): BoardDocument | null => {
     pages,
     activePageId: pages.some((page) => page.id === requestedActive) ? requestedActive : pages[0].id,
     updatedAt: stringOr(raw.updatedAt, new Date().toISOString()),
+    ...(context ? { context } : {}),
     ...(classroom ? { classroom } : {}),
   };
 };

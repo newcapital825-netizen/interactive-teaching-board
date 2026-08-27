@@ -37,10 +37,11 @@ describe("Gate 5 Teacher Productization contracts", () => {
     const document = createDocument();
     const second = createPage("Practice");
     const text = createObject("TextObject", "هدف الدرس", 40, 40);
-    const saved = { ...document, title: "النحو والمعادلات", pages: [...document.pages, { ...second, objects: [text] }], activePageId: second.id };
+    const saved = { ...document, title: "النحو والمعادلات", context: { subject: "العربية", category: "إعدادي", level: "الصف الثاني الإعدادي" }, pages: [...document.pages, { ...second, objects: [text] }], activePageId: second.id };
     expect(persistDocument(saved).ok).toBe(true);
     const restored = restoreDocument();
     expect(restored?.title).toBe(saved.title);
+    expect(restored?.context).toEqual(saved.context);
     expect(restored?.pages.map((page) => page.name)).toEqual(["Page 1", "Practice"]);
     expect(restored?.activePageId).toBe(second.id);
     expect(restored?.pages[1].objects[0].id).toBe(text.id);
