@@ -693,3 +693,11 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] تنفيذ الفحص الساكن للأسرار وتسجيلات المحتوى الحساس دون نتائج مخالفة.
 - [x] إعادة الجولة النهائية: check وVitest 10/10 وbuild وdiff-check وPlaywright 16/16 على Chromium و16/16 على mobile-chromium.
 - [ ] تنفيذ جلسات human acceptance الفعلية مع المعلمين والطلاب؛ لا تُسجل نتائج قبل حدوثها.
+
+
+## Owner request — save all current work to GitHub
+
+- [ ] فحص الفرع والـremote والـHEAD وحالة working tree قبل الحفظ.
+- [ ] إنشاء commit محلي لكل التغييرات الحالية فقط.
+- [ ] رفع `feature/productization-v1` بالطريقة العادية والتحقق من SHA البعيد.
+- [ ] التحقق من بقاء `main` دون تغيير ونظافة working tree.
