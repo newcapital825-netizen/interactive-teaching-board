@@ -94,3 +94,19 @@
 تم عزل التخزين المحلي لحالة المساعد بحسب المادة والمستوى وسياق الدرس، لمنع ظهور نية أو مصدر أو مراجعة من درس سابق داخل درس آخر. نجحت الفحوص بعد التعديل: `pnpm check`، وVitest **10/10**، و`pnpm build`، و`git diff --check`، وPlaywright **16/16** على Chromium و**16/16** على `mobile-chromium`.
 
 هذا عزل محلي داخل المتصفح فقط؛ لا توجد مزامنة بين الأجهزة ولا تخزين سحابي ولا حسابات طلاب.
+
+## Final automated and security verification round
+
+أُعيد تشغيل الجولة النهائية على النسخة الحالية. نجح فحص TypeScript، وVitest بنتيجة **10/10**، وbuild الإنتاج، و`git diff --check`، وPlaywright بنتيجة **16/16** على Chromium و**16/16** على `mobile-chromium`. كما نجح الفحص الساكن لعدم وجود أنماط أسرار داخل `client/src`، ولم يظهر تسجيل مباشر لسؤال المساعد أو سياق الدرس أو المحتوى المحدد في سجلات التطبيق.
+
+| المجال | الحالة | حدود الدليل |
+|---|---|---|
+| العربية والرياضيات والشعر bounded | PROVEN آليًا | لا يثبت محركًا عامًا أو وزنًا شعريًا أو اعتمادًا منهجيًا |
+| حفظ سياق المساعد محليًا | PROVEN ضمن المتصفح | لا يثبت مزامنة أو حسابات أو أجهزة متعددة |
+| Grounding وprovenance وuncertainty | PROVEN bounded | تعارض المصادر الحية يحتاج مراجعة المعلم |
+| E2E desktop/mobile emulation | PROVEN | المحاكاة ليست جهازًا حقيقيًا |
+| الأسرار والتسجيلات الحساسة | PROVEN bounded | ليس تدقيقًا أمنيًا مستقلًا شاملًا |
+| Touch وStylus | NOT VERIFIED | لا توجد أجهزة فعلية |
+| Screen reader وWCAG الكامل | NOT VERIFIED | لم يُنفذ تدقيق قارئ شاشة مستقل |
+| Human acceptance | NOT VERIFIED | لم تُسجل جلسات بشرية فعلية |
+| Pilot Ready | NOT AUTHORIZED | يبقى التصنيف PILOT CANDIDATE — HUMAN VALIDATION REQUIRED |

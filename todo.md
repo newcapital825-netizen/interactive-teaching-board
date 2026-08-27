@@ -690,3 +690,6 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] عزل حالة مراجعة المساعد محليًا بحسب المادة والمستوى وسياق الدرس لمنع التسرب بين الدروس.
 - [x] إعادة التحقق بعد العزل: check وVitest 10/10 وbuild وdiff-check وPlaywright 16/16 على Chromium و16/16 على mobile-chromium.
 - [x] إنشاء `docs/pilot/HUMAN_ACCEPTANCE_CHECKLIST.md` لربط الأدلة الآلية بما يجب إثباته مع المعلمين والطلاب، دون اختلاق نتائج بشرية.
+- [x] تنفيذ الفحص الساكن للأسرار وتسجيلات المحتوى الحساس دون نتائج مخالفة.
+- [x] إعادة الجولة النهائية: check وVitest 10/10 وbuild وdiff-check وPlaywright 16/16 على Chromium و16/16 على mobile-chromium.
+- [ ] تنفيذ جلسات human acceptance الفعلية مع المعلمين والطلاب؛ لا تُسجل نتائج قبل حدوثها.
