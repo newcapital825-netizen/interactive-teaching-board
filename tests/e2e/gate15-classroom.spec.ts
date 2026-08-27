@@ -254,3 +254,17 @@ test("Productization: poetry safety, external references, and teacher review con
   await expect(page.getByRole("link", { name: /موارد العربية/ })).toHaveAttribute("href", /illinois\.edu/);
   await expect(page.getByRole("textbox", { name: "مصدر يقدمه المعلم \(اختياري\)" })).toBeVisible();
 });
+
+
+test("Productization: assistant intent and source evidence remain teacher-led", async ({ page }) => {
+  await openWorkspace(page);
+  await page.getByRole("button", { name: "العربية", exact: true }).click();
+  const assistant = page.getByRole("region", { name: "المساعد التعليمي" });
+  await assistant.scrollIntoViewIfNeeded();
+  await expect(assistant.getByRole("combobox", { name: "ما الذي تريده من المساعد؟" })).toHaveValue("explain");
+  await assistant.getByRole("combobox", { name: "ما الذي تريده من المساعد؟" }).selectOption("question");
+  await expect(assistant.getByRole("combobox", { name: "ما الذي تريده من المساعد؟" })).toHaveValue("question");
+  await expect(assistant).toContainText("مراجعة المعلم مطلوبة");
+  await expect(assistant).toContainText("العلاقة بالمنهج");
+  await expect(assistant).toContainText("المعلم صاحب القرار");
+});

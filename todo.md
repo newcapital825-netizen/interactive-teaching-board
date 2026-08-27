@@ -681,3 +681,4 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] إضافة evidence class وverification state إلى عقد المساعد والواجهة، مع اختبار malformed/unsupported safety.
 - [x] إضافة نوايا تعليمية محددة: شرح، تحليل، سؤال، نشاط، وتبسيط.
 - [x] تحديث تقرير productization بنتائج 7/7 Vitest و14/14 Chromium و14/14 mobile-chromium.
+- [x] إضافة رحلة E2E لنوايا المساعد وطبقات الدليل وقرار المعلم؛ نجحت 1/1 على Chromium و1/1 على mobile-chromium.
