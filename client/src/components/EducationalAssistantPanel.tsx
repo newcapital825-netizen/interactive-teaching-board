@@ -20,6 +20,8 @@ export default function EducationalAssistantPanel({ subject, level, lessonContex
     sources: Array<{ label: string; kind: string; note: string }>;
     limitations: string[];
     teacherReviewRequired: boolean;
+    evidenceClass: "verified_curriculum_fact" | "trusted_external_fact" | "structured_engine_result" | "ai_inference" | "uncertain_claim";
+    verificationState: "verified" | "high_confidence" | "medium_confidence" | "low_confidence" | "unverified" | "conflicting_sources" | "requires_teacher_review";
   } | null>(null);
   const [reviewState, setReviewState] = useState<TeacherReviewState>("pending");
   const [correction, setCorrection] = useState("");
@@ -110,6 +112,8 @@ export default function EducationalAssistantPanel({ subject, level, lessonContex
             <span><strong>الحالة:</strong> {lastEvidence.provenanceStatus}</span>
             <span><strong>المصادر:</strong> {lastEvidence.sources.map((source) => source.label).join("، ")}</span>
             <span><strong>قرار المعلم:</strong> {reviewLabel(reviewState)}</span>
+            <span><strong>نوع الدليل:</strong> {lastEvidence.evidenceClass === "verified_curriculum_fact" ? "حقيقة منهجية متحققة" : lastEvidence.evidenceClass === "trusted_external_fact" ? "حقيقة من مصدر خارجي موثوق" : lastEvidence.evidenceClass === "structured_engine_result" ? "نتيجة محرك منظم" : lastEvidence.evidenceClass === "ai_inference" ? "استدلال من المساعد" : "ادعاء غير متحقق"}</span>
+            <span><strong>حالة التحقق:</strong> {lastEvidence.verificationState === "conflicting_sources" ? "مصادر متعارضة" : lastEvidence.verificationState === "verified" ? "متحقق" : lastEvidence.verificationState === "requires_teacher_review" ? "تحتاج مراجعة المعلم" : lastEvidence.verificationState === "unverified" ? "غير متحقق" : lastEvidence.verificationState}</span>
           </div>
           {lastEvidence.teacherReviewRequired && <p className="educational-assistant-warning"><AlertTriangle size={15} /> تحتاج هذه الإجابة إلى مراجعة المعلم قبل اعتمادها.</p>}
           {lastEvidence.limitations.length > 0 && <ul>{lastEvidence.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>}

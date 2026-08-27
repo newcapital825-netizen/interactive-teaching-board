@@ -676,3 +676,8 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] تحديث source hierarchy والتقرير ثم نجاح check وVitest 6/6 وbuild وdiff-check وPlaywright 14/14 على Chromium و14/14 على mobile-chromium.
 - [x] إضافة نوايا تعليمية صريحة للمساعد: شرح، تحليل، سؤال، نشاط، وتبسيط، بدل chatbot عام.
 - [x] تشغيل check وVitest 7/7 وbuild وdiff-check وPlaywright 14/14 على Chromium و14/14 على mobile-chromium بعد إضافة النوايا.
+- [x] إضافة تصنيف نوع الدليل وحالة التحقق إلى عقد المساعد وواجهة المعلم، مع fallback آمن واختبار deterministic.
+- [x] التحقق بعد الإضافة: check وVitest 7/7 وbuild وdiff-check وPlaywright 14/14 على Chromium و14/14 على mobile-chromium.
+- [x] إضافة evidence class وverification state إلى عقد المساعد والواجهة، مع اختبار malformed/unsupported safety.
+- [x] إضافة نوايا تعليمية محددة: شرح، تحليل، سؤال، نشاط، وتبسيط.
+- [x] تحديث تقرير productization بنتائج 7/7 Vitest و14/14 Chromium و14/14 mobile-chromium.

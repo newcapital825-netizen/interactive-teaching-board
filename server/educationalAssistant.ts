@@ -26,6 +26,8 @@ export const educationalAssistOutput = z.object({
   sources: z.array(sourceSchema).max(5),
   limitations: z.array(z.string()).max(5),
   teacherReviewRequired: z.boolean(),
+  evidenceClass: z.enum(["verified_curriculum_fact", "trusted_external_fact", "structured_engine_result", "ai_inference", "uncertain_claim"]).default("uncertain_claim"),
+  verificationState: z.enum(["verified", "high_confidence", "medium_confidence", "low_confidence", "unverified", "conflicting_sources", "requires_teacher_review"]).default("requires_teacher_review"),
 });
 
 export type EducationalAssistInput = z.infer<typeof educationalAssistInput>;
@@ -56,6 +58,8 @@ const fallback = (reason: string): EducationalAssistOutput => ({
   sources: [{ label: "لا يوجد مصدر متاح", kind: "none", note: "تحتاج الإجابة إلى مصدر أو مراجعة المعلم." }],
   limitations: ["المساعد لا يجلب منهجًا رسميًا تلقائيًا في هذه الجولة.", "تجب مراجعة الإجابة قبل عرضها على الطلاب."],
   teacherReviewRequired: true,
+  evidenceClass: "uncertain_claim",
+  verificationState: "requires_teacher_review",
 });
 
 export async function runEducationalAssistant(input: EducationalAssistInput): Promise<EducationalAssistOutput> {
@@ -82,6 +86,8 @@ export async function runEducationalAssistant(input: EducationalAssistInput): Pr
             "إذا لم توجد مصادر في السياق، اجعل sources قائمة بمصدر none فقط، واجعل provenanceStatus غير متحقق أو استدلال يحتاج مراجعة.",
             "المصدر الذي يكتبه المعلم ليس تحققًا خارجيًا؛ لا تصفه كمصدر موثوق، واستخدم teacher_context أو provided_source مع teacherReviewRequired=true.",
             "أظهر الإجابة والسبب والشرح والحدود بوضوح، ونفّذ نية المعلم المحددة فقط. اجعل teacherReviewRequired=true لأي استدلال أو نقص تحقق.",
+            "صنّف نوع الدليل فقط إلى verified_curriculum_fact أو trusted_external_fact أو structured_engine_result أو ai_inference أو uncertain_claim. لا تستخدم verified_curriculum_fact أو trusted_external_fact دون دليل داخل السياق.",
+            "صنّف حالة التحقق بصدق، واستخدم conflicting_sources عند التعارض وrequires_teacher_review عند الشك.",
             "لا تستخدم HTML ولا تعليمات تقنية للمستخدم. أخرج JSON مطابقًا للمخطط فقط.",
           ].join("\n"),
         },
@@ -103,8 +109,10 @@ export async function runEducationalAssistant(input: EducationalAssistInput): Pr
               sources: { type: "array", items: { type: "object", properties: { label: { type: "string" }, kind: { type: "string", enum: ["teacher_context", "provided_source", "none"] }, note: { type: "string" } }, required: ["label", "kind", "note"], additionalProperties: false } },
               limitations: { type: "array", items: { type: "string" } },
               teacherReviewRequired: { type: "boolean" },
+              evidenceClass: { type: "string", enum: ["verified_curriculum_fact", "trusted_external_fact", "structured_engine_result", "ai_inference", "uncertain_claim"] },
+              verificationState: { type: "string", enum: ["verified", "high_confidence", "medium_confidence", "low_confidence", "unverified", "conflicting_sources", "requires_teacher_review"] },
             },
-            required: ["answer", "explanation", "why", "confidence", "provenanceStatus", "sources", "limitations", "teacherReviewRequired"],
+            required: ["answer", "explanation", "why", "confidence", "provenanceStatus", "sources", "limitations", "teacherReviewRequired", "evidenceClass", "verificationState"],
             additionalProperties: false,
           },
         },
