@@ -624,3 +624,13 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [ ] إنشاء commit محلي واضح لكل تغييرات Final Pre-Pilot Verification الحالية.
 - [ ] رفع الفرع الحالي فقط إلى مستودع GitHub المعتمد والتحقق من SHA والرابط.
 - [ ] عدم تعديل main أو force push أو rebase أو reset أو PR أو merge.
+
+
+## New Productization Mandate — authorized by owner
+
+- [x] تثبيت أحدث baseline مستقر وفحص المستودع والفرع وmain.
+- [x] تحليل فجوات تجربة المعلم والطالب والطبقات التعليمية والمصادر والذكاء.
+- [x] تنفيذ productization على فرع Feature جديد فقط، دون لمس main أو حذف baseline.
+- [ ] إضافة قدرات عربية ورياضيات وشعر ومصادر وAI ضمن حدود موثوقة وقابلة للإثبات. (أُنجزت أول طبقة AI server-side bounded؛ ما تبقى لم يُنفذ بعد.)
+- [ ] تنفيذ اختبارات آلية ومتصفح وأمان واستجابة، ثم كتابة Product Release Report.
+- [ ] إنشاء commits واضحة والحفاظ على rollback capability.
