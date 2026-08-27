@@ -706,4 +706,6 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 
 - [x] استعادة `feature/productization-v1` من GitHub بعد عودة sandbox إلى `main` والـremote الداخلي.
 - [x] التحقق من تطابق الفرع المستعاد مع المرجع البعيد الفعلي، مع حفظ baseline دون reset أو force push.
-- [ ] مواصلة التحقق المتكامل على الفرع المستعاد، مع إبقاء `main` دون تعديل.
+- [x] مواصلة التحقق المتكامل على الفرع المستعاد، مع إبقاء `main` دون تعديل.
+- [x] ربط ArabicToolkitPanel بالـcanonical Grammar Lens وI3rab الموجودين، مع عرض التحليل والشرح فقط للحالات المثبتة وعدم اختلاق نتائج للنصوص غير المدعومة.
+- [x] إضافة اختبارات unit وE2E لرحلة العربية: كتابة → تحليل/إعراب → شرح → نشاط، مع توثيق unsupported boundaries.

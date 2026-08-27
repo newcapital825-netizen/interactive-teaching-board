@@ -283,3 +283,20 @@ test("Productization: assistant review context survives reload", async ({ page }
   await expect(restoredAssistant.getByRole("combobox", { name: "ما الذي تريده من المساعد؟" })).toHaveValue("activity");
   await expect(restoredAssistant.getByRole("textbox", { name: "مصدر يقدمه المعلم (اختياري)" })).toHaveValue("مرجع يراجعه المعلم");
 });
+
+
+test("Product coherence: Arabic writing reaches bounded analysis, I3rab, explanation, and safe unsupported state", async ({ page }) => {
+  await openWorkspace(page);
+  await page.getByText("أدوات الشرح المساندة", { exact: false }).click();
+  const arabicPanel = page.getByRole("region", { name: "أدوات العربية للمعلم" });
+  await expect(arabicPanel).toBeVisible();
+  await expect(arabicPanel.getByRole("textbox", { name: "النص أو الفقرة" })).toHaveValue("كتبَ الطالبُ الدرسَ.");
+  await arabicPanel.getByTestId("arabic-analyze-button").click();
+  await expect(arabicPanel.getByTestId("arabic-analysis")).toContainText("تحليل وإعراب");
+  await expect(arabicPanel.getByTestId("arabic-i3rab")).toContainText("فاعل");
+  await expect(arabicPanel.getByTestId("arabic-i3rab")).toContainText("من قام بالفعل");
+
+  await arabicPanel.getByRole("textbox", { name: "النص أو الفقرة" }).fill("نص جديد غير مدعوم للتحليل.");
+  await arabicPanel.getByTestId("arabic-analyze-button").click();
+  await expect(arabicPanel.getByTestId("arabic-analysis-unsupported")).toContainText("لم تُخترع نتيجة");
+});
