@@ -697,7 +697,7 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 
 ## Owner request — save all current work to GitHub
 
-- [ ] فحص الفرع والـremote والـHEAD وحالة working tree قبل الحفظ.
-- [ ] إنشاء commit محلي لكل التغييرات الحالية فقط.
-- [ ] رفع `feature/productization-v1` بالطريقة العادية والتحقق من SHA البعيد.
-- [ ] التحقق من بقاء `main` دون تغيير ونظافة working tree.
+- [x] فحص الفرع والـremote والـHEAD وحالة working tree قبل الحفظ.
+- [x] إنشاء commit محلي لكل التغييرات الحالية فقط.
+- [x] رفع `feature/productization-v1` بالطريقة العادية والتحقق من SHA البعيد.
+- [x] التحقق من بقاء `main` دون تغيير ونظافة working tree.
