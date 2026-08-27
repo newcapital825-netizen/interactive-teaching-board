@@ -633,3 +633,11 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .educational-assistant-source label { color:var(--olive); font-size:10px; }
 .educational-assistant-source input { width:100%; border:1px solid var(--line); padding:9px; background:#fffefa; color:var(--ink); font:12px 'IBM Plex Sans Arabic',sans-serif; }
 .educational-assistant-source input:focus { border-color:var(--coral); box-shadow:0 0 0 3px rgba(213,107,88,.12); outline:none; }
+
+.educational-assistant-resources { display:grid; gap:7px; margin:14px 0 10px; }
+.educational-assistant-resources-heading { color:var(--olive); font-size:10px; font-weight:800; }
+.educational-assistant-resource-link { display:grid; gap:3px; border:1px solid var(--line); padding:9px 10px; color:var(--ink); background:#fffefa; text-decoration:none; }
+.educational-assistant-resource-link:hover,.educational-assistant-resource-link:focus-visible { border-color:var(--coral); outline:2px solid rgba(198,110,91,.2); outline-offset:2px; }
+.educational-assistant-resource-link strong { color:var(--olive); font-size:10px; }
+.educational-assistant-resource-link span,.educational-assistant-resource-link small { color:var(--muted-foreground); font-size:9px; line-height:1.5; }
+.educational-assistant-resource-link small { color:#9a6d25; }

@@ -4,7 +4,7 @@ const { invokeLLM } = vi.hoisted(() => ({ invokeLLM: vi.fn() }));
 vi.mock("./_core/llm", () => ({ invokeLLM }));
 
 import { educationalAssistInput, runEducationalAssistant } from "./educationalAssistant";
-import { reviewLabel } from "../client/src/components/EducationalAssistantPanel";
+import { reviewLabel } from "../client/src/lib/teacherReview";
 
 describe("teacher review labels", () => {
   it("keeps teacher decisions explicit", () => {

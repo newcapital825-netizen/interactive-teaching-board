@@ -2,6 +2,8 @@ import { useState } from "react";
 import { AlertTriangle, BookOpenCheck, Check, ChevronDown, Pencil, ShieldCheck, X } from "lucide-react";
 import { AIChatBox, type Message } from "@/components/AIChatBox";
 import { trpc } from "@/lib/trpc";
+import { resourcesForSubject } from "@/lib/teachingResources";
+import { reviewLabel, type TeacherReviewState } from "@/lib/teacherReview";
 
 type EducationalAssistantPanelProps = {
   subject: string;
@@ -9,17 +11,6 @@ type EducationalAssistantPanelProps = {
   lessonContext: string;
   selectedContent?: string;
 };
-
-export type TeacherReviewState = "pending" | "accepted" | "rejected" | "corrected";
-
-export function reviewLabel(state: TeacherReviewState): string {
-  return {
-    pending: "بانتظار مراجعة المعلم",
-    accepted: "اعتمدها المعلم",
-    rejected: "رفضها المعلم",
-    corrected: "صححها المعلم",
-  }[state];
-}
 
 export default function EducationalAssistantPanel({ subject, level, lessonContext, selectedContent }: EducationalAssistantPanelProps) {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -33,6 +24,7 @@ export default function EducationalAssistantPanel({ subject, level, lessonContex
   const [reviewState, setReviewState] = useState<TeacherReviewState>("pending");
   const [correction, setCorrection] = useState("");
   const [providedSource, setProvidedSource] = useState("");
+  const resources = resourcesForSubject(subject);
   const assist = trpc.educational.assist.useMutation({
     onSuccess: (result, variables) => {
       setMessages((current) => [...current, { role: "user", content: variables.question }, { role: "assistant", content: `${result.answer}\n\n**لماذا؟** ${result.why}\n\n**شرح تعليمي:** ${result.explanation}` }]);
@@ -71,6 +63,18 @@ export default function EducationalAssistantPanel({ subject, level, lessonContex
         </div>
         <span className="educational-assistant-badge"><ShieldCheck size={14} /> المعلم صاحب القرار</span>
       </div>
+      {resources.length > 0 && (
+        <div className="educational-assistant-resources" aria-label="مراجع خارجية للمادة">
+          <div className="educational-assistant-resources-heading">مراجع مقترحة للمراجعة</div>
+          {resources.map((resource) => (
+            <a key={resource.id} href={resource.url} target="_blank" rel="noreferrer" className="educational-assistant-resource-link">
+              <strong>{resource.title}</strong>
+              <span>{resource.description}</span>
+              <small>{resource.verification}</small>
+            </a>
+          ))}
+        </div>
+      )}
       <div className="educational-assistant-source">
         <label htmlFor="assistant-source">مصدر يقدمه المعلم (اختياري)</label>
         <input id="assistant-source" value={providedSource} onChange={(event) => setProvidedSource(event.target.value)} placeholder="عنوان أو مرجع للمراجعة، لا يتم التحقق منه تلقائيًا" />

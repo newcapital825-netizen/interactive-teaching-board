@@ -35,3 +35,7 @@ The preview reopened successfully after switching the server-side model to `clau
 ## Claude model retest
 
 The prompt submission did not yet produce an assistant message in the captured page view; the page returned to the top while the request was pending or rerendering. This interaction is **NOT VERIFIED** as a successful live completion and must not be reported as such without a subsequent response capture.
+
+## Productization v1.1 visual review
+
+The full-page mobile capture at 390×844 shows the context-first teacher workspace, lesson pages, direct canvas, classroom loop, assistant panel, two external-resource cards, source input, prompt buttons, and the Arabic send field without visible horizontal clipping. Formal accessibility, touch, stylus, and real-device behavior remain unverified.
