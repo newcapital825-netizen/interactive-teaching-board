@@ -239,3 +239,18 @@ test("Journey J: keyboard selection, Escape, and text-editing isolation", async 
   await page.keyboard.press("ArrowLeft");
   await expect(editor).toHaveValue("نص keyboard محفوظ");
 });
+
+
+test("Productization: poetry safety, external references, and teacher review controls", async ({ page }) => {
+  await openWorkspace(page);
+  await page.getByRole("button", { name: "العربية", exact: true }).click();
+  await page.locator("details.teacher-product-secondary").first().locator("summary").click();
+  await expect(page.getByRole("heading", { name: "حلّل النص دون ادعاء غير متحقق" })).toBeVisible();
+  await page.getByRole("textbox", { name: "البيت أو المقطع" }).fill("قفا نبك من ذكرى حبيب ومنزل");
+  await page.getByRole("button", { name: "تحليل آمن" }).click();
+  const poetryResult = page.getByRole("region", { name: "أداة الشعر" }).getByRole("status");
+  await expect(poetryResult).toContainText("الوزن");
+  await expect(poetryResult).toContainText("غير متحقق");
+  await expect(page.getByRole("link", { name: /موارد العربية/ })).toHaveAttribute("href", /illinois\.edu/);
+  await expect(page.getByRole("textbox", { name: "مصدر يقدمه المعلم \(اختياري\)" })).toBeVisible();
+});

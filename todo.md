@@ -653,3 +653,4 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] رفع `feature/productization-v1` إلى مستودع GitHub المعتمد دون force push.
 - [x] التحقق من تطابق SHA المحلي وGitHub: `025f242502ced2472d172ba79e5808e4a42266f4`.
 - [x] التحقق من بقاء GitHub `main` عند `ee646db6863ef494ddfcb954ac1823413d37db1f` ونظافة working tree.
+- [x] إضافة رحلة Playwright للشعر والمراجع وقرار المعلم، وتصحيح محدد الاختبار بعد فشل مثبت، ثم نجاح المجموعة الكاملة 14/14.
