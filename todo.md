@@ -659,3 +659,4 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] إعادة تشغيل check وVitest 6/6 وbuild وdiff-check وPlaywright 14/14 بعد التحصين.
 - [x] تشغيل Playwright الكامل على `mobile-chromium` بنتيجة 14/14 وتوثيق حدود المحاكاة.
 - [x] إنشاء `docs/release/PRODUCTIZATION_SCOPE.md` لتثبيت Included/Limited/Not Included وقواعد اعتماد المساعد.
+- [x] التحقق من بقاء GitHub `main` عند `ee646db6863ef494ddfcb954ac1823413d37db1f` بعد رفع productization-v1.
