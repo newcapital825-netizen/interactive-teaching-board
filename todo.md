@@ -646,3 +646,6 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] إضافة أداة شعر bounded للقياسات الشكلية فقط مع منع ادعاء الوزن.
 - [x] إضافة اختبارات المساعد والشعر وسجل المراجع، ونجاح check/test/build/diff-check.
 - [x] تنفيذ تحقق بصري Desktop 1280×720 وMobile 390×844 للواجهة الحالية.
+
+- [x] إنشاء `docs/release/PRODUCTIZATION_RELEASE_REPORT.md` كمسودة مرحلية تفصل PROVEN عن NOT VERIFIED.
+- [ ] استكمال productization والتحقق النهائي قبل إصدار التقرير النهائي.
