@@ -772,3 +772,13 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 - [x] Fix mobile header hit-testing regression by making teacher actions a responsive two-column grid with an in-viewport save action.
 - [x] Run pnpm check, Vitest 132/132, production build, git diff --check, and Playwright 36/36 across Chromium and mobile-chromium.
 - [x] Capture final visual verification at 1280×720 and 390×844 and record evidence in docs/qa/UI_REFACTOR_VISUAL_FINDINGS.md.
+
+
+## Competitive Product Superiority Assessment — owner request
+
+- [x] تقييم الفجوة بين تجربة مِداد الحالية والرؤية المرجعية المتقدمة في الصورة دون اختلاق قدرات غير موجودة.
+- [x] تعريف معايير تفوق قابلة للقياس في سرعة الإعداد، جودة التدريس، وضوح السياق، التفاعل على اللوحة، الموثوقية، وإمكانية الوصول.
+- [x] إعداد خارطة طريق قصيرة ومتوسطة المدى تحافظ على BoardDocument والـengines المحدودة والاختبارات الحالية.
+- [x] تحديد ما يمكن تنفيذه في الجولة التالية وما يحتاج تحققًا بشريًا أو أجهزة فعلية أو بنية خارجية.
+- [ ] تنفيذ الأولوية التي يعتمدها صاحب المشروع فقط بعد تثبيت الفجوات ومعايير القبول.
+- [ ] إعادة تشغيل الاختبارات والمعاينة البصرية بعد أي تنفيذ، وتحديث checkpoint قبل التسليم.
