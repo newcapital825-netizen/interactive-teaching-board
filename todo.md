@@ -786,7 +786,7 @@ Authentication, billing implementation, AI, OCR, PDF Intelligence, real-time col
 
 ## GitHub Public Release — owner request
 
-- [ ] التحقق من أحدث commit والفرع والـremote ومستودع GitHub الحالي.
-- [ ] رفع أحدث نسخة إلى GitHub دون force push أو تغيير تاريخ commits.
-- [ ] تحويل مستودع GitHub إلى Public بعد التأكد من المستودع المقصود.
-- [ ] التحقق من visibility والفرع والـSHA والرابط والحالة النهائية.
+- [x] التحقق من أحدث commit والفرع والـremote ومستودع GitHub الحالي.
+- [x] رفع أحدث نسخة إلى GitHub دون force push أو تغيير تاريخ commits.
+- [x] تحويل مستودع GitHub إلى Public بعد التأكد من المستودع المقصود.
+- [x] التحقق من visibility والفرع والـSHA والرابط والحالة النهائية.
