@@ -17,10 +17,27 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script
-      defer
-      src="%VITE_ANALYTICS_ENDPOINT%/umami"
-      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+    <script>
+      (function () {
+        // Analytics is optional and environment-provided. Vite's %VITE_*%
+        // HTML replacement leaves the literal placeholder text in place when
+        // the env vars are unset (e.g. local/dev/test environments), which
+        // previously caused a broken script request and console errors on
+        // every page load. Guard against that instead of hardcoding the tag.
+        var endpoint = "%VITE_ANALYTICS_ENDPOINT%";
+        var websiteId = "%VITE_ANALYTICS_WEBSITE_ID%";
+        var isConfigured = function (value) {
+          return Boolean(value) && value.indexOf("%") === -1;
+        };
+        if (isConfigured(endpoint) && isConfigured(websiteId)) {
+          var script = document.createElement("script");
+          script.defer = true;
+          script.src = endpoint + "/umami";
+          script.setAttribute("data-website-id", websiteId);
+          document.body.appendChild(script);
+        }
+      })();
+    </script>
   </body>
 
 </html>
