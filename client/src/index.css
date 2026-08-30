@@ -217,6 +217,7 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
 .core-stage-wrap { min-width:0; padding:18px; background:#f0ede5; }
 .stage-meta, .stage-footer { display:flex; justify-content:space-between; gap:12px; color:var(--muted-foreground); font-size:9px; }
 .core-stage { position:relative; height:500px; overflow:hidden; background:#fbfaf6; border:1px solid rgba(53,72,59,.2); transform-origin:top right; touch-action:none; }
+.canvas-viewport { position:absolute; inset:0; transform-origin:top right; will-change:transform; }
 .core-grid { position:absolute; inset:0; opacity:.42; background-image:radial-gradient(rgba(53,72,59,.18) .8px, transparent .8px); background-size:22px 22px; }
 .core-object { position:absolute; z-index:2; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:5px; padding:12px 14px; border:1px solid rgba(53,72,59,.26); box-shadow:5px 6px 0 rgba(53,72,59,.07); text-align:right; cursor:grab; transition:box-shadow 150ms ease-out, border-color 150ms ease-out; }
 .core-object:hover, .core-object.selected { border-color:var(--coral); box-shadow:8px 9px 0 rgba(213,107,88,.14); }
